@@ -7,7 +7,20 @@
     "test:ui": "npx playwright test --project=sales-portal-ui",
     "test:api": "npx playwright test --project=sales-portal-api",
     "update-snapshots": "npx playwright test --update-snapshots",
-    "report-html-open": "npx playwright show-report"
+    "report-html-open": "npx playwright show-report",
+    "ui-mode": "npx playwright test --ui",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --config .prettierrc src/**/*.ts --check src/",
+    "format:fix": "prettier --config .prettierrc src/**/*.ts --write src/",
+    "prepare": "husky",
+    "lint-check": "npm run lint && npm run format"
+  },
+  "lint-staged": {
+    "src/**/*": [
+      "prettier --write --ignore-unknown",
+      "eslint --fix"
+    ]
   },
   "repository": {
     "type": "git",
@@ -21,7 +34,15 @@
   },
   "homepage": "https://github.com/Nimiretta/playwright_final_project#readme",
   "devDependencies": {
+    "@eslint/js": "^9.28.0",
     "@playwright/test": "^1.52.0",
-    "@types/node": "^24.0.0"
+    "@types/node": "^24.0.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "globals": "^16.2.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
+    "typescript-eslint": "^8.34.0"
   }
 }
