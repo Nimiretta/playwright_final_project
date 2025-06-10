@@ -8,3 +8,4 @@ node_modules/
 allure-results
 allure-report
 .env
+src/.auth/user.json

@@ -41,13 +41,19 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
       name: 'sales-portal-ui',
-      use: { ...devices['Desktop Chrome'] },
-      testDir: './src/ui/tests/SalesPortal',
+      use: { ...devices['Desktop Chrome'], storageState: 'src/.auth/user.json' },
+      dependencies: ['setup'],
+      testDir: './src/ui/tests/',
     },
     {
       name: 'sales-portal-api',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], storageState: 'src/.auth/user.json' },
+      dependencies: ['setup'],
       testDir: './src/api/tests',
     },
     // {
