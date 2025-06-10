@@ -1,0 +1,27 @@
+{
+  "name": "playwright_final_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test:ui": "npx playwright test --project=sales-portal-ui",
+    "test:api": "npx playwright test --project=sales-portal-api",
+    "update-snapshots": "npx playwright test --update-snapshots",
+    "report-html-open": "npx playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nimiretta/playwright_final_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nimiretta/playwright_final_project/issues"
+  },
+  "homepage": "https://github.com/Nimiretta/playwright_final_project#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^24.0.0"
+  }
+}
