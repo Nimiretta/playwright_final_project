@@ -1,5 +1,5 @@
 import { MANUFACTURERS } from 'data/products';
-import { IResponseFields, productSortFields, sortDirection } from './api.types';
+import { IResponseFields, productSortFields, sortDirection } from 'types/api.types';
 
 export interface IProduct {
   name: string;
@@ -20,6 +20,9 @@ export interface IProductResponse extends IResponseFields {
 
 export interface IProductsResponse extends IResponseFields {
   Products: IProductFromResponse[];
+}
+
+export interface IProductResponseSorted extends IProductsResponse {
   sorting: {
     sortField: productSortFields;
     sortOrder: sortDirection;
