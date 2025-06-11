@@ -17,6 +17,8 @@ export interface IResponseFields {
   ErrorMessage: string | null;
 }
 
-export type sortDirection = 'asc' | 'desc';
+export type SortDirection = 'asc' | 'desc';
 
-export type customersSortField = 'createdOn' | 'email' | 'name' | 'country';
+export type CustomersSortField = 'createdOn' | 'email' | 'name' | 'country';
+
+export type ProductSortFields = 'createdOn' | 'name' | 'manufacturer' | 'price';
