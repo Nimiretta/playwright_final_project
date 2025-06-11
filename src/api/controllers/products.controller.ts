@@ -10,6 +10,7 @@ export class ProductsController {
   constructor(context: APIRequestContext) {
     this.request = new RequestApi(context);
   }
+
   @logStep('Send product getByID request')
   async getById(id: string, token: string) {
     const options: IRequestOptions = {
@@ -23,6 +24,7 @@ export class ProductsController {
     };
     return await this.request.send<IProductResponse>(options);
   }
+
   @logStep('Send delete product request')
   async delete(id: string, token: string) {
     const options: IRequestOptions = {
@@ -35,6 +37,7 @@ export class ProductsController {
     };
     return await this.request.send<null>(options);
   }
+
   @logStep('Send create product request')
   async create(token: string, body: IProduct) {
     const options: IRequestOptions = {
@@ -49,6 +52,7 @@ export class ProductsController {
     };
     return await this.request.send<IProductResponse>(options);
   }
+
   @logStep('Send update product request')
   async update(id: string, token: string, body: IProduct) {
     const options: IRequestOptions = {
@@ -63,6 +67,7 @@ export class ProductsController {
     };
     return this.request.send<IProductResponse>(options);
   }
+
   @logStep('Send getAll products request')
   async getAll(token: string) {
     const options: IRequestOptions = {
@@ -76,6 +81,7 @@ export class ProductsController {
     };
     return this.request.send<IProductsResponse>(options);
   }
+
   @logStep('Send getAllSorted products request')
   async getAllSorted(token: string, params?: Record<string, string>) {
     const options: IRequestOptions = {
