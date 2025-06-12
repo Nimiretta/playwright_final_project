@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
-import { STATUS_CODES } from 'http';
+import { STATUS_CODES } from 'data';
+
 import { IResponse, IResponseFields } from 'types';
 
 export function validateResponse<T extends IResponseFields>(
@@ -14,6 +15,6 @@ export function validateResponse<T extends IResponseFields>(
 }
 
 export function validateDeleteResponse(response: IResponse<null>) {
-  expect.soft(response.status).toBe(STATUS_CODES.Delete);
+  expect.soft(response.status).toBe(STATUS_CODES.DELETED);
   expect.soft(response.body).toBe('');
 }
