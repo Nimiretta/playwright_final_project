@@ -45,7 +45,7 @@ export class CustomersController {
   async getAll(token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
-      url: apiConfig.ENDPOINTS.CUSTOMERS,
+      url: apiConfig.ENDPOINTS.CUSTOMERS_ALL,
       method: 'get',
       headers: {
         'content-type': 'application/json',
