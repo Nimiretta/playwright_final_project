@@ -1,3 +1,4 @@
+import { SORT_FIELD, SORT_ORDER } from 'data/sort.data';
 import { customerSchema } from './customer.schema';
 import { COUNTRIES } from 'data/customers';
 
@@ -21,8 +22,14 @@ export const customersWithSortAndFilterSchema = {
     sorting: {
       type: 'object',
       properties: {
-        sortField: { type: 'string' },
-        sortOrder: { type: 'string' },
+        sortField: {
+          type: 'string',
+          enum: Object.values(SORT_FIELD),
+        },
+        sortOrder: {
+          type: 'string',
+          enum: Object.values(SORT_ORDER),
+        },
       },
       required: ['sortField', 'sortOrder'],
     },
