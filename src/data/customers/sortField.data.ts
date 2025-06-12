@@ -1,11 +1,6 @@
-export enum SORT_FIELD {
+export enum SORT_FIELD_CUSTOMERS {
   CREATED_ON = 'createdOn',
   EMAIL = 'email',
   NAME = 'name',
   COUNTRY = 'country',
-}
-
-export enum SORT_ORDER {
-  ASC = 'asc',
-  DESC = 'desc',
 }

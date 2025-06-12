@@ -1,6 +1,6 @@
-import { MANUFACTURERS } from 'data/products';
 import { productSchema } from './product.schema';
-import { SORT_FIELD, SORT_ORDER } from 'data/sort.data';
+import { SORT_ORDER } from 'data/sortOrder.data';
+import { MANUFACTURERS, SORT_FIELD_PRODUCTS } from 'data/products';
 
 export const productsWithSortAndFilterSchema = {
   type: 'object',
@@ -24,7 +24,7 @@ export const productsWithSortAndFilterSchema = {
       properties: {
         sortField: {
           type: 'string',
-          enum: Object.values(SORT_FIELD),
+          enum: Object.values(SORT_FIELD_PRODUCTS),
         },
         sortOrder: {
           type: 'string',
