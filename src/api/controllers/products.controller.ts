@@ -11,7 +11,7 @@ export class ProductsController {
     this.request = new RequestApi(context);
   }
 
-  @logStep('Send product getByID request')
+  @logStep('Send get product by id request')
   async getById(id: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
@@ -72,7 +72,7 @@ export class ProductsController {
   async getAll(token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
-      url: apiConfig.ENDPOINTS.PRODUCTS,
+      url: apiConfig.ENDPOINTS.PRODUCTS_ALL,
       method: 'get',
       headers: {
         'content-type': 'application/json',
