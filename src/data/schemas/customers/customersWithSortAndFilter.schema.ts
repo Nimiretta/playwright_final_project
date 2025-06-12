@@ -1,13 +1,13 @@
-import { productSchema } from './product.schema';
 import { SORT_ORDER } from 'data/sortOrder.data';
-import { MANUFACTURERS, SORT_FIELD_PRODUCTS } from 'data/products';
+import { customerSchema } from './customer.schema';
+import { COUNTRIES, SORT_FIELD_CUSTOMERS } from 'data/customers';
 
-export const productsWithSortAndFilterSchema = {
+export const customersWithSortAndFilterSchema = {
   type: 'object',
   properties: {
-    Products: {
+    Customers: {
       type: 'array',
-      items: productSchema.properties.Product,
+      items: customerSchema.properties.Customer,
     },
     IsSuccess: { type: 'boolean' },
     ErrorMessage: { type: ['string', 'null'] },
@@ -15,16 +15,16 @@ export const productsWithSortAndFilterSchema = {
     page: { type: 'number' },
     limit: { type: 'number' },
     search: { type: 'string' },
-    manufacturer: {
+    country: {
       type: 'array',
-      items: { type: 'string', enum: Object.values(MANUFACTURERS) },
+      items: { type: 'string', enum: Object.values(COUNTRIES) },
     },
     sorting: {
       type: 'object',
       properties: {
         sortField: {
           type: 'string',
-          enum: Object.values(SORT_FIELD_PRODUCTS),
+          enum: Object.values(SORT_FIELD_CUSTOMERS),
         },
         sortOrder: {
           type: 'string',
@@ -34,5 +34,5 @@ export const productsWithSortAndFilterSchema = {
       required: ['sortField', 'sortOrder'],
     },
   },
-  required: ['Products', 'IsSuccess', 'ErrorMessage', 'total', 'page', 'limit', 'search', 'manufacturer', 'sorting'],
+  required: ['Customers', 'total', 'page', 'limit', 'search', 'country', 'sorting', 'IsSuccess', 'ErrorMessage'],
 };
