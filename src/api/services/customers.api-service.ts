@@ -8,7 +8,7 @@ import { logStep } from 'utils';
 import { validateResponse, validateDeleteResponse, validateSchema } from 'utils/validations';
 
 export class CustomersApiService {
-  controller: CustomersController;
+  private controller: CustomersController;
   constructor(request: APIRequestContext) {
     this.controller = new CustomersController(request);
   }
