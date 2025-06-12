@@ -14,5 +14,5 @@ export function validateResponse<T extends IResponseFields>(
 
 export function validateDeleteResponse(response: IResponse<null>, status: number) {
   expect.soft(response.status).toBe(status);
-  expect.soft(response.body).toBe(null);
+  expect.soft(response.body).toBe('');
 }
