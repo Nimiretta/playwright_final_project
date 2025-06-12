@@ -25,6 +25,6 @@ export class ProductsApiService {
   @logStep('Delete product via API')
   async delete(token: string, id: string) {
     const response = await this.controller.delete(token, id);
-    validateDeleteResponse(response, STATUS_CODES.DELETED);
+    validateDeleteResponse(response);
   }
 }
