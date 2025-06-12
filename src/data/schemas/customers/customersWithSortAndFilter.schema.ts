@@ -1,7 +1,7 @@
 import { customerSchema } from './customer.schema';
 import { COUNTRIES } from 'data/customers';
 
-export const productsWithSortAndFilterSchema = {
+export const customersWithSortAndFilterSchema = {
   type: 'object',
   properties: {
     Customers: {
