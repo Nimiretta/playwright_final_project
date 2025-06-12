@@ -23,4 +23,8 @@ export const test = base.extend<IApiServices>({
   ordersApiService: async ({ request }, use) => {
     await use(new OrdersApiService(request));
   },
+
+  ordersApiService: async ({ request }, use) => {
+    await use(new OrdersApiService(request));
+  },
 });
