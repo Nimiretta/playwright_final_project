@@ -52,7 +52,7 @@ test.describe('[API] [Customers] [Delete]', () => {
   );
 
   test(
-    '[] Should NOT delete customer with an invalid ID',
+    'Should NOT delete customer with an invalid ID',
     { tag: ['@4_C_DL_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const invalidID = '123';
