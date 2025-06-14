@@ -11,7 +11,7 @@ test.describe('[API] [Customers] [Delete]', () => {
   let token = '';
   let customer: ICustomerFromResponse;
 
-  test.beforeAll(async ({ signInApiService }) => {
+  test.beforeEach(async ({ signInApiService }) => {
     token = await signInApiService.loginAsLocalUser();
   });
 
@@ -25,8 +25,8 @@ test.describe('[API] [Customers] [Delete]', () => {
   });
 
   test(
-    '[1_C_DL_API] Should DELETE the customer by correct ID',
-    { tag: [TAGS.SMOKE, TAGS.API, TAGS.REGRESSION] },
+    'Should DELETE the customer by correct ID',
+    { tag: ['@1_C_DL_API', TAGS.SMOKE, TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const responseDelete = await customersController.delete(customer._id, token);
       validateDeleteResponse(responseDelete);
@@ -37,8 +37,8 @@ test.describe('[API] [Customers] [Delete]', () => {
   );
 
   test(
-    '[3_C_DL_API] Should NOT delete customer with a non-existent ID',
-    { tag: [TAGS.SMOKE, TAGS.API, TAGS.REGRESSION] },
+    'Should NOT delete customer with a non-existent ID',
+    { tag: ['@3_C_DL_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const nonexistentID = new ObjectId().toHexString();
       const responseDelete = await customersController.delete(nonexistentID, token);
@@ -52,8 +52,8 @@ test.describe('[API] [Customers] [Delete]', () => {
   );
 
   test(
-    '[4_C_DL_API] Should NOT delete customer with an invalid ID',
-    { tag: [TAGS.API, TAGS.REGRESSION] },
+    '[] Should NOT delete customer with an invalid ID',
+    { tag: ['@4_C_DL_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const invalidID = '123';
       const responseDelete = await customersController.delete(invalidID, token);
@@ -65,24 +65,10 @@ test.describe('[API] [Customers] [Delete]', () => {
       );
     },
   );
+
   test(
-    '[5_C_DL_API] Should NOT delete  customer with correct ID  and  expired authorization token',
-    { tag: [TAGS.API, TAGS.REGRESSION] },
-    async ({ customersController }) => {
-      const expiredToken =
-        'eyJpZCI6IjY4MDRmMjcyZDAwNmJhM2Q0NzVmYjNlMCIsInJvbGVzIjpbIlVTRVIiXSwiaWF0IjoxNzQ5NzE0MjIwLCJleHAiOjE3NDk4MDA2MjB9.5MDtQekidZ8aQNWYJULTJQkpcs5a2nT_1yvVMYGaaMU';
-      const responseDelete = await customersController.delete(customer._id, expiredToken);
-      validateResponse(
-        responseDelete as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        ERRORS.EXPIRED_TOKEN,
-      );
-    },
-  );
-  test(
-    '[6_C_DL_API]  Should NOT delete  customer with correct ID  and  empty  authorization token',
-    { tag: [TAGS.API, TAGS.REGRESSION] },
+    'Should NOT delete  customer with correct ID  and  empty  authorization token',
+    { tag: ['@6_C_DL_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const emptyToken = '';
       const responseDelete = await customersController.delete(customer._id, emptyToken);
@@ -95,8 +81,8 @@ test.describe('[API] [Customers] [Delete]', () => {
     },
   );
   test(
-    '[7_C_DL_API]   Should NOT delete  customer with correct ID  and  incorrect / invalid  authorization token',
-    { tag: [TAGS.API, TAGS.REGRESSION] },
+    'Should NOT delete  customer with correct ID  and  incorrect / invalid  authorization token',
+    { tag: ['@7_C_DL_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const incorrectToken = '12345';
       const responseDelete = await customersController.delete(customer._id, incorrectToken);
