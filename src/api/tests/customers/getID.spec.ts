@@ -1,11 +1,11 @@
-import { test } from 'fixtures';
+import { expect, test } from 'fixtures';
 import { ICustomerFromResponse } from 'types/customer.types';
 import { validateResponse } from 'utils/validations/responseValidation.utils';
 import { TAGS } from 'data/tags.data';
 import { STATUS_CODES } from 'data/statusCodes.data';
 import { API_ERRORS } from 'data/errors.data';
 import { IResponse, IResponseFields } from 'types/api.types';
-import { generateID } from 'data/customers/generateID.data';
+import { generateID } from 'data/generateID.data';
 import { errorResponseSchema } from 'data/schemas/errorResponse.schema';
 import { validateSchema } from 'utils/validations/schemaValidation.utils';
 import { customerSchema } from 'data/schemas/customers/customer.schema';
@@ -34,6 +34,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
       const responseGetID = await customersController.getById(customer._id, token);
       validateResponse(responseGetID, STATUS_CODES.OK, true, null);
       validateSchema(customerSchema, responseGetID.body);
+      expect.soft(customer).toEqual(responseGetID.body.Customer);
     },
   );
 
@@ -43,7 +44,6 @@ test.describe('[API] [Customers] [GET by ID]', () => {
     async ({ customersController }) => {
       const nonexistentID = generateID();
       const responseGetID = await customersController.getById(nonexistentID, token);
-      console.log(responseGetID);
       validateResponse(
         responseGetID as unknown as IResponse<IResponseFields>,
         STATUS_CODES.NOT_FOUND,
