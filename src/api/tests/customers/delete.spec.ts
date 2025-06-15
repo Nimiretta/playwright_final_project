@@ -18,9 +18,7 @@ test.describe('[API] [Customers] [Delete]', () => {
   //   token = await signInApiService.loginAsLocalUser();
   // });
 
-  test.beforeEach(async ({ browser, customersApiService }) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
+  test.beforeEach(async ({ page, customersApiService }) => {
     token = await getAuthToken(page);
 
     customer = await customersApiService.create(token);
