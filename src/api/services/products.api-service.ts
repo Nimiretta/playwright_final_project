@@ -23,8 +23,8 @@ export class ProductsApiService {
   }
 
   @logStep('Delete product via API')
-  async delete(token: string, id: string) {
-    const response = await this.controller.delete(token, id);
+  async delete(id: string, token: string) {
+    const response = await this.controller.delete(id, token);
     validateDeleteResponse(response);
   }
 }
