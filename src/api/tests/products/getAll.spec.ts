@@ -1,16 +1,15 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { allProductsSchema, errorResponseSchema } from 'data/schemas';
 import { test, expect } from 'fixtures';
-import { getAuthToken } from 'utils';
 import { validateResponse, validateSchema } from 'utils/validations';
 
 test.describe('[API] [Products] [Get All]', () => {
   let token = '';
 
-  test.beforeAll(async ({ browser }) => {
+  test.beforeAll(async ({ browser, signInApiService }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    token = await getAuthToken(page);
+    token = await signInApiService.getAuthToken(page);
   });
 
   test(
