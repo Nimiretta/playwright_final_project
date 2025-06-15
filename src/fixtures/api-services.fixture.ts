@@ -5,7 +5,7 @@ interface IApiServices {
   signInApiService: SignInApiService;
   ordersApiService: OrdersApiService;
   productsApiService: ProductsApiService;
-  customersApiSetvice: CustomersApiService;
+  customersApiService: CustomersApiService;
 }
 
 export const test = base.extend<IApiServices>({
@@ -17,10 +17,10 @@ export const test = base.extend<IApiServices>({
     await use(new ProductsApiService(request));
   },
 
-  customersApiSetvice: async ({ request }, use) => {
+  customersApiService: async ({ request }, use) => {
     await use(new CustomersApiService(request));
   },
-    
+
   ordersApiService: async ({ request }, use) => {
     await use(new OrdersApiService(request));
   },

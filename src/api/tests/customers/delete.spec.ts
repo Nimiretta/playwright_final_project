@@ -1,11 +1,13 @@
-import { test, expect } from 'fixtures';
+import { test } from 'fixtures';
 import { ICustomerFromResponse } from 'types/customer.types';
 import { validateDeleteResponse, validateResponse } from 'utils/validations/responseValidation.utils';
 import { TAGS } from 'data/tags.data';
 import { STATUS_CODES } from 'data/statusCodes.data';
-import { ERRORS } from 'data/errors.data';
-import { ObjectId } from 'bson';
+import { API_ERRORS } from 'data/errors.data';
 import { IResponse, IResponseFields } from 'types/api.types';
+import { generateID } from 'data/customers/generateID.data';
+import { errorResponseSchema } from 'data/schemas/errorResponse.schema';
+import { validateSchema } from 'utils/validations/schemaValidation.utils';
 
 test.describe('[API] [Customers] [Delete]', () => {
   let token = '';
@@ -15,13 +17,13 @@ test.describe('[API] [Customers] [Delete]', () => {
     token = await signInApiService.loginAsLocalUser();
   });
 
-  test.beforeEach(async ({ customersApiSetvice }) => {
-    customer = await customersApiSetvice.create(token);
+  test.beforeEach(async ({ customersApiService }) => {
+    customer = await customersApiService.create(token);
   });
 
-  test.afterEach(async ({ customersApiSetvice }) => {
-    if (customer._id) return;
-    await customersApiSetvice.delete(customer._id, token);
+  test.afterEach(async ({ customersController }) => {
+    if (!customer._id) return;
+    await customersController.delete(customer._id, token);
   });
 
   test(
@@ -30,9 +32,9 @@ test.describe('[API] [Customers] [Delete]', () => {
     async ({ customersController }) => {
       const responseDelete = await customersController.delete(customer._id, token);
       validateDeleteResponse(responseDelete);
-      expect(responseDelete.body).toBe('');
+
       const responseGetID = await customersController.getById(customer._id, token);
-      validateResponse(responseGetID, STATUS_CODES.NOT_FOUND, false, ERRORS.CUSTOMER_NOT_FOUND(customer._id));
+      validateResponse(responseGetID, STATUS_CODES.NOT_FOUND, false, API_ERRORS.CUSTOMER_NOT_FOUND(customer._id));
     },
   );
 
@@ -40,14 +42,15 @@ test.describe('[API] [Customers] [Delete]', () => {
     'Should NOT delete customer with a non-existent ID',
     { tag: ['@3_C_DL_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
-      const nonexistentID = new ObjectId().toHexString();
+      const nonexistentID = generateID();
       const responseDelete = await customersController.delete(nonexistentID, token);
       validateResponse(
         responseDelete as unknown as IResponse<IResponseFields>,
         STATUS_CODES.NOT_FOUND,
         false,
-        ERRORS.CUSTOMER_NOT_FOUND(nonexistentID),
+        API_ERRORS.CUSTOMER_NOT_FOUND(nonexistentID),
       );
+      validateSchema(errorResponseSchema, responseDelete.body as unknown as IResponse<IResponseFields>);
     },
   );
 
@@ -61,8 +64,9 @@ test.describe('[API] [Customers] [Delete]', () => {
         responseDelete as unknown as IResponse<IResponseFields>,
         STATUS_CODES.NOT_FOUND,
         false,
-        ERRORS.CUSTOMER_NOT_FOUND(invalidID),
+        API_ERRORS.CUSTOMER_NOT_FOUND(invalidID),
       );
+      validateSchema(errorResponseSchema, responseDelete.body as unknown as IResponse<IResponseFields>);
     },
   );
 
@@ -76,8 +80,9 @@ test.describe('[API] [Customers] [Delete]', () => {
         responseDelete as unknown as IResponse<IResponseFields>,
         STATUS_CODES.UNAUTHORIZED,
         false,
-        ERRORS.EMPTY_TOKEN,
+        API_ERRORS.EMPTY_TOKEN,
       );
+      validateSchema(errorResponseSchema, responseDelete.body as unknown as IResponse<IResponseFields>);
     },
   );
   test(
@@ -90,8 +95,9 @@ test.describe('[API] [Customers] [Delete]', () => {
         responseDelete as unknown as IResponse<IResponseFields>,
         STATUS_CODES.UNAUTHORIZED,
         false,
-        ERRORS.INVALID_TOKEN,
+        API_ERRORS.INVALID_TOKEN,
       );
+      validateSchema(errorResponseSchema, responseDelete.body as unknown as IResponse<IResponseFields>);
     },
   );
 });
