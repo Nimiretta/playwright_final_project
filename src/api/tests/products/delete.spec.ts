@@ -2,15 +2,15 @@ import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { errorResponseSchema } from 'data/schemas';
 import { test } from 'fixtures';
 import { IResponse, IResponseFields } from 'types';
-import { getAuthToken, generateID } from 'utils';
+import { generateID } from 'utils';
 import { validateDeleteResponse, validateResponse, validateSchema } from 'utils/validations';
 
 test.describe('[API] [Products] [Delete]', async () => {
   let token = '';
   let createdProductId = '';
 
-  test.beforeEach(async ({ page, productsApiService }) => {
-    token = await getAuthToken(page);
+  test.beforeEach(async ({ page, productsApiService, signInApiService }) => {
+    token = await signInApiService.getAuthToken(page);
     createdProductId = (await productsApiService.create(token))._id;
   });
 
