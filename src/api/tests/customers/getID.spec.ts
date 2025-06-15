@@ -34,7 +34,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
       const responseGetID = await customersController.getById(customer._id, token);
       validateResponse(responseGetID, STATUS_CODES.OK, true, null);
       validateSchema(customerSchema, responseGetID.body);
-      expect.soft(customer).toEqual(responseGetID.body.Customer);
+      expect.soft(responseGetID.body.Customer).toEqual(customer);
     },
   );
 
