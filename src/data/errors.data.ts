@@ -4,4 +4,6 @@ export const API_ERRORS = {
   INVALID_TOKEN: 'Invalid access token',
   EXPIRED_TOKEN: 'Access token expired',
   PRODUCT_NOT_FOUND: (id: string) => `Product with id '${id}' wasn't found`,
+  CUSTOMER_BAD_REQUEST: 'Incorrect request body',
+  CUSTOMER_EMAIL_ALREADY_EXIST: (email: string) => `Customer with email '${email}' already exists`,
 } as const;
