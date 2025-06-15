@@ -1,19 +1,23 @@
-import { API_ERRORS, generateID, STATUS_CODES, TAGS } from 'data';
+import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { errorResponseSchema, productSchema } from 'data/schemas';
 import { test, expect } from 'fixtures';
 import { IProductFromResponse } from 'types';
-import { getAuthToken } from 'utils';
+import { generateID } from 'utils';
 import { validateResponse, validateSchema } from 'utils/validations';
 
 test.describe('[API] [Products] [Get By Id]', () => {
   let token = '';
   let createdProduct: IProductFromResponse;
 
-  test.beforeAll(async ({ productsApiService, browser }) => {
+  test.beforeAll(async ({ productsApiService, browser, signInApiService }) => {
     const context = await browser.newContext();
     const page = await context.newPage();
-    token = await getAuthToken(page);
+    token = await signInApiService.getAuthToken(page);
     createdProduct = await productsApiService.create(token);
+  });
+
+  test.afterAll(async ({ productsApiService }) => {
+    await productsApiService.delete(createdProduct._id, token);
   });
 
   test(
@@ -75,8 +79,4 @@ test.describe('[API] [Products] [Get By Id]', () => {
       validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
     },
   );
-
-  test.afterAll(async ({ productsApiService }) => {
-    await productsApiService.delete(createdProduct._id, token);
-  });
 });
