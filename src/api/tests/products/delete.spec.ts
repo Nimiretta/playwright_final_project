@@ -1,8 +1,8 @@
-import { API_ERRORS, generateID, STATUS_CODES, TAGS } from 'data';
+import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { errorResponseSchema } from 'data/schemas';
 import { test } from 'fixtures';
 import { IResponse, IResponseFields } from 'types';
-import { getAuthToken } from 'utils';
+import { getAuthToken, generateID } from 'utils';
 import { validateDeleteResponse, validateResponse, validateSchema } from 'utils/validations';
 
 test.describe('[API] [Products] [Delete]', async () => {
