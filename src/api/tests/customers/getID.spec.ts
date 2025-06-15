@@ -9,16 +9,21 @@ import { generateID } from 'data/generateID.data';
 import { errorResponseSchema } from 'data/schemas/errorResponse.schema';
 import { validateSchema } from 'utils/validations/schemaValidation.utils';
 import { customerSchema } from 'data/schemas/customers/customer.schema';
+import { getAuthToken } from 'utils/authToken.utils';
 
 test.describe('[API] [Customers] [GET by ID]', () => {
   let token = '';
   let customer: ICustomerFromResponse;
 
-  test.beforeEach(async ({ signInApiService }) => {
-    token = await signInApiService.loginAsLocalUser();
-  });
+  // test.beforeEach(async ({ signInApiService }) => {
+  //   token = await signInApiService.loginAsLocalUser();
+  // });
 
-  test.beforeEach(async ({ customersApiService }) => {
+  test.beforeEach(async ({ browser, customersApiService }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    token = await getAuthToken(page);
+
     customer = await customersApiService.create(token);
   });
 
