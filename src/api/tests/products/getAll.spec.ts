@@ -28,7 +28,7 @@ test.describe('[API] [Products] [Get All]', () => {
         expect.soft(productFromResponse).toEqual(createdProduct);
       });
 
-      await productsApiService.delete(token, createdProduct._id);
+      await productsApiService.delete(createdProduct._id, token);
     },
   );
 
