@@ -26,7 +26,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
   });
 
   test(
-    'Should Get  the customer by correct ID',
+    'Should GET  the customer by correct ID',
     { tag: ['@1_C_GET_ID_API', TAGS.SMOKE, TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const responseGetID = await customersController.getById(customer._id, token);
@@ -37,7 +37,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
   );
 
   test(
-    'Should NOT Get customer with a non-existent ID',
+    'Should NOT GET customer with a non-existent ID',
     { tag: ['@2_C_GET_ID_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const nonexistentID = generateID();
@@ -53,7 +53,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
   );
 
   test(
-    ' Should NOT Get customer with INVALID  format ID',
+    ' Should NOT GET customer with INVALID  format ID',
     { tag: ['@3_C_GET_ID_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const invalidID = '123';
@@ -69,7 +69,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
   );
 
   test(
-    'Should NOT delete  customer with correct ID  and  empty  authorization token',
+    'Should NOT GET  customer with correct ID  and  empty  authorization token',
     { tag: ['@4_C_GET_ID_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const emptyToken = '';
@@ -88,7 +88,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
     { tag: ['@5_C_GET_ID_API', TAGS.API, TAGS.REGRESSION] },
     async ({ customersController }) => {
       const incorrectToken = '12345';
-      const responseGetID = await customersController.delete(customer._id, incorrectToken);
+      const responseGetID = await customersController.getById(customer._id, incorrectToken);
       validateResponse(
         responseGetID as unknown as IResponse<IResponseFields>,
         STATUS_CODES.UNAUTHORIZED,
