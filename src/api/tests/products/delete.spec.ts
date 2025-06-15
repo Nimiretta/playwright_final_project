@@ -14,6 +14,13 @@ test.describe('[API] [Products] [Delete]', async () => {
     createdProductId = (await productsApiService.create(token))._id;
   });
 
+  test.afterEach(async ({ productsApiService, productsController }) => {
+    const isProductExists = (await productsController.getById(createdProductId, token)).status === STATUS_CODES.OK;
+    if (isProductExists) {
+      await productsApiService.delete(createdProductId, token);
+    }
+  });
+
   test(
     'Should delete product by ID',
     { tag: ['@1_P_DL_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION] },
@@ -93,11 +100,4 @@ test.describe('[API] [Products] [Delete]', async () => {
       );
     },
   );
-
-  test.afterEach(async ({ productsApiService, productsController }) => {
-    const isProductExists = (await productsController.getById(createdProductId, token)).status === STATUS_CODES.OK;
-    if (isProductExists) {
-      await productsApiService.delete(createdProductId, token);
-    }
-  });
 });
