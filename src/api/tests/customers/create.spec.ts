@@ -1,6 +1,6 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { generateCustomerData } from 'data/customers';
-import { customerNegativeTestData, customerPositiveTestData } from 'data/customers/createCustomerTest.data';
+import { customerNegativeTestData, customerPositiveTestData } from 'data/customers';
 import { customerSchema, errorResponseSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
 import { ICustomer } from 'types';
