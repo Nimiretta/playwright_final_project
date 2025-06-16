@@ -9,10 +9,8 @@ test.describe('[API] [Products] [Get By Id]', () => {
   let token = '';
   let createdProduct: IProductFromResponse;
 
-  test.beforeAll(async ({ productsApiService, browser, signInApiService }) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    token = await signInApiService.getAuthToken(page);
+  test.beforeEach(async ({ productsApiService, signInApiService }) => {
+    token = await signInApiService.getAuthToken();
     createdProduct = await productsApiService.create(token);
   });
 

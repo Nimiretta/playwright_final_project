@@ -9,8 +9,8 @@ interface IApiServices {
 }
 
 export const test = base.extend<IApiServices>({
-  signInApiService: async ({ request }, use) => {
-    await use(new SignInApiService(request));
+  signInApiService: async ({ request, page }, use) => {
+    await use(new SignInApiService(request, page));
   },
 
   productsApiService: async ({ request }, use) => {

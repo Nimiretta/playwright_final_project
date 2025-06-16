@@ -8,8 +8,10 @@ import { Page } from '@playwright/test';
 
 export class SignInApiService {
   controller: SignInController;
-  constructor(request: APIRequestContext) {
+  page: Page;
+  constructor(request: APIRequestContext, page: Page) {
     this.controller = new SignInController(request);
+    this.page = page;
   }
 
   @logStep('Login and get token via API')
@@ -24,7 +26,7 @@ export class SignInApiService {
     return token;
   }
 
-  async getAuthToken(page: Page) {
-    return (await page.context().cookies()).find((c) => c.name === 'Authorization')!.value;
+  async getAuthToken() {
+    return (await this.page.context().cookies()).find((c) => c.name === 'Authorization')!.value;
   }
 }
