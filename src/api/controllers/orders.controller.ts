@@ -14,7 +14,7 @@ export class OrdersController {
   }
 
   @logStep('Send get order by id request')
-  async getByIdOrder(token: string, id: string) {
+  async getById(id: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS_BY_ID(id),
@@ -28,7 +28,7 @@ export class OrdersController {
   }
 
   @logStep('Send delete order request')
-  async deleteOrder(token: string, id: string) {
+  async delete(id: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS_BY_ID(id),
@@ -40,14 +40,15 @@ export class OrdersController {
     return await this.request.send<null>(options);
   }
 
-  @logStep('Send put order request')
-  async updateOrder(token: string, id: string, body: IOrderRequest) {
+  @logStep('Send update order request')
+  async update(id: string, body: IOrderRequest, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS_BY_ID(id),
       method: 'put',
       data: body,
       headers: {
+        'content-type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     };
@@ -55,7 +56,7 @@ export class OrdersController {
   }
 
   @logStep('Send create order request')
-  async createOrder(token: string, body: IOrderRequest) {
+  async create(body: IOrderRequest, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS,
@@ -70,7 +71,7 @@ export class OrdersController {
   }
 
   @logStep('Send getAllSorted orders request')
-  async getAllSortedOrders(token: string, params?: Record<string, string>) {
+  async getAllSorted(token: string, params?: Record<string, string>) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS + (params ? convertRequestParams(params) : ''),
@@ -84,7 +85,7 @@ export class OrdersController {
   }
 
   @logStep('Send assign manager request')
-  async assignManager(token: string, orderId: string, managerId: string) {
+  async assignManager(orderId: string, managerId: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ASSIGN_MANAGER(orderId, managerId),
@@ -98,7 +99,7 @@ export class OrdersController {
   }
 
   @logStep('Send unassign manager request')
-  async unassignManager(token: string, orderId: string) {
+  async unassignManager(orderId: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.UNASSIGN_MANAGER(orderId),
@@ -111,7 +112,7 @@ export class OrdersController {
     return await this.request.send<IOrderFromResponse>(options);
   }
   @logStep('Send add comment request to order ')
-  async addComment(token: string, orderId: string, body: IOrderCommentRequest) {
+  async addComment(orderId: string, body: IOrderCommentRequest, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDER_COMMENTS_ADD(orderId),
@@ -126,7 +127,7 @@ export class OrdersController {
   }
 
   @logStep('Send delete comment request to order ')
-  async deleteComment(token: string, orderId: string, commentId: string) {
+  async deleteComment(orderId: string, commentId: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDER_COMMENTS_DELETE(orderId, commentId),
