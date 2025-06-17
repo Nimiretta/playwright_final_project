@@ -86,4 +86,5 @@ export interface IOrderHistoryItem {
   changedOn: string;
   action: ORDER_HISTORY_ACTIONS;
   performer: IUser;
+  assignedManager: IAssignedManager | null;
 }
