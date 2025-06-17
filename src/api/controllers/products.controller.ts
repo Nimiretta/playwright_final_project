@@ -65,7 +65,7 @@ export class ProductsController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IProductResponse>(options);
+    return await this.request.send<IProductResponse>(options);
   }
 
   @logStep('Send getAll products request')
@@ -79,7 +79,7 @@ export class ProductsController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IProductsResponse>(options);
+    return await this.request.send<IProductsResponse>(options);
   }
 
   @logStep('Send getAllSorted products request')
@@ -93,6 +93,6 @@ export class ProductsController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IProductResponseSorted>(options);
+    return await this.request.send<IProductResponseSorted>(options);
   }
 }

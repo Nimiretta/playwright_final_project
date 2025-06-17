@@ -14,7 +14,7 @@ export class OrdersController {
   }
 
   @logStep('Send get order by id request')
-  async getByIdOrder(id: string, token: string) {
+  async getByIdOrder(token: string, id: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS_BY_ID(id),
@@ -28,7 +28,7 @@ export class OrdersController {
   }
 
   @logStep('Send delete order request')
-  async deleteOrder(id: string, token: string) {
+  async deleteOrder(token: string, id: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS_BY_ID(id),
@@ -41,11 +41,12 @@ export class OrdersController {
   }
 
   @logStep('Send put order request')
-  async updateOrder(id: string, token: string) {
+  async updateOrder(token: string, id: string, body: IOrderRequest) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.ORDERS_BY_ID(id),
       method: 'put',
+      data: body,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -79,7 +80,7 @@ export class OrdersController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IOrderResponseSorted>(options);
+    return await this.request.send<IOrderResponseSorted>(options);
   }
 
   @logStep('Assign Manager to orders request')
@@ -93,7 +94,7 @@ export class OrdersController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IOrderFromResponse>(options);
+    return await this.request.send<IOrderFromResponse>(options);
   }
 
   @logStep('Unassign Manager request from order ')
@@ -107,6 +108,6 @@ export class OrdersController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IOrderFromResponse>(options);
+    return await this.request.send<IOrderFromResponse>(options);
   }
 }

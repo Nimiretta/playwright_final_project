@@ -3,6 +3,8 @@ import { ICustomerFromResponse } from './customer.types';
 import { IProductFromResponse } from './product.types';
 import { IResponseFields, OrderSortFields, SortDirection } from './api.types';
 import { ROLES } from 'data/roles.data';
+import { COUNTRIES } from 'data/customers/countries.data';
+import { DELIVERY_CONDITIONS } from 'data/orders/delivery.data';
 
 export interface IOrderRequest {
   customer: string;
@@ -15,10 +17,10 @@ export interface IOrder {
   products: IProductFromResponse[];
   createdOn: string;
   total_price: number;
-  delivery: null;
-  comments: string[];
+  delivery: IDelivery | null;
+  comments: IComment[];
   history: object[];
-  assignedManager: IAssignedManager;
+  assignedManager: IAssignedManager | null;
 }
 
 export interface IOrderFromResponse extends IOrder {
@@ -53,18 +55,20 @@ export interface IAssignedManager {
   username: string;
   _id: string;
 }
-// export interface IProductsResponse extends IResponseFields {
-//   Products: IProductFromResponse[];
-// }
+export interface IDelivery {
+  finalDate: string;
+  condition: DELIVERY_CONDITIONS;
+  address: {
+    country: COUNTRIES;
+    city: string;
+    street: string;
+    house: number;
+    flat: number;
+  };
+}
 
-// export interface IProductResponseSorted extends IProductsResponse {
-//   sorting: {
-//     sortField: ProductSortFields;
-//     sortOrder: SortDirection;
-//   };
-//   page: number;
-//   limit: number;
-//   search: string;
-//   total: number;
-//   manufacturer: MANUFACTURERS[];
-// }
+export interface IComment {
+  createdOn: string;
+  text: string;
+  _id: string;
+}
