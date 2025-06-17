@@ -13,5 +13,7 @@ export const apiConfig = {
     ORDERS_BY_ID: (id: string) => `/api/orders/${id}/`,
     ASSIGN_MANAGER: (orderId: string, managerId: string) => `/api/orders/${orderId}/assign-manager/${managerId}`,
     UNASSIGN_MANAGER: (orderId: string) => `/api/orders/${orderId}/unassign-manager`,
+    ORDER_COMMENTS_ADD: (id: string) => `api/orders/${id}/comments`,
+    ORDER_COMMENTS_DELETE: (id: string, commentId: string) => `/api/orders/${id}/comments/${commentId}`,
   },
 } as const;

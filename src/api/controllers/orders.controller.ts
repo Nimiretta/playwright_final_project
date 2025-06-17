@@ -2,7 +2,7 @@ import { APIRequestContext } from '@playwright/test';
 import { RequestApi } from 'api/apiClients/request';
 import { apiConfig } from 'config/apiConfig';
 import { IRequestOptions } from 'types/api.types';
-import { IOrderFromResponse, IOrderRequest, IOrderResponseSorted } from 'types/orders.types';
+import { IOrderCommentRequest, IOrderFromResponse, IOrderRequest, IOrderResponseSorted } from 'types/orders.types';
 import { logStep } from 'utils/reporter.utils';
 import { convertRequestParams } from 'utils/requestParams.utils';
 
@@ -83,7 +83,7 @@ export class OrdersController {
     return await this.request.send<IOrderResponseSorted>(options);
   }
 
-  @logStep('Assign Manager to orders request')
+  @logStep('Send assign manager request')
   async assignManager(token: string, orderId: string, managerId: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
@@ -97,7 +97,7 @@ export class OrdersController {
     return await this.request.send<IOrderFromResponse>(options);
   }
 
-  @logStep('Unassign Manager request from order ')
+  @logStep('Send unassign manager request')
   async unassignManager(token: string, orderId: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
@@ -109,5 +109,32 @@ export class OrdersController {
       },
     };
     return await this.request.send<IOrderFromResponse>(options);
+  }
+  @logStep('Send add comment request to order ')
+  async addComment(token: string, orderId: string, body: IOrderCommentRequest) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.ORDER_COMMENTS_ADD(orderId),
+      method: 'post',
+      data: body,
+      headers: {
+        'content-type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<IOrderFromResponse>(options);
+  }
+
+  @logStep('Send delete comment request to order ')
+  async deleteComment(token: string, orderId: string, commentId: string) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.ORDER_COMMENTS_DELETE(orderId, commentId),
+      method: 'delete',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<null>(options);
   }
 }

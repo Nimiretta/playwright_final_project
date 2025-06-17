@@ -20,7 +20,7 @@ export interface IOrder {
   createdOn: string;
   total_price: number;
   delivery: IDelivery | null;
-  comments: IOrderComment[];
+  comments: IOrderCommentResponse[];
   history: IOrderHistoryItem[];
   assignedManager: IAssignedManager | null;
 }
@@ -71,10 +71,13 @@ export interface IAddress {
   flat: number;
 }
 
-export interface IOrderComment {
+export interface IOrderCommentResponse {
   createdOn: string;
   text: string;
   _id: string;
+}
+export interface IOrderCommentRequest {
+  comment: string;
 }
 
 export interface IOrderHistoryItem {
