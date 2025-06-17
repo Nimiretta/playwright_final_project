@@ -1,7 +1,7 @@
 export interface IRequestOptions {
   baseURL: string;
   url: string;
-  method: 'get' | 'post' | 'put' | 'delete';
+  method: 'get' | 'post' | 'put' | 'delete' | 'patch';
   data?: object;
   headers?: Record<string, string>;
 }
