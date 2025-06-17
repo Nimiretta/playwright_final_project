@@ -5,7 +5,7 @@ import { TAGS } from 'data/tags.data';
 import { STATUS_CODES } from 'data/statusCodes.data';
 import { API_ERRORS } from 'data/errors.data';
 import { IResponse, IResponseFields } from 'types/api.types';
-import { generateID } from 'data/generateID.data';
+import { generateID } from 'utils';
 import { errorResponseSchema } from 'data/schemas/errorResponse.schema';
 import { validateSchema } from 'utils/validations/schemaValidation.utils';
 
