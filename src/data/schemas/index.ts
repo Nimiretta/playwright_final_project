@@ -9,3 +9,4 @@ export * from './customers/customersWithSortAndFilter.schema';
 export * from './orders/order.schema';
 export * from './orders/ordersWithSortAndFilter.schema';
 export * from './orders/allOrders.schema';
+export * from './orders/notifications.schema';
