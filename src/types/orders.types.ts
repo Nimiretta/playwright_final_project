@@ -5,6 +5,8 @@ import { IResponseFields, OrderSortFields, SortDirection } from './api.types';
 import { ROLES } from 'data/roles.data';
 import { COUNTRIES } from 'data/customers/countries.data';
 import { DELIVERY_CONDITIONS } from 'data/orders/delivery.data';
+import { ORDER_HISTORY_ACTIONS } from 'data/orders/historyActions.data';
+import { IUser } from './signIn.types';
 
 export interface IOrderRequest {
   customer: string;
@@ -18,8 +20,8 @@ export interface IOrder {
   createdOn: string;
   total_price: number;
   delivery: IDelivery | null;
-  comments: IComment[];
-  history: object[];
+  comments: IOrderComment[];
+  history: IOrderHistoryItem[];
   assignedManager: IAssignedManager | null;
 }
 
@@ -58,17 +60,30 @@ export interface IAssignedManager {
 export interface IDelivery {
   finalDate: string;
   condition: DELIVERY_CONDITIONS;
-  address: {
-    country: COUNTRIES;
-    city: string;
-    street: string;
-    house: number;
-    flat: number;
-  };
+  address: IAddress;
 }
 
-export interface IComment {
+export interface IAddress {
+  country: COUNTRIES;
+  city: string;
+  street: string;
+  house: number;
+  flat: number;
+}
+
+export interface IOrderComment {
   createdOn: string;
   text: string;
   _id: string;
+}
+
+export interface IOrderHistoryItem {
+  status: ORDER_STATUSES;
+  customer: string;
+  products: IProductFromResponse[];
+  total_price: number;
+  delivery: IDelivery | null;
+  changedOn: string;
+  action: ORDER_HISTORY_ACTIONS;
+  performer: IUser;
 }
