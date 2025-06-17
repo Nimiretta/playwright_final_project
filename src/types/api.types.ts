@@ -22,3 +22,5 @@ export type SortDirection = 'asc' | 'desc';
 export type CustomersSortField = 'createdOn' | 'email' | 'name' | 'country';
 
 export type ProductSortFields = 'createdOn' | 'name' | 'manufacturer' | 'price';
+
+export type OrderSortFields = 'createdOn' | '_id' | 'email' | 'price' | 'delivery' | 'status' | 'assignedManager';
