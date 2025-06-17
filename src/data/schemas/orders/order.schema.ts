@@ -1,0 +1,124 @@
+import { COUNTRIES } from 'data/customers';
+import { DELIVERY_CONDITIONS, ORDER_HISTORY_ACTIONS, ORDER_STATUSES } from 'data/orders';
+import { productSchema } from 'data/schemas';
+import { customerSchema } from 'data/schemas';
+
+const commentsSchema = {
+  type: 'object',
+  properties: {
+    createdOn: { type: 'string' },
+    text: { type: 'string' },
+    _id: { type: 'string' },
+  },
+  required: ['createdOn', 'text', '_id'],
+};
+
+const assignedManagerSchema = {
+  anyOf: [
+    {
+      type: 'object',
+      properties: {
+        createdOn: { type: 'string' },
+        firstName: { type: 'string' },
+        lastName: { type: 'string' },
+        username: { type: 'string' },
+        _id: { type: 'string' },
+        role: { type: 'array' },
+      },
+      required: ['createdOn', 'firstName', 'lastName', 'username', '_id', 'role'],
+    },
+    { type: 'null' },
+  ],
+};
+
+const deliverySchema = {
+  anyOf: [
+    {
+      type: 'object',
+      properties: {
+        conditions: { type: 'string', enum: Object.values(DELIVERY_CONDITIONS) },
+        finalDate: { type: 'string' },
+        address: {
+          type: 'object',
+          properties: {
+            country: { type: 'string', enum: Object.values(COUNTRIES) },
+            city: { type: 'string' },
+            street: { type: 'string' },
+            house: { type: 'number' },
+            flat: { type: 'number' },
+          },
+        },
+      },
+      required: ['conditions', 'finalDate', 'address'],
+    },
+    { type: 'null' },
+  ],
+};
+
+const historySchema = {
+  type: 'object',
+  properties: {
+    action: { type: 'string', enum: Object.values(ORDER_HISTORY_ACTIONS) },
+    assignedManager: assignedManagerSchema,
+    changedOn: { type: 'string' },
+    customer: { type: 'string' },
+    delivery: deliverySchema,
+    products: { type: 'array', items: productSchema.properties.Product },
+    status: { type: 'string' },
+    total_price: { type: 'number' },
+    performer: assignedManagerSchema,
+  },
+  required: [
+    'action',
+    'assignedManager',
+    'changedOn',
+    'customer',
+    'delivery',
+    'products',
+    'status',
+    'total_price',
+    'performer',
+  ],
+};
+
+export const orderSchema = {
+  type: 'object',
+  properties: {
+    Order: {
+      type: 'object',
+      properties: {
+        comments: { type: 'array', items: commentsSchema },
+        createdOn: { type: 'string' },
+        assignedManager: assignedManagerSchema,
+        delivery: deliverySchema,
+        history: {
+          type: 'array',
+          items: historySchema,
+        },
+        products: {
+          type: 'array',
+          items: productSchema.properties.Product,
+        },
+        customer: customerSchema.properties.Customer,
+        status: { type: 'string', enum: Object.values(ORDER_STATUSES) },
+        total_price: { type: 'number' },
+        _id: { type: 'string' },
+      },
+      required: [
+        'comments',
+        'createdOn',
+        'assignedManager',
+        'delivery',
+        'history',
+        'products',
+        'customer',
+        'status',
+        'total_price',
+        '_id',
+      ],
+    },
+    IsSuccess: { type: 'boolean' },
+    ErrorMessage: { type: ['string', 'null'] },
+  },
+  required: ['Order', 'IsSuccess', 'ErrorMessage'],
+};
