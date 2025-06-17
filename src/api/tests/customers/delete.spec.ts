@@ -13,8 +13,8 @@ test.describe('[API] [Customers] [Delete]', () => {
   let token = '';
   let customer: ICustomerFromResponse;
 
-  test.beforeEach(async ({ page, signInApiService, customersApiService }) => {
-    token = await signInApiService.getAuthToken(page);
+  test.beforeEach(async ({ signInApiService, customersApiService }) => {
+    token = await signInApiService.getAuthToken();
 
     customer = await customersApiService.create(token);
   });

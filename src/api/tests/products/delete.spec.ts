@@ -9,8 +9,8 @@ test.describe('[API] [Products] [Delete]', async () => {
   let token = '';
   let createdProductId = '';
 
-  test.beforeEach(async ({ page, productsApiService, signInApiService }) => {
-    token = await signInApiService.getAuthToken(page);
+  test.beforeEach(async ({ productsApiService, signInApiService }) => {
+    token = await signInApiService.getAuthToken();
     createdProductId = (await productsApiService.create(token))._id;
   });
 

@@ -6,10 +6,8 @@ import { validateResponse, validateSchema } from 'utils/validations';
 test.describe('[API] [Products] [Get All]', () => {
   let token = '';
 
-  test.beforeAll(async ({ browser, signInApiService }) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    token = await signInApiService.getAuthToken(page);
+  test.beforeEach(async ({ signInApiService }) => {
+    token = await signInApiService.getAuthToken();
   });
 
   test(
