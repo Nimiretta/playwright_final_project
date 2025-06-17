@@ -1,7 +1,22 @@
 import { COUNTRIES } from 'data/customers';
 import { DELIVERY_CONDITIONS, ORDER_HISTORY_ACTIONS, ORDER_STATUSES } from 'data/orders';
+import { MANUFACTURERS } from 'data/products';
 import { productSchema } from 'data/schemas';
 import { customerSchema } from 'data/schemas';
+
+const productsSchema = {
+  type: 'object',
+  properties: {
+    _id: { type: 'string' },
+    name: { type: 'string' },
+    amount: { type: 'number' },
+    price: { type: 'number' },
+    manufacturer: { type: 'string', enum: Object.values(MANUFACTURERS) },
+    received: { type: 'boolean' },
+    notes: { type: 'string' },
+  },
+  required: ['_id', 'name', 'amount', 'price', 'manufacturer', 'received'],
+};
 
 const commentsSchema = {
   type: 'object',
@@ -63,7 +78,7 @@ const historySchema = {
     changedOn: { type: 'string' },
     customer: { type: 'string' },
     delivery: deliverySchema,
-    products: { type: 'array', items: productSchema.properties.Product },
+    products: { type: 'array', items: productsSchema },
     status: { type: 'string' },
     total_price: { type: 'number' },
     performer: assignedManagerSchema,
