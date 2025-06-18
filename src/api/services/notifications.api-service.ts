@@ -13,13 +13,13 @@ export class NotificationsApiService {
   }
 
   @logStep("Get authenticated user's notifications list via API")
-  async getAll(token: string, read: boolean = false) {
+  async getAll(token: string, read?: boolean) {
     const response = await this.controller.getAll(token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(notificationsSchema, response.body);
-    return read
+    return typeof read === 'undefined'
       ? response.body.Notifications
-      : response.body.Notifications.filter((notification) => !notification.read);
+      : response.body.Notifications.filter((notification) => notification.read === read);
   }
 
   @logStep("Mark notification as read and get authenticated user's notifications list via API")
