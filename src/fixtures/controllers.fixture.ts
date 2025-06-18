@@ -1,11 +1,18 @@
 import { test as base } from '@playwright/test';
-import { CustomersController, OrdersController, ProductsController, SignInController } from 'api/controllers';
+import {
+  CustomersController,
+  NotificationsController,
+  OrdersController,
+  ProductsController,
+  SignInController,
+} from 'api/controllers';
 
 interface IControllers {
   productsController: ProductsController;
   signInController: SignInController;
   customersController: CustomersController;
   ordersController: OrdersController;
+  notificationsController: NotificationsController;
 }
 
 export const test = base.extend<IControllers>({
@@ -23,5 +30,9 @@ export const test = base.extend<IControllers>({
 
   ordersController: async ({ request }, use) => {
     await use(new OrdersController(request));
+  },
+
+  notificationsController: async ({ request }, use) => {
+    await use(new NotificationsController(request));
   },
 });
