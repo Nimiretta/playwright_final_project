@@ -17,8 +17,21 @@ export interface IResponseFields {
   ErrorMessage: string | null;
 }
 
+export interface ISorting<T extends string> {
+  sortField: T;
+  sortOrder: SortDirection;
+}
+export interface IPagination {
+  page: number;
+  limit: number;
+  search: string;
+  total: number;
+}
+
 export type SortDirection = 'asc' | 'desc';
 
 export type CustomersSortField = 'createdOn' | 'email' | 'name' | 'country';
 
 export type ProductSortFields = 'createdOn' | 'name' | 'manufacturer' | 'price';
+
+export type OrderSortFields = 'createdOn' | '_id' | 'email' | 'price' | 'delivery' | 'status' | 'assignedManager';

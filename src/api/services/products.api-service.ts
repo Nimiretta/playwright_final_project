@@ -16,7 +16,7 @@ export class ProductsApiService {
   @logStep('Create product and get created product via API')
   async create(token: string, productData?: IProduct) {
     const body = generateProductData(productData);
-    const response = await this.controller.create(token, body);
+    const response = await this.controller.create(body, token);
     validateResponse(response, STATUS_CODES.CREATED, true, null);
     validateSchema(productSchema, response.body);
     return response.body.Product;

@@ -1,5 +1,5 @@
 import { MANUFACTURERS } from 'data/products';
-import { IResponseFields, ProductSortFields, SortDirection } from 'types/api.types';
+import { IPagination, IResponseFields, ISorting, ProductSortFields } from 'types/api.types';
 
 export interface IProduct {
   name: string;
@@ -14,6 +14,11 @@ export interface IProductFromResponse extends IProduct {
   createdOn: string;
 }
 
+export interface IProductInOrder extends IProduct {
+  _id: string;
+  received: boolean;
+}
+
 export interface IProductResponse extends IResponseFields {
   Product: IProductFromResponse;
 }
@@ -22,14 +27,12 @@ export interface IProductsResponse extends IResponseFields {
   Products: IProductFromResponse[];
 }
 
-export interface IProductResponseSorted extends IProductsResponse {
-  sorting: {
-    sortField: ProductSortFields;
-    sortOrder: SortDirection;
-  };
-  page: number;
-  limit: number;
-  search: string;
-  total: number;
+export interface IProductResponseSorted extends IProductsResponse, IPagination {
+  sorting: ISorting<ProductSortFields>;
   manufacturer: MANUFACTURERS[];
+}
+
+export interface ITopProduct {
+  name: string;
+  sales: number;
 }
