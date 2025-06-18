@@ -13,15 +13,17 @@ export class NotificationsApiService {
   }
 
   @logStep("Get authenticated user's notifications list via API")
-  async getNotificationsList(token: string) {
+  async getAll(token: string, read: boolean = false) {
     const response = await this.controller.getAll(token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(notificationsSchema, response.body);
-    return response.body.Notifications;
+    return read
+      ? response.body.Notifications
+      : response.body.Notifications.filter((notification) => !notification.read);
   }
 
   @logStep("Mark notification as read and get authenticated user's notifications list via API")
-  async readNotification(id: string, token: string) {
+  async readById(id: string, token: string) {
     const response = await this.controller.markReadById(id, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(notificationsSchema, response.body);
@@ -29,7 +31,7 @@ export class NotificationsApiService {
   }
 
   @logStep("Mark all notifications as read and get authenticated user's notifications list via API")
-  async readAllNotifications(token: string) {
+  async readAll(token: string) {
     const response = await this.controller.markReadAll(token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(notificationsSchema, response.body);
