@@ -1,11 +1,18 @@
 import { test as base } from '@playwright/test';
-import { CustomersApiService, ProductsApiService, OrdersApiService, SignInApiService } from 'api/services';
+import {
+  CustomersApiService,
+  ProductsApiService,
+  OrdersApiService,
+  SignInApiService,
+  NotificationsApiService,
+} from 'api/services';
 
 interface IApiServices {
   signInApiService: SignInApiService;
   ordersApiService: OrdersApiService;
   productsApiService: ProductsApiService;
   customersApiService: CustomersApiService;
+  notificationsApiService: NotificationsApiService;
 }
 
 export const test = base.extend<IApiServices>({
@@ -23,5 +30,9 @@ export const test = base.extend<IApiServices>({
 
   ordersApiService: async ({ request }, use) => {
     await use(new OrdersApiService(request));
+  },
+
+  notificationsApiService: async ({ request }, use) => {
+    await use(new NotificationsApiService(request));
   },
 });
