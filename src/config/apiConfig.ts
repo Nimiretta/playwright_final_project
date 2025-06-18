@@ -21,5 +21,6 @@ export const apiConfig = {
     NOTIFICATIONS: '/api/notifications',
     NOTIFICATIONS_BY_ID_READ: (id: string) => `/api/notifications/${id}/read`,
     NOTIFICATIONS_ALL_READ: '/api/notifications/mark-all-read',
+    CUSTOMER_ORDERS: (orderId: string) => `/api/customers/${orderId}/orders`,
   },
 } as const;
