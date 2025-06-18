@@ -99,10 +99,10 @@ export class CustomersController {
   }
 
   @logStep('Send get customer orders requets')
-  async getOrders(orderId: string, token: string) {
+  async getOrders(customerId: string, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
-      url: apiConfig.ENDPOINTS.CUSTOMER_ORDERS(orderId),
+      url: apiConfig.ENDPOINTS.CUSTOMER_ORDERS(customerId),
       method: 'get',
       headers: {
         Authorization: `Bearer ${token}`,

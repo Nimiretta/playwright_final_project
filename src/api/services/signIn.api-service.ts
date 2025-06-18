@@ -7,7 +7,7 @@ import { validateResponse } from 'utils/validations';
 import { Page } from '@playwright/test';
 
 export class SignInApiService {
-  controller: SignInController;
+  private controller: SignInController;
   page: Page;
   constructor(request: APIRequestContext, page: Page) {
     this.controller = new SignInController(request);
