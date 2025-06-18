@@ -4,4 +4,3 @@ export * from './tags.data';
 export * from './sortOrder.data';
 export * from './errors.data';
 export * from './roles.data';
-export * from './generateID.data';
