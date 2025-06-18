@@ -1,6 +1,7 @@
 import { APIRequestContext } from '@playwright/test';
 import { RequestApi } from 'api/apiClients/request';
 import { apiConfig } from 'config';
+import { IOrdersResponse } from 'types';
 import { IRequestOptions } from 'types/api.types';
 import { ICustomer, ICustomerResponse, ICustomersResponse, ICustomersResponseSorted } from 'types/customer.types';
 import { logStep } from 'utils';
@@ -95,5 +96,18 @@ export class CustomersController {
       },
     };
     return await this.request.send<null>(options);
+  }
+
+  @logStep('Send get customer orders requets')
+  async getOrders(orderId: string, token: string) {
+    const options: IRequestOptions = {
+      baseURL: apiConfig.BASE_URL,
+      url: apiConfig.ENDPOINTS.CUSTOMER_ORDERS(orderId),
+      method: 'get',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await this.request.send<IOrdersResponse>(options);
   }
 }
