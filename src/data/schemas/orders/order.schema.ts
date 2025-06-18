@@ -1,7 +1,7 @@
 import { COUNTRIES } from 'data/customers';
 import { DELIVERY_CONDITIONS, ORDER_HISTORY_ACTIONS, ORDER_STATUSES } from 'data/orders';
 import { MANUFACTURERS } from 'data/products';
-import { productSchema } from 'data/schemas';
+import { ROLES } from 'data/roles.data';
 import { customerSchema } from 'data/schemas';
 
 const productsSchema = {
@@ -38,9 +38,15 @@ const assignedManagerSchema = {
         lastName: { type: 'string' },
         username: { type: 'string' },
         _id: { type: 'string' },
-        role: { type: 'array' },
+        roles: {
+          type: 'array',
+          items: {
+            type: 'string',
+            enum: Object.values(ROLES),
+          },
+        },
       },
-      required: ['createdOn', 'firstName', 'lastName', 'username', '_id', 'role'],
+      required: ['createdOn', 'firstName', 'lastName', 'username', '_id', 'roles'],
     },
     { type: 'null' },
   ],
@@ -51,7 +57,7 @@ const deliverySchema = {
     {
       type: 'object',
       properties: {
-        conditions: { type: 'string', enum: Object.values(DELIVERY_CONDITIONS) },
+        condition: { type: 'string', enum: Object.values(DELIVERY_CONDITIONS) },
         finalDate: { type: 'string' },
         address: {
           type: 'object',
@@ -62,6 +68,7 @@ const deliverySchema = {
             house: { type: 'number' },
             flat: { type: 'number' },
           },
+          required: ['country', 'city', 'street', 'house', 'flat'],
         },
       },
       required: ['conditions', 'finalDate', 'address'],
@@ -79,7 +86,7 @@ const historySchema = {
     customer: { type: 'string' },
     delivery: deliverySchema,
     products: { type: 'array', items: productsSchema },
-    status: { type: 'string' },
+    status: { type: 'string', enum: Object.values(ORDER_STATUSES) },
     total_price: { type: 'number' },
     performer: assignedManagerSchema,
   },
@@ -112,7 +119,7 @@ export const orderSchema = {
         },
         products: {
           type: 'array',
-          items: productSchema.properties.Product,
+          items: productsSchema,
         },
         customer: customerSchema.properties.Customer,
         status: { type: 'string', enum: Object.values(ORDER_STATUSES) },
