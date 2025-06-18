@@ -1,9 +1,10 @@
 import { ICustomerFromResponse } from './customer.types';
-import { IProductFromResponse, IProductInOrder } from './product.types';
+import { IProductInOrder } from './product.types';
 import { IPagination, IResponseFields, ISorting, OrderSortFields } from './api.types';
 import { COUNTRIES } from 'data/customers/countries.data';
 import { IUser } from './signIn.types';
 import { DELIVERY_CONDITIONS, ORDER_HISTORY_ACTIONS, ORDER_STATUSES } from 'data/orders';
+
 export interface IOrderRequest {
   customer: string;
   products: string[];
@@ -12,7 +13,7 @@ export interface IOrderRequest {
 export interface IOrderFromResponse {
   status: ORDER_STATUSES;
   customer: ICustomerFromResponse;
-  products: IProductFromResponse[];
+  products: IProductInOrder[];
   createdOn: string;
   total_price: number;
   delivery: IDelivery | null;

@@ -14,6 +14,11 @@ export interface IProductFromResponse extends IProduct {
   createdOn: string;
 }
 
+export interface IProductInOrder extends IProduct {
+  _id: string;
+  received: boolean;
+}
+
 export interface IProductResponse extends IResponseFields {
   Product: IProductFromResponse;
 }
@@ -25,10 +30,6 @@ export interface IProductsResponse extends IResponseFields {
 export interface IProductResponseSorted extends IProductsResponse, IPagination {
   sorting: ISorting<ProductSortFields>;
   manufacturer: MANUFACTURERS[];
-}
-export interface IProductInOrder extends IProduct {
-  _id: string;
-  received: boolean;
 }
 
 export interface ITopProduct {
