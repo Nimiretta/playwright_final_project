@@ -6,3 +6,7 @@ export * from './products/allProducts.schema';
 export * from './products/product.schema';
 export * from './products/productsWithSortAndFilter.schema';
 export * from './customers/customersWithSortAndFilter.schema';
+export * from './orders/order.schema';
+export * from './orders/ordersWithSortAndFilter.schema';
+export * from './orders/allOrders.schema';
+export * from './orders/notifications.schema';
