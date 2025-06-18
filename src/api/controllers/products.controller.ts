@@ -39,7 +39,7 @@ export class ProductsController {
   }
 
   @logStep('Send create product request')
-  async create(token: string, body: IProduct) {
+  async create(body: IProduct, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.PRODUCTS,
@@ -54,7 +54,7 @@ export class ProductsController {
   }
 
   @logStep('Send update product request')
-  async update(id: string, token: string, body: IProduct) {
+  async update(id: string, body: IProduct, token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
       url: apiConfig.ENDPOINTS.PRODUCT_BY_ID(id),
@@ -65,7 +65,7 @@ export class ProductsController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IProductResponse>(options);
+    return await this.request.send<IProductResponse>(options);
   }
 
   @logStep('Send getAll products request')
@@ -79,7 +79,7 @@ export class ProductsController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IProductsResponse>(options);
+    return await this.request.send<IProductsResponse>(options);
   }
 
   @logStep('Send getAllSorted products request')
@@ -93,6 +93,6 @@ export class ProductsController {
         Authorization: `Bearer ${token}`,
       },
     };
-    return this.request.send<IProductResponseSorted>(options);
+    return await this.request.send<IProductResponseSorted>(options);
   }
 }

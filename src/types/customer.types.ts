@@ -1,5 +1,5 @@
 import { COUNTRIES } from 'data/customers';
-import { CustomersSortField, IResponseFields, SortDirection } from 'types';
+import { CustomersSortField, IPagination, IResponseFields, ISorting } from 'types';
 
 export interface ICustomer {
   email: string;
@@ -26,14 +26,7 @@ export interface ICustomersResponse extends IResponseFields {
   Customers: ICustomerFromResponse[];
 }
 
-export interface ICustomersResponseSorted extends ICustomersResponse {
-  sorting: {
-    sortField: CustomersSortField;
-    sortOrder: SortDirection;
-  };
+export interface ICustomersResponseSorted extends ICustomersResponse, IPagination {
+  sorting: ISorting<CustomersSortField>;
   country: COUNTRIES[];
-  limit: number;
-  page: number;
-  search: string;
-  total: number;
 }

@@ -1,3 +1,4 @@
+import { ROLES } from 'data/roles.data';
 import { IResponseFields } from './api.types';
 
 export interface ICredentials {
@@ -11,7 +12,7 @@ export interface IUser {
   firstName: string;
   lastName: string;
   createdOn: string;
-  roles: string[];
+  roles: ROLES[];
 }
 
 export interface ILoginResponse extends IResponseFields {
