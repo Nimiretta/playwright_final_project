@@ -14,7 +14,7 @@ export class ProductsApiService {
   }
 
   @logStep('Create product and get created product via API')
-  async create(token: string, productData?: IProduct) {
+  async create(token: string, productData?: Partial<IProduct>) {
     const body = generateProductData(productData);
     const response = await this.controller.create(body, token);
     validateResponse(response, STATUS_CODES.CREATED, true, null);
@@ -26,5 +26,10 @@ export class ProductsApiService {
   async delete(id: string, token: string) {
     const response = await this.controller.delete(id, token);
     validateDeleteResponse(response);
+  }
+
+  @logStep('Create products in bulk and get created products via API')
+  async createBulk(amount: number, token: string, productData?: Partial<IProduct>) {
+    return await Promise.all(Array.from({ length: amount }, () => this.create(token, productData)));
   }
 }
