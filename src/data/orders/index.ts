@@ -4,3 +4,4 @@ export * from './historyActions.data';
 export * from './notifications.data';
 export * from './sortFields.data';
 export * from './generateDelivery.data';
+export * from './generateComment.data';

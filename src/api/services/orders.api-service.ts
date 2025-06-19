@@ -1,8 +1,5 @@
 import { APIRequestContext } from '@playwright/test';
-import { OrdersController } from 'api/controllers';
-import { generateDeliveryData, ORDER_STATUSES } from 'data/orders';
-import { ordersWithSortAndFilter, orderSchema } from 'data/schemas';
-import { STATUS_CODES } from 'data';
+import { generateDeliveryData, ORDER_STATUSES, generateCommentData } from 'data/orders';
 import { logStep, extractIds } from 'utils';
 import {
   IOrderOptions,
@@ -13,13 +10,20 @@ import {
   IOrderOptionsWithDelivery,
   IDeliveryOptions,
 } from 'types';
-import { validateResponse, validateSchema, validateDeleteResponse } from 'utils/validations';
 import { CustomersApiService, ProductsApiService } from '.';
+import { OrdersController, CustomersController, ProductsController } from 'api/controllers';
+import { STATUS_CODES } from 'data';
+import { generateCustomerData } from 'data/customers';
+import { generateProductData } from 'data/products';
+import { orderSchema, ordersWithSortAndFilter } from 'data/schemas';
+import { validateDeleteResponse, validateResponse, validateSchema } from 'utils/validations';
 
 export class OrdersApiService {
   private controller: OrdersController;
   private customerService: CustomersApiService;
   private productsService: ProductsApiService;
+  private customersController: CustomersController;
+  private productsController: ProductsController;
   private customers: Set<string>;
   private products: Set<string>;
   private orders: Set<string>;
@@ -28,6 +32,8 @@ export class OrdersApiService {
     this.controller = new OrdersController(request);
     this.customerService = new CustomersApiService(request);
     this.productsService = new ProductsApiService(request);
+    this.customersController = new CustomersController(request);
+    this.productsController = new ProductsController(request);
     this.customers = new Set();
     this.products = new Set();
     this.orders = new Set();
@@ -119,6 +125,36 @@ export class OrdersApiService {
     return response.body.Order;
   }
 
+  @logStep('Update order by customer')
+  async updateByCustomer(id: string, body: IOrderRequest, token: string) {
+    const customerBodyReq = generateCustomerData();
+    const customer = await this.customersController.create(customerBodyReq, token);
+    const updatedBody: IOrderRequest = {
+      ...body,
+      customer: customer.body.Customer._id,
+    };
+    const response = await this.controller.update(id, updatedBody, token);
+    validateResponse(response, STATUS_CODES.OK, true, null);
+    validateSchema(orderSchema, response.body);
+    return response.body.Order;
+  }
+
+  @logStep('Update order by products')
+  async updateByProducts(id: string, body: IOrderRequest, token: string) {
+    const productsIdArr: string[] = [];
+    const productrBodyReq = generateProductData();
+    const product = await this.productsController.create(productrBodyReq, token);
+    productsIdArr.push(product.body.Product._id);
+    const updatedBody: IOrderRequest = {
+      ...body,
+      products: productsIdArr,
+    };
+    const response = await this.controller.update(id, updatedBody, token);
+    validateResponse(response, STATUS_CODES.OK, true, null);
+    validateSchema(orderSchema, response.body);
+    return response.body.Order;
+  }
+
   @logStep('Update status order')
   async updateStatus(id: string, status: ORDER_STATUSES, token: string) {
     const response = await this.controller.updateStatus(id, status, token);
@@ -144,7 +180,8 @@ export class OrdersApiService {
 
   @logStep('Add comment')
   async addComment(orderId: string, body: IOrderCommentRequest, token: string) {
-    const response = await this.controller.addComment(orderId, body, token);
+    const comment = body.comment ? body : generateCommentData();
+    const response = await this.controller.addComment(orderId, comment, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(orderSchema, response.body);
     return response.body.Order;
@@ -167,6 +204,14 @@ export class OrdersApiService {
   @logStep('Unassign manager from order')
   async unassignManager(orderId: string, token: string) {
     const response = await this.controller.unassignManager(orderId, token);
+    validateResponse(response, STATUS_CODES.OK, true, null);
+    validateSchema(orderSchema, response.body);
+    return response.body.Order;
+  }
+
+  @logStep('Mark products as received in order')
+  async receiveProduct(orderId: string, prodID: string[], token: string) {
+    const response = await this.controller.receiveProduct(orderId, prodID, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(orderSchema, response.body);
     return response.body.Order;
