@@ -169,7 +169,7 @@ export class OrdersController {
   async receiveProduct(orderId: string, prodID: string[], token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
-      url: apiConfig.ENDPOINTS.ORDER_DELIVERY(orderId),
+      url: apiConfig.ENDPOINTS.ORDER_RECEIVE(orderId),
       method: 'post',
       data: { products: prodID },
       headers: {

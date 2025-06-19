@@ -82,23 +82,34 @@ export class OrdersApiService {
   @logStep('Create canceled order w/o delivery and get order via API')
   async createCanceled(token: string, options?: IOrderOptions) {
     const draftId = (await this.createDraft(token, options))._id;
-    const canceled = await this.updateStatus(draftId, ORDER_STATUSES.CANCELED, token);
-    return canceled;
+    return await this.updateStatus(draftId, ORDER_STATUSES.CANCELED, token);
   }
 
   @logStep('Create draft order with delivery and get created order via API')
   async createDraftWithDelivery(token: string, options?: IOrderOptionsWithDelivery) {
     const { deliveryData, ...orderOptions } = options || {};
     const draftId = (await this.createDraft(token, orderOptions))._id;
-    const draftWithDelivery = await this.updateDelivery(draftId, token, deliveryData);
-    return draftWithDelivery;
+    return await this.updateDelivery(draftId, token, deliveryData);
   }
 
   @logStep('Create order In process and get created order via API')
   async createInProcess(token: string, options?: IOrderOptionsWithDelivery) {
     const draftId = (await this.createDraftWithDelivery(token, options))._id;
-    const inProcess = await this.updateStatus(draftId, ORDER_STATUSES.IN_PROCESS, token);
-    return inProcess;
+    return await this.updateStatus(draftId, ORDER_STATUSES.IN_PROCESS, token);
+  }
+
+  @logStep('Create order Partially Received and get created order via API')
+  async createPartiallyReceived(token: string, options?: IOrderOptionsWithDelivery) {
+    const safeOptions = { ...options, productCount: Math.max(options?.productCount ?? 2, 2) };
+    const inProcess = await this.createInProcess(token, safeOptions);
+    return await this.receiveProduct(inProcess._id, [inProcess.products[0]._id], token);
+  }
+
+  @logStep('Create Received order and get created order via API')
+  async createReceived(token: string, options?: IOrderOptionsWithDelivery) {
+    const inProcess = await this.createInProcess(token, options);
+    const productIds = extractIds(inProcess.products);
+    return await this.receiveProduct(inProcess._id, productIds, token);
   }
 
   @logStep('Get order by ID')
