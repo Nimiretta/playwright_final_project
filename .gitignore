@@ -9,3 +9,4 @@ allure-results
 allure-report
 .env
 src/.auth/user.json
+.DS_Store
