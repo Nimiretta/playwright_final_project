@@ -1,5 +1,5 @@
-import { ICustomerFromResponse } from './customer.types';
-import { IProductInOrder } from './product.types';
+import { ICustomer, ICustomerFromResponse } from './customer.types';
+import { IProduct, IProductInOrder } from './product.types';
 import { IPagination, IResponseFields, ISorting, OrderSortFields, SortDirection } from './api.types';
 import { COUNTRIES } from 'data/customers/countries.data';
 import { IUser } from './signIn.types';
@@ -76,4 +76,19 @@ export interface IOrderSortRequest {
   status?: ORDER_STATUSES[];
   sortField?: OrderSortFields;
   sortOrder?: SortDirection;
+}
+
+export interface IOrderOptions {
+  customerData?: Partial<ICustomer>;
+  productData?: Partial<IProduct>;
+  productCount?: number;
+  isUniqueProducts?: boolean;
+}
+
+export interface IDeliveryOptions extends Omit<Partial<IDelivery>, 'address'> {
+  address?: Partial<IAddress>;
+}
+
+export interface IOrderOptionsWithDelivery extends IOrderOptions {
+  deliveryData?: IDeliveryOptions;
 }
