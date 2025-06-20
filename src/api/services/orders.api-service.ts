@@ -231,9 +231,9 @@ export class OrdersApiService {
 
   @logStep('Delete all created entities')
   async clear(token: string) {
-    await Promise.all(Array.from(this.orders, (id) => this.deleteOrder(id, token)));
-    await Promise.all(Array.from(this.products, (id) => this.productsService.delete(id, token)));
-    await Promise.all(Array.from(this.customers, (id) => this.customerService.delete(id, token)));
+    await Promise.allSettled(Array.from(this.orders, (id) => this.deleteOrder(id, token)));
+    await Promise.allSettled(Array.from(this.products, (id) => this.productsService.delete(id, token)));
+    await Promise.allSettled(Array.from(this.customers, (id) => this.customerService.delete(id, token)));
     this.orders.clear();
     this.products.clear();
     this.customers.clear();
