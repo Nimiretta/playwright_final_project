@@ -9,12 +9,11 @@ import {
   IProduct,
   IOrderOptionsWithDelivery,
   IDeliveryOptions,
+  OrderCustomerUpdateOptions,
 } from 'types';
 import { CustomersApiService, ProductsApiService } from '.';
-import { OrdersController, CustomersController, ProductsController } from 'api/controllers';
+import { OrdersController } from 'api/controllers';
 import { STATUS_CODES } from 'data';
-import { generateCustomerData } from 'data/customers';
-import { generateProductData } from 'data/products';
 import { orderSchema, ordersWithSortAndFilter } from 'data/schemas';
 import { validateDeleteResponse, validateResponse, validateSchema } from 'utils/validations';
 
@@ -22,8 +21,6 @@ export class OrdersApiService {
   private controller: OrdersController;
   private customerService: CustomersApiService;
   private productsService: ProductsApiService;
-  private customersController: CustomersController;
-  private productsController: ProductsController;
   private customers: Set<string>;
   private products: Set<string>;
   private orders: Set<string>;
@@ -32,8 +29,6 @@ export class OrdersApiService {
     this.controller = new OrdersController(request);
     this.customerService = new CustomersApiService(request);
     this.productsService = new ProductsApiService(request);
-    this.customersController = new CustomersController(request);
-    this.productsController = new ProductsController(request);
     this.customers = new Set();
     this.products = new Set();
     this.orders = new Set();
@@ -112,7 +107,7 @@ export class OrdersApiService {
     return await this.receiveProduct(inProcess._id, productIds, token);
   }
 
-  @logStep('Get order by ID')
+  @logStep('Get order by ID via API')
   async getById(id: string, token: string) {
     const response = await this.controller.getById(id, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
@@ -120,7 +115,7 @@ export class OrdersApiService {
     return response.body.Order;
   }
 
-  @logStep('Get sorted & filtered list of orders')
+  @logStep('Get sorted & filtered list of orders via API')
   async getAll(token: string, params?: IOrderSortRequest) {
     const response = await this.controller.getAllSorted(token, params);
     validateResponse(response, STATUS_CODES.OK, true, null);
@@ -128,7 +123,7 @@ export class OrdersApiService {
     return response.body;
   }
 
-  @logStep('Update order')
+  @logStep('Update order via API')
   async updateOrder(id: string, body: IOrderRequest, token: string) {
     const response = await this.controller.update(id, body, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
@@ -136,37 +131,43 @@ export class OrdersApiService {
     return response.body.Order;
   }
 
-  @logStep('Update order by customer')
-  async updateByCustomer(id: string, body: IOrderRequest, token: string) {
-    const customerBodyReq = generateCustomerData();
-    const customer = await this.customersController.create(customerBodyReq, token);
-    const updatedBody: IOrderRequest = {
-      ...body,
-      customer: customer.body.Customer._id,
+  @logStep('Update order by customer via API')
+  async updateByCustomer(id: string, token: string, options?: OrderCustomerUpdateOptions) {
+    let customerId;
+    if (options?.customerId) {
+      customerId = options.customerId;
+    } else {
+      customerId = (await this.customerService.create(token, options?.customerData))._id;
+      this.customers.add(customerId);
+    }
+
+    const products = (await this.getById(id, token)).products;
+    const updatedBody = {
+      customer: customerId,
+      products: extractIds(products),
     };
-    const response = await this.controller.update(id, updatedBody, token);
-    validateResponse(response, STATUS_CODES.OK, true, null);
-    validateSchema(orderSchema, response.body);
-    return response.body.Order;
+
+    return await this.updateOrder(id, updatedBody, token);
   }
 
-  @logStep('Update order by products')
-  async updateByProducts(id: string, body: IOrderRequest, token: string) {
-    const productsIdArr: string[] = [];
-    const productrBodyReq = generateProductData();
-    const product = await this.productsController.create(productrBodyReq, token);
-    productsIdArr.push(product.body.Product._id);
+  @logStep('Update order by products via API')
+  async updateByProducts(id: string, token: string, options?: Omit<IOrderOptions, 'customerData'>) {
+    const { productCount = 1, isUniqueProducts = true, productData } = options || {};
+
+    const products = isUniqueProducts
+      ? await this.createUniqueProductIds(productCount, token, productData)
+      : await this.createRepeatedProductIds(productCount, token, productData);
+
+    const customer = (await this.getById(id, token)).customer._id;
     const updatedBody: IOrderRequest = {
-      ...body,
-      products: productsIdArr,
+      customer,
+      products,
     };
-    const response = await this.controller.update(id, updatedBody, token);
-    validateResponse(response, STATUS_CODES.OK, true, null);
-    validateSchema(orderSchema, response.body);
-    return response.body.Order;
+
+    return await this.updateOrder(id, updatedBody, token);
   }
 
-  @logStep('Update status order')
+  @logStep('Update status order via API')
   async updateStatus(id: string, status: ORDER_STATUSES, token: string) {
     const response = await this.controller.updateStatus(id, status, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
@@ -174,7 +175,7 @@ export class OrdersApiService {
     return response.body.Order;
   }
 
-  @logStep('Update delivery')
+  @logStep('Update delivery via API')
   async updateDelivery(id: string, token: string, customData?: IDeliveryOptions) {
     const body = generateDeliveryData(customData);
     const response = await this.controller.updateDelivery(id, body, token);
@@ -183,28 +184,28 @@ export class OrdersApiService {
     return response.body.Order;
   }
 
-  @logStep('Delete order')
+  @logStep('Delete order via API')
   async deleteOrder(id: string, token: string) {
     const response = await this.controller.delete(id, token);
     validateDeleteResponse(response);
   }
 
-  @logStep('Add comment')
-  async addComment(orderId: string, body: IOrderCommentRequest, token: string) {
-    const comment = body.comment ? body : generateCommentData();
+  @logStep('Add comment via API')
+  async addComment(orderId: string, token: string, customComment?: IOrderCommentRequest) {
+    const comment = generateCommentData(customComment);
     const response = await this.controller.addComment(orderId, comment, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(orderSchema, response.body);
     return response.body.Order;
   }
 
-  @logStep('Delete comment')
+  @logStep('Delete comment via API')
   async deleteComment(orderId: string, commentId: string, token: string) {
     const response = await this.controller.deleteComment(orderId, commentId, token);
     validateDeleteResponse(response);
   }
 
-  @logStep('Assign manager to order')
+  @logStep('Assign manager to order via API')
   async assignManager(orderId: string, managerId: string, token: string) {
     const response = await this.controller.assignManager(orderId, managerId, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
@@ -212,7 +213,7 @@ export class OrdersApiService {
     return response.body.Order;
   }
 
-  @logStep('Unassign manager from order')
+  @logStep('Unassign manager from order via API')
   async unassignManager(orderId: string, token: string) {
     const response = await this.controller.unassignManager(orderId, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
@@ -220,11 +221,21 @@ export class OrdersApiService {
     return response.body.Order;
   }
 
-  @logStep('Mark products as received in order')
+  @logStep('Mark products as received in order via API')
   async receiveProduct(orderId: string, prodID: string[], token: string) {
     const response = await this.controller.receiveProduct(orderId, prodID, token);
     validateResponse(response, STATUS_CODES.OK, true, null);
     validateSchema(orderSchema, response.body);
     return response.body.Order;
+  }
+
+  @logStep('Delete all created entities')
+  async clear(token: string) {
+    await Promise.all(Array.from(this.orders, (id) => this.deleteOrder(id, token)));
+    await Promise.all(Array.from(this.products, (id) => this.productsService.delete(id, token)));
+    await Promise.all(Array.from(this.customers, (id) => this.customerService.delete(id, token)));
+    this.orders.clear();
+    this.products.clear();
+    this.customers.clear();
   }
 }

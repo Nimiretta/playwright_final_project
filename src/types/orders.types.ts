@@ -55,6 +55,7 @@ export interface IOrderCommentResponse {
   text: string;
   _id: string;
 }
+
 export interface IOrderCommentRequest {
   comment: string;
 }
@@ -92,3 +93,13 @@ export interface IDeliveryOptions extends Omit<Partial<IDelivery>, 'address'> {
 export interface IOrderOptionsWithDelivery extends IOrderOptions {
   deliveryData?: IDeliveryOptions;
 }
+
+export type OrderCustomerUpdateOptions =
+  | {
+      customerData: Partial<ICustomer>;
+      customerId?: never;
+    }
+  | {
+      customerData?: never;
+      customerId: string;
+    };

@@ -8,4 +8,7 @@ export enum ORDER_HISTORY_ACTIONS {
   RECEIVED = 'Received',
   RECEIVED_ALL = 'All products received',
   CANCELED = 'Order canceled',
+  MANAGER_ASSIGNED = 'Manager Assigned',
+  MANAGER_UNASSIGNED = 'Manager Unassigned',
+  REOPENED = 'Order reopened',
 }
