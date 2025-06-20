@@ -20,8 +20,8 @@ export const ordersWithSortAndFilter = {
       },
       required: ['sortField', 'sortOrder'],
     },
-    statuses: { type: 'array', items: { type: 'string', enum: Object.values(ORDER_STATUSES) } },
+    status: { type: 'array', items: { type: 'string', enum: Object.values(ORDER_STATUSES) } },
     total: { type: 'number' },
   },
-  required: ['ErrorMessage', 'IsSuccess', 'Orders', 'limit', 'page', 'search', 'sorting', 'statuses', 'total'],
+  required: ['ErrorMessage', 'IsSuccess', 'Orders', 'limit', 'page', 'search', 'sorting', 'status', 'total'],
 };

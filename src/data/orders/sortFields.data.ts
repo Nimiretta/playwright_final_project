@@ -5,5 +5,5 @@ export enum SORT_FIELD_ORDERS {
   DELIVERY = 'delivery',
   STATUS = 'status',
   ASSIGNED_MANAGER = 'assignedManager',
-  CRERATED_ON = 'createdON',
+  CREATED_ON = 'createdOn',
 }

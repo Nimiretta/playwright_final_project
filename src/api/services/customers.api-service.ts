@@ -14,7 +14,7 @@ export class CustomersApiService {
   }
 
   @logStep('Create customer and get created customer via API')
-  async create(token: string, customData?: ICustomer) {
+  async create(token: string, customData?: Partial<ICustomer>) {
     const body = generateCustomerData(customData);
     const response = await this.controller.create(body, token);
     validateResponse(response, STATUS_CODES.CREATED, true, null);

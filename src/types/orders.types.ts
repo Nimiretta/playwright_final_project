@@ -1,6 +1,6 @@
-import { ICustomerFromResponse } from './customer.types';
-import { IProductInOrder } from './product.types';
-import { IPagination, IResponseFields, ISorting, OrderSortFields } from './api.types';
+import { ICustomer, ICustomerFromResponse } from './customer.types';
+import { IProduct, IProductInOrder } from './product.types';
+import { IPagination, IResponseFields, ISorting, OrderSortFields, SortDirection } from './api.types';
 import { COUNTRIES } from 'data/customers/countries.data';
 import { IUser } from './signIn.types';
 import { DELIVERY_CONDITIONS, ORDER_HISTORY_ACTIONS, ORDER_STATUSES } from 'data/orders';
@@ -55,6 +55,7 @@ export interface IOrderCommentResponse {
   text: string;
   _id: string;
 }
+
 export interface IOrderCommentRequest {
   comment: string;
 }
@@ -70,3 +71,35 @@ export interface IOrderHistoryItem {
   performer: IUser;
   assignedManager: IUser | null;
 }
+
+export interface IOrderSortRequest {
+  search?: string;
+  status?: ORDER_STATUSES[];
+  sortField?: OrderSortFields;
+  sortOrder?: SortDirection;
+}
+
+export interface IOrderOptions {
+  customerData?: Partial<ICustomer>;
+  productData?: Partial<IProduct>;
+  productCount?: number;
+  isUniqueProducts?: boolean;
+}
+
+export interface IDeliveryOptions extends Omit<Partial<IDelivery>, 'address'> {
+  address?: Partial<IAddress>;
+}
+
+export interface IOrderOptionsWithDelivery extends IOrderOptions {
+  deliveryData?: IDeliveryOptions;
+}
+
+export type OrderCustomerUpdateOptions =
+  | {
+      customerData: Partial<ICustomer>;
+      customerId?: never;
+    }
+  | {
+      customerData?: never;
+      customerId: string;
+    };
