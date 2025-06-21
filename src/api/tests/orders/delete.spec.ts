@@ -20,9 +20,6 @@ test.describe('[API] [Orders] [Delete]', () => {
       await customersApiService.delete(order.customer._id, token);
       await Promise.all(order.products.map((product) => productsApiService.delete(product._id, token)));
     } else {
-      // await ordersController.delete(order._id, token);
-      // await customersApiService.delete(order.customer._id, token);
-      // await Promise.all(order.products.map((product) => productsApiService.delete(product._id, token)));
       ordersApiService.clear(token);
     }
   });
