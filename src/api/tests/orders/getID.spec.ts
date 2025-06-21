@@ -16,8 +16,7 @@ test.describe('[API] [Orders] [GET by ID]', () => {
   });
 
   test.afterEach(async ({ ordersApiService }) => {
-    if (!order._id) return;
-    await ordersApiService.deleteOrder(order._id, token);
+    await ordersApiService.clear(token);
   });
 
   test(
