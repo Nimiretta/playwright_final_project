@@ -15,22 +15,22 @@ test.describe('[API] [Orders] [Delete]', () => {
     order = await ordersApiService.createDraft(token);
   });
 
-  test.afterEach(async ({ customersApiService, ordersController, productsApiService }) => {
+  test.afterEach(async ({ customersApiService, productsApiService, ordersApiService }) => {
     if (deleteResponse.status === STATUS_CODES.DELETED) {
       await customersApiService.delete(order.customer._id, token);
       await Promise.all(order.products.map((product) => productsApiService.delete(product._id, token)));
     } else {
-      await ordersController.delete(order._id, token);
-      await customersApiService.delete(order.customer._id, token);
-      await Promise.all(order.products.map((product) => productsApiService.delete(product._id, token)));
+      // await ordersController.delete(order._id, token);
+      // await customersApiService.delete(order.customer._id, token);
+      // await Promise.all(order.products.map((product) => productsApiService.delete(product._id, token)));
+      ordersApiService.clear(token);
     }
   });
 
   test(
     'Should delete order with valid id and token',
     { tag: ['@001_O_DELETE_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION] },
-    async ({ ordersApiService, ordersController }) => {
-      const order: IOrderFromResponse = await ordersApiService.createDraft(token);
+    async ({ ordersController }) => {
       deleteResponse = await ordersController.delete(order._id, token);
       validateDeleteResponse(deleteResponse as IResponse<null>);
       const getOrderByIdResponse = await ordersController.getById(order._id, token);
