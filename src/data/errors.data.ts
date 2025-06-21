@@ -6,4 +6,5 @@ export const API_ERRORS = {
   PRODUCT_NOT_FOUND: (id: string) => `Product with id '${id}' wasn't found`,
   CUSTOMER_BAD_REQUEST: 'Incorrect request body',
   CUSTOMER_EMAIL_ALREADY_EXIST: (email: string) => `Customer with email '${email}' already exists`,
+  ORDER_NOT_FOUND: (id: string) => `Order with id '${id}' wasn't found`,
 } as const;
