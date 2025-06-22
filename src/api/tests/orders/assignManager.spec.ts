@@ -1,7 +1,6 @@
 import { USER_ID } from 'config';
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { ORDER_HISTORY_ACTIONS } from 'data/orders';
-
 import { errorResponseSchema, orderSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse, IResponse, IResponseFields } from 'types';
