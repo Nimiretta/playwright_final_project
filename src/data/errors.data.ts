@@ -9,4 +9,6 @@ export const API_ERRORS = {
   ORDER_NOT_FOUND: (id: string) => `Order with id '${id}' wasn't found`,
   ORDER_BAD_REQUEST: 'Incorrect request body',
   COMMENT_NOT_FOUND: 'Comment was not found',
+  PRODUCT_IN_ORDER: 'Not allowed to delete product, assigned to the order',
+  CUSTOMER_IN_ORDER: 'Not allowed to delete customer, assigned to the order',
 } as const;
