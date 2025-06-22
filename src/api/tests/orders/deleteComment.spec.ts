@@ -1,5 +1,5 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
-import { DeleteCommentTestData } from 'data/orders/commentTest.data';
+import { deleteCommentTestData } from 'data/orders/commentTest.data';
 import { errorResponseSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse, IResponse, IResponseFields } from 'types';
@@ -30,7 +30,7 @@ test.describe('[API] [Orders] [Add Comment]', () => {
     },
   );
 
-  DeleteCommentTestData.forEach((data) => {
+  deleteCommentTestData.forEach((data) => {
     test(data.testName, { tag: data.tag }, async ({ ordersController }) => {
       const deleteCommentResponse = await ordersController.deleteComment(
         data.orderId ?? order._id,

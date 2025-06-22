@@ -1,4 +1,5 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
+import { generateCommentData } from 'data/orders';
 import { commentTestData } from 'data/orders/commentTest.data';
 import { errorResponseSchema, orderSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
@@ -24,7 +25,7 @@ test.describe('[API] [Orders] [Add Comment]', () => {
       tag: ['@001_O_COMM_POST_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController }) => {
-      const commentText = { comment: 'test comment' };
+      const commentText = generateCommentData();
       const orderWithCommentResponse = await ordersController.addComment(order._id, commentText, token);
       validateResponse(orderWithCommentResponse, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, orderWithCommentResponse.body);
@@ -56,7 +57,7 @@ test.describe('[API] [Orders] [Add Comment]', () => {
       tag: ['@006_O_COMM_POST_API', TAGS.API, TAGS.REGRESSION],
     },
     async ({ ordersController }) => {
-      const commentText = { comment: 'test comment' };
+      const commentText = generateCommentData();
       const invalidOrderId = generateID();
       const orderWithCommentResponse = await ordersController.addComment(invalidOrderId, commentText, token);
       validateResponse(

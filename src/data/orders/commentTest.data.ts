@@ -1,14 +1,13 @@
 import { API_ERRORS } from 'data/errors.data';
 import { STATUS_CODES } from 'data/statusCodes.data';
 import { TAGS } from 'data/tags.data';
+import { generateCommentData } from './generateComment.data';
 
 export const commentTestData = [
   {
     testName: 'Should not create a comment with invalid token',
     tag: ['@002_O_COMM_POST_API', TAGS.API, TAGS.REGRESSION],
-    body: {
-      comment: 'test comment',
-    },
+    body: generateCommentData(),
     token: '123',
     statusCode: STATUS_CODES.UNAUTHORIZED,
     error: API_ERRORS.INVALID_TOKEN,
@@ -16,9 +15,7 @@ export const commentTestData = [
   {
     testName: 'Should not create a comment with missing token',
     tag: ['@003_O_COMM_POST_API', TAGS.API, TAGS.REGRESSION],
-    body: {
-      comment: 'test comment',
-    },
+    body: generateCommentData(),
     token: '',
     statusCode: STATUS_CODES.UNAUTHORIZED,
     error: API_ERRORS.EMPTY_TOKEN,
@@ -26,9 +23,7 @@ export const commentTestData = [
   {
     testName: 'Should not create a comment with orderId as empty string',
     tag: ['@004_O_COMM_POST_API', TAGS.API, TAGS.REGRESSION],
-    body: {
-      comment: 'test comment',
-    },
+    body: generateCommentData(),
     orderId: '',
     statusCode: STATUS_CODES.BAD_REQUEST,
     error: API_ERRORS.CUSTOMER_BAD_REQUEST,
@@ -36,9 +31,7 @@ export const commentTestData = [
   {
     testName: 'Should not create a comment with orderId invalid format (non hex, 12-byte string, int)',
     tag: ['@005_O_COMM_POST_API', TAGS.API, TAGS.REGRESSION],
-    body: {
-      comment: 'test comment',
-    },
+    body: generateCommentData(),
     orderId: '123',
     statusCode: STATUS_CODES.BAD_REQUEST,
     error: API_ERRORS.CUSTOMER_BAD_REQUEST,
@@ -79,7 +72,7 @@ export const commentTestData = [
   },
 ];
 
-export const DeleteCommentTestData = [
+export const deleteCommentTestData = [
   {
     testName: 'Should not delete a comment with invalid token',
     tag: ['@002_O_COMM_DELETE_API', TAGS.API, TAGS.REGRESSION],
