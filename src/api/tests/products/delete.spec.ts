@@ -100,4 +100,26 @@ test.describe('[API] [Products] [Delete]', async () => {
       );
     },
   );
+
+  test(
+    'Should return 400 error when product is added to order',
+    { tag: ['@6_P_DL_API', TAGS.API, TAGS.REGRESSION] },
+    async ({ productsController, ordersController, customersApiService, ordersApiService }) => {
+      const customer = (await customersApiService.create(token))._id;
+      const orderId = (await ordersController.create({ customer, products: [createdProductId] }, token)).body.Order._id;
+
+      const response = await productsController.delete(createdProductId, token);
+
+      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(
+        response as unknown as IResponse<IResponseFields>,
+        STATUS_CODES.BAD_REQUEST,
+        false,
+        API_ERRORS.PRODUCT_IN_ORDER,
+      );
+
+      await ordersApiService.deleteOrder(orderId, token);
+      await customersApiService.delete(customer, token);
+    },
+  );
 });

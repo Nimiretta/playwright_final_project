@@ -83,6 +83,7 @@ test.describe('[API] [Customers] [Delete]', () => {
       validateSchema(errorResponseSchema, responseDelete.body as unknown as IResponse<IResponseFields>);
     },
   );
+
   test(
     'Should NOT delete  customer with correct ID  and  incorrect / invalid  authorization token',
     { tag: ['@7_C_DL_API', TAGS.API, TAGS.REGRESSION] },
@@ -96,6 +97,29 @@ test.describe('[API] [Customers] [Delete]', () => {
         API_ERRORS.INVALID_TOKEN,
       );
       validateSchema(errorResponseSchema, responseDelete.body as unknown as IResponse<IResponseFields>);
+    },
+  );
+
+  test(
+    'Should return 400 error when customer is added to order',
+    { tag: ['@8_C_DL_API', TAGS.API, TAGS.REGRESSION] },
+    async ({ customersController, productsApiService, ordersApiService, ordersController }) => {
+      const product = (await productsApiService.create(token))._id;
+      const orderId = (await ordersController.create({ customer: customer._id, products: [product] }, token)).body.Order
+        ._id;
+
+      const responseDelete = await customersController.delete(customer._id, token);
+
+      validateResponse(
+        responseDelete as unknown as IResponse<IResponseFields>,
+        STATUS_CODES.BAD_REQUEST,
+        false,
+        API_ERRORS.CUSTOMER_IN_ORDER,
+      );
+      validateSchema(errorResponseSchema, responseDelete.body as unknown as IResponse<IResponseFields>);
+
+      await ordersApiService.deleteOrder(orderId, token);
+      await productsApiService.delete(product, token);
     },
   );
 });
