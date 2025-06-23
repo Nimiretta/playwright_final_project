@@ -75,9 +75,9 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
       tag: ['@004_O_M_UN_PUT_API', TAGS.API, TAGS.REGRESSION],
     },
     async ({ ordersController }) => {
-      const orderId = '';
-      const response = await ordersController.unassignManager(orderId, token);
-      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(orderId));
+      const emptyOrderId = '';
+      const response = await ordersController.unassignManager(emptyOrderId, token);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(emptyOrderId));
       validateSchema(errorResponseSchema, response.body);
     },
   );
@@ -115,8 +115,8 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
     },
     async ({ ordersController }) => {
       const response = await ordersController.unassignManager(order._id, token);
-      validateResponse(response, STATUS_CODES.OK, true, null);
 
+      validateResponse(response, STATUS_CODES.OK, true, null);
       await test.step('Validated that assigned manager is null', () => {
         expect.soft(response.body.Order.assignedManager).toEqual(null);
       });
