@@ -11,4 +11,5 @@ export const API_ERRORS = {
   COMMENT_NOT_FOUND: 'Comment was not found',
   PRODUCT_IN_ORDER: 'Not allowed to delete product, assigned to the order',
   CUSTOMER_IN_ORDER: 'Not allowed to delete customer, assigned to the order',
+  PRODUCT_IS_NOT_REQUESTED: (id: string) => `Product with Id '${id}' is not requested`,
 } as const;
