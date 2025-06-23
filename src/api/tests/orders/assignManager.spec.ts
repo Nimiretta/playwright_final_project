@@ -30,8 +30,14 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
       const response = await ordersController.assignManager(order._id, managerID, token);
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+
+      await test.step('Validated that assigned manager ID matches the expected managerID', () => {
+        expect.soft(response.body.Order.assignedManager, "Assigned manager isn't found").toBeDefined();
+        expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
+      });
+      await test.step('Validated that order history contains MANAGER_ASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      });
     },
   );
 
@@ -42,15 +48,17 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     },
     async ({ ordersController }) => {
       const response = await ordersController.assignManager(order._id, managerID, token);
-      validateResponse(response, STATUS_CODES.OK, true, null);
-      validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
       const secondAssignResponse = await ordersController.assignManager(order._id, managerID, token);
       validateResponse(secondAssignResponse, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, secondAssignResponse.body);
-      expect.soft(secondAssignResponse.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(secondAssignResponse.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+
+      await test.step('Validated that Reassigned manager ID matches the expected managerID', () => {
+        expect.soft(response.body.Order.assignedManager, "Assigned manager isn't found").toBeDefined();
+        expect.soft(secondAssignResponse.body.Order.assignedManager?._id).toEqual(managerID);
+      });
+      await test.step('Validated that order history contains MANAGER_ASSIGNED action', () => {
+        expect.soft(secondAssignResponse.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      });
     },
   );
 
@@ -183,8 +191,14 @@ test.describe('[API] [Orders] [Assign Manager with all valid data| Other statuse
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+
+      await test.step('Validated that assigned manager ID matches the expected managerID', () => {
+        expect.soft(response.body.Order.assignedManager, "Assigned manager isn't found").toBeDefined();
+        expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
+      });
+      await test.step('Validated that order history contains MANAGER_ASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      });
     },
   );
 
@@ -199,8 +213,13 @@ test.describe('[API] [Orders] [Assign Manager with all valid data| Other statuse
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      await test.step('Validated that assigned manager ID matches the expected managerID', () => {
+        expect.soft(response.body.Order.assignedManager, "Assigned manager isn't found").toBeDefined();
+        expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
+      });
+      await test.step('Validated that order history contains MANAGER_ASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      });
     },
   );
 
@@ -215,8 +234,14 @@ test.describe('[API] [Orders] [Assign Manager with all valid data| Other statuse
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+
+      await test.step('Validated that assigned manager ID matches the expected managerID', () => {
+        expect.soft(response.body.Order.assignedManager, "Assigned manager isn't found").toBeDefined();
+        expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
+      });
+      await test.step('Validated that order history contains MANAGER_ASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      });
     },
   );
 
@@ -231,8 +256,14 @@ test.describe('[API] [Orders] [Assign Manager with all valid data| Other statuse
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+
+      await test.step('Validated that assigned manager ID matches the expected managerID', () => {
+        expect.soft(response.body.Order.assignedManager, "Assigned manager isn't found").toBeDefined();
+        expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
+      });
+      await test.step('Validated that order history contains MANAGER_ASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      });
     },
   );
 
@@ -247,8 +278,14 @@ test.describe('[API] [Orders] [Assign Manager with all valid data| Other statuse
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+
+      await test.step('Validated that assigned manager ID matches the expected managerID', () => {
+        expect.soft(response.body.Order.assignedManager, "Assigned manager isn't found").toBeDefined();
+        expect.soft(response.body.Order.assignedManager?._id).toEqual(managerID);
+      });
+      await test.step('Validated that order history contains MANAGER_ASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_ASSIGNED);
+      });
     },
   );
 });

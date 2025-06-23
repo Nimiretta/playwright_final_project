@@ -33,8 +33,13 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager).toEqual(null);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+
+      await test.step('Validated that assigned manager is null', () => {
+        expect.soft(response.body.Order.assignedManager).toEqual(null);
+      });
+      await test.step('Validated that order history contains MANAGER_UNASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+      });
     },
   );
 
@@ -111,8 +116,13 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const response = await ordersController.unassignManager(order._id, token);
       validateResponse(response, STATUS_CODES.OK, true, null);
-      expect.soft(response.body.Order.assignedManager).toEqual(null);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+
+      await test.step('Validated that assigned manager is null', () => {
+        expect.soft(response.body.Order.assignedManager).toEqual(null);
+      });
+      await test.step('Validated that order history contains MANAGER_UNASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+      });
     },
   );
 });
@@ -141,8 +151,13 @@ test.describe('[API] [Orders] [Unassign Manager  with all valid data| Other stat
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager).toEqual(null);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+
+      await test.step('Validated that assigned manager is null', () => {
+        expect.soft(response.body.Order.assignedManager).toEqual(null);
+      });
+      await test.step('Validated that order history contains MANAGER_UNASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+      });
     },
   );
 
@@ -158,8 +173,13 @@ test.describe('[API] [Orders] [Unassign Manager  with all valid data| Other stat
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager).toEqual(null);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+
+      await test.step('Validated that assigned manager is null', () => {
+        expect.soft(response.body.Order.assignedManager).toEqual(null);
+      });
+      await test.step('Validated that order history contains MANAGER_UNASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+      });
     },
   );
 
@@ -175,8 +195,13 @@ test.describe('[API] [Orders] [Unassign Manager  with all valid data| Other stat
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager).toEqual(null);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+
+      await test.step('Validated that assigned manager is null', () => {
+        expect.soft(response.body.Order.assignedManager).toEqual(null);
+      });
+      await test.step('Validated that order history contains MANAGER_UNASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+      });
     },
   );
 
@@ -192,8 +217,13 @@ test.describe('[API] [Orders] [Unassign Manager  with all valid data| Other stat
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager).toEqual(null);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+
+      await test.step('Validated that assigned manager is null', () => {
+        expect.soft(response.body.Order.assignedManager).toEqual(null);
+      });
+      await test.step('Validated that order history contains MANAGER_UNASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+      });
     },
   );
 
@@ -209,8 +239,13 @@ test.describe('[API] [Orders] [Unassign Manager  with all valid data| Other stat
 
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.assignedManager).toEqual(null);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+
+      await test.step('Validated that assigned manager is null', () => {
+        expect.soft(response.body.Order.assignedManager).toEqual(null);
+      });
+      await test.step('Validated that order history contains MANAGER_UNASSIGNED action', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.MANAGER_UNASSIGNED);
+      });
     },
   );
 });
