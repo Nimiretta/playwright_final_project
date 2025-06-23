@@ -20,12 +20,12 @@ export class SignInApiService {
       username: USER_LOGIN,
       password: USER_PASSWORD,
     });
-
     validateResponse(response, STATUS_CODES.OK, true, null);
     const token = response.headers['authorization'];
     return token;
   }
 
+  @logStep('Get auth token from cookies')
   async getAuthToken() {
     return (await this.page.context().cookies()).find((c) => c.name === 'Authorization')!.value;
   }
