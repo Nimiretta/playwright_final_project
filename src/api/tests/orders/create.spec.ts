@@ -20,10 +20,12 @@ test.describe('[API] [Orders] [Create]', () => {
 
   test.afterEach(async ({ ordersApiService, customersApiService, productsApiService }) => {
     if (orderResponse.status !== STATUS_CODES.CREATED) {
-      if (!customer) return;
-      if (!products) return;
-      await customersApiService.delete(customer._id, token);
-      await Promise.all(products.map((product) => productsApiService.delete(product._id, token)));
+      if (!customer) {
+        return;
+      } else await customersApiService.delete(customer._id, token);
+      if (!products) {
+        return;
+      } else await Promise.all(products.map((product) => productsApiService.delete(product._id, token)));
     } else ordersApiService.clear(token);
   });
 
