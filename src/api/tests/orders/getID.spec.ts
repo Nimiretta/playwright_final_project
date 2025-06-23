@@ -1,6 +1,5 @@
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse } from 'types';
-import { IResponse, IResponseFields } from 'types/api.types';
 import { generateID } from 'utils';
 import { validateResponse, validateSchema } from 'utils/validations';
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
@@ -36,13 +35,8 @@ test.describe('[API] [Orders] [GET by ID]', () => {
     async ({ ordersController }) => {
       const nonexistentID = generateID();
       const responseGetID = await ordersController.getById(nonexistentID, token);
-      validateResponse(
-        responseGetID as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(nonexistentID),
-      );
-      validateSchema(errorResponseSchema, responseGetID.body as unknown as IResponse<IResponseFields>);
+      validateResponse(responseGetID, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(nonexistentID));
+      validateSchema(errorResponseSchema, responseGetID.body);
     },
   );
 
@@ -52,13 +46,8 @@ test.describe('[API] [Orders] [GET by ID]', () => {
     async ({ ordersController }) => {
       const invalidID = '123';
       const responseGetID = await ordersController.getById(invalidID, token);
-      validateResponse(
-        responseGetID as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(invalidID),
-      );
-      validateSchema(errorResponseSchema, responseGetID.body as unknown as IResponse<IResponseFields>);
+      validateResponse(responseGetID, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(invalidID));
+      validateSchema(errorResponseSchema, responseGetID.body);
     },
   );
 
@@ -68,13 +57,8 @@ test.describe('[API] [Orders] [GET by ID]', () => {
     async ({ ordersController }) => {
       const incorrectToken = '12345';
       const responseGetID = await ordersController.getById(order._id, incorrectToken);
-      validateResponse(
-        responseGetID as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.INVALID_TOKEN,
-      );
-      validateSchema(errorResponseSchema, responseGetID.body as unknown as IResponse<IResponseFields>);
+      validateResponse(responseGetID, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
+      validateSchema(errorResponseSchema, responseGetID.body);
     },
   );
 
@@ -84,13 +68,8 @@ test.describe('[API] [Orders] [GET by ID]', () => {
     async ({ ordersController }) => {
       const emptyToken = '';
       const responseGetID = await ordersController.getById(order._id, emptyToken);
-      validateResponse(
-        responseGetID as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.EMPTY_TOKEN,
-      );
-      validateSchema(errorResponseSchema, responseGetID.body as unknown as IResponse<IResponseFields>);
+      validateResponse(responseGetID, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.EMPTY_TOKEN);
+      validateSchema(errorResponseSchema, responseGetID.body);
     },
   );
 });

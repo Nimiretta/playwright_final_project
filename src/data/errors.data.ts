@@ -13,4 +13,5 @@ export const API_ERRORS = {
   PRODUCT_IN_ORDER: 'Not allowed to delete product, assigned to the order',
   CUSTOMER_IN_ORDER: 'Not allowed to delete customer, assigned to the order',
   PRODUCT_NAME_ALREADY_EXISTS: (name: string) => `Product with name '${name}' already exists`,
+  MANAGER_NOT_FOUND: (id: string) => `Manager with id '${id}' wasn't found`,
 } as const;
