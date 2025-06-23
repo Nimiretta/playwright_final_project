@@ -71,7 +71,7 @@ const deliverySchema = {
           required: ['country', 'city', 'street', 'house', 'flat'],
         },
       },
-      required: ['conditions', 'finalDate', 'address'],
+      required: ['condition', 'finalDate', 'address'],
     },
     { type: 'null' },
   ],

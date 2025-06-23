@@ -9,6 +9,7 @@ import {
   IOrderRequest,
   IOrderResponse,
   IOrderResponseSorted,
+  IOrderSortRequest,
 } from 'types/orders.types';
 import { logStep } from 'utils/reporter.utils';
 import { convertRequestParams } from 'utils/requestParams.utils';
@@ -36,10 +37,12 @@ export class OrdersController {
   }
 
   @logStep('Send getAllSorted orders request with optional filters and sorting')
-  async getAllSorted(token: string, params?: Record<string, string>) {
+  async getAllSorted(token: string, params?: IOrderSortRequest) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
-      url: apiConfig.ENDPOINTS.ORDERS + (params ? convertRequestParams(params) : ''),
+      url:
+        apiConfig.ENDPOINTS.ORDERS +
+        (params ? convertRequestParams(params as Record<string, string | Array<string>>) : ''),
       method: 'get',
       headers: {
         'content-type': 'application/json',
@@ -166,7 +169,7 @@ export class OrdersController {
   async receiveProduct(orderId: string, prodID: string[], token: string) {
     const options: IRequestOptions = {
       baseURL: apiConfig.BASE_URL,
-      url: apiConfig.ENDPOINTS.ORDER_DELIVERY(orderId),
+      url: apiConfig.ENDPOINTS.ORDER_RECEIVE(orderId),
       method: 'post',
       data: { products: prodID },
       headers: {
