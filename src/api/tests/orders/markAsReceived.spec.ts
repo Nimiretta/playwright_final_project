@@ -3,7 +3,7 @@ import { ORDER_HISTORY_ACTIONS, ORDER_STATUSES } from 'data/orders';
 import { errorResponseSchema, orderSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse } from 'types';
-import { generateID } from 'utils';
+import { extractIds, generateID } from 'utils';
 import { validateResponse, validateSchema } from 'utils/validations';
 
 test.describe('[API] [Orders] [Mark Products as Received | from status In Process]', () => {
@@ -24,11 +24,8 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       tag: ['@001_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      const prodID: string[] = [];
       order = await ordersApiService.createInProcess(token, { productCount: 5 });
-      order.products.forEach((product) => {
-        prodID.push(product._id);
-      });
+      const prodID = extractIds(order.products);
       const response = await ordersController.receiveProduct(order._id, prodID, token);
 
       validateResponse(response, STATUS_CODES.OK, true, null);
@@ -53,11 +50,8 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       tag: ['@002_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      const prodID: string[] = [];
       order = await ordersApiService.createInProcess(token, { productCount: 1 });
-      order.products.forEach((product) => {
-        prodID.push(product._id);
-      });
+      const prodID = extractIds(order.products);
       const response = await ordersController.receiveProduct(order._id, prodID, token);
 
       validateResponse(response, STATUS_CODES.OK, true, null);
@@ -82,11 +76,8 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       tag: ['@003_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      const prodID: string[] = [];
       order = await ordersApiService.createInProcess(token, { productCount: 2 });
-      order.products.forEach((product) => {
-        prodID.push(product._id);
-      });
+      const prodID = extractIds(order.products);
       const response = await ordersController.receiveProduct(order._id, [prodID[0]], token);
 
       validateResponse(response, STATUS_CODES.OK, true, null);
@@ -113,12 +104,46 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
   );
 
   test(
-    'Should not mark as received if product does not exist in order',
+    'Should mark some products (one from three) twice as  PARTIALLY received',
     {
       tag: ['@004_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      order = await ordersApiService.createInProcess(token, { productCount: 1 });
+      order = await ordersApiService.createInProcess(token, { productCount: 3 });
+      const prodID = extractIds(order.products);
+      await ordersController.receiveProduct(order._id, [prodID[0]], token);
+      const responseSecond = await ordersController.receiveProduct(order._id, [prodID[1]], token);
+
+      validateResponse(responseSecond, STATUS_CODES.OK, true, null);
+      validateSchema(orderSchema, responseSecond.body);
+
+      await test.step('Validated order status is PARTIALLY_RECEIVED', () => {
+        expect.soft(responseSecond.body.Order.status).toEqual(ORDER_STATUSES.PARTIALLY_RECEIVED);
+      });
+      await test.step('Validated first history action and status', () => {
+        expect.soft(responseSecond.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED);
+        expect.soft(responseSecond.body.Order.history[0].status).toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
+      });
+      await test.step('Validated first product is received', () => {
+        expect.soft(responseSecond.body.Order.products[0].received).toBeTruthy();
+      });
+      await test.step('Validated second history action and status', () => {
+        expect.soft(responseSecond.body.Order.history[2].action).toBe(ORDER_HISTORY_ACTIONS.PROCESSED);
+        expect.soft(responseSecond.body.Order.history[2].status).toBe(ORDER_STATUSES.IN_PROCESS);
+      });
+      await test.step('Validated second product is not received', () => {
+        expect.soft(responseSecond.body.Order.products[2].received).toBeFalsy();
+      });
+    },
+  );
+
+  test(
+    'Should not mark as received if product does not exist in order',
+    {
+      tag: ['@005_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createInProcess(token);
       const nonExistentProdID = [generateID()];
       const response = await ordersController.receiveProduct(order._id, nonExistentProdID, token);
 
@@ -135,10 +160,10 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
   test(
     'Should not mark as received if productID does not valid',
     {
-      tag: ['@005_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+      tag: ['@006_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      order = await ordersApiService.createInProcess(token, { productCount: 1 });
+      order = await ordersApiService.createInProcess(token);
       const invalidProdID = ['123'];
       const response = await ordersController.receiveProduct(order._id, invalidProdID, token);
 
@@ -155,10 +180,10 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
   test(
     'Should not mark as received if productID is empty',
     {
-      tag: ['@006_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+      tag: ['@007_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      order = await ordersApiService.createInProcess(token, { productCount: 1 });
+      order = await ordersApiService.createInProcess(token);
       const emptyProdID = [''];
       const response = await ordersController.receiveProduct(order._id, emptyProdID, token);
 
@@ -170,15 +195,12 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
   test(
     'Should not mark as received with empty token',
     {
-      tag: ['@007_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+      tag: ['@008_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      const prodID: string[] = [];
       const emptyToken = '';
-      order = await ordersApiService.createInProcess(token, { productCount: 2 });
-      order.products.forEach((product) => {
-        prodID.push(product._id);
-      });
+      order = await ordersApiService.createInProcess(token);
+      const prodID = extractIds(order.products);
       const response = await ordersController.receiveProduct(order._id, prodID, emptyToken);
 
       validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.EMPTY_TOKEN);
@@ -189,18 +211,259 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
   test(
     'Should not mark as received with invalid token',
     {
-      tag: ['@008_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+      tag: ['@009_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
     },
     async ({ ordersController, ordersApiService }) => {
-      const prodID: string[] = [];
       const invalidToken = '12345';
-      order = await ordersApiService.createInProcess(token, { productCount: 2 });
-      order.products.forEach((product) => {
-        prodID.push(product._id);
-      });
+      order = await ordersApiService.createInProcess(token);
+      const prodID = extractIds(order.products);
       const response = await ordersController.receiveProduct(order._id, prodID, invalidToken);
 
       validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+});
+
+test.describe('[API] [Orders] [Mark Products as Received | from  Partialy Received]', () => {
+  let token = '';
+  let order: IOrderFromResponse;
+
+  test.beforeEach(async ({ signInApiService }) => {
+    token = await signInApiService.getAuthToken();
+  });
+
+  test.afterEach(async ({ ordersApiService }) => {
+    await ordersApiService.clear(token);
+  });
+
+  test(
+    'Should mark all products as received',
+    {
+      tag: ['@010_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createPartiallyReceived(token);
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, prodID, token);
+
+      validateResponse(response, STATUS_CODES.OK, true, null);
+      validateSchema(orderSchema, response.body);
+
+      await test.step('Validated order status is RECEIVED', () => {
+        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
+      });
+      await test.step('Validated order history has RECEIVED_ALL action and RECEIVED status', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
+        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
+      });
+      await test.step('Validated all products are marked as received', () => {
+        expect.soft(response.body.Order.products.every((product) => product.received)).toBeTruthy();
+      });
+    },
+  );
+
+  test(
+    'Should not mark as received if product does not exist in order',
+    {
+      tag: ['@011_O_MR_PUT_API', TAGS.API, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createPartiallyReceived(token);
+      const nonExistentProdID = [generateID()];
+      const response = await ordersController.receiveProduct(order._id, nonExistentProdID, token);
+
+      validateResponse(
+        response,
+        STATUS_CODES.BAD_REQUEST,
+        false,
+        API_ERRORS.PRODUCT_IS_NOT_REQUESTED(nonExistentProdID[0]),
+      );
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark as received if productID does not valid',
+    {
+      tag: ['@012_O_MR_PUT_API', TAGS.API, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createPartiallyReceived(token);
+      const invalidProdID = ['123'];
+      const response = await ordersController.receiveProduct(order._id, invalidProdID, token);
+
+      validateResponse(
+        response,
+        STATUS_CODES.BAD_REQUEST,
+        false,
+        API_ERRORS.PRODUCT_IS_NOT_REQUESTED(invalidProdID[0]),
+      );
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark as received if productID is empty',
+    {
+      tag: ['@013_O_MR_PUT_API', TAGS.API, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createPartiallyReceived(token);
+      const emptyProdID = [''];
+      const response = await ordersController.receiveProduct(order._id, emptyProdID, token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.PRODUCT_IS_NOT_REQUESTED(emptyProdID[0]));
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark as received with empty token',
+    {
+      tag: ['@014_O_MR_PUT_API', TAGS.API, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      const emptyToken = '';
+      order = await ordersApiService.createPartiallyReceived(token);
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, prodID, emptyToken);
+
+      validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.EMPTY_TOKEN);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark as received with invalid token',
+    {
+      tag: ['@015_O_MR_PUT_API', TAGS.API, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      const invalidToken = '12345';
+      order = await ordersApiService.createPartiallyReceived(token);
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, prodID, invalidToken);
+
+      validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+});
+
+test.describe('[API] [Orders] [Mark as Received - Forbidden Statuses: DRAFT, CANCELED, DRAFT WITH DELIVERY, RECEIVED]', () => {
+  let token = '';
+  let order: IOrderFromResponse;
+
+  test.beforeEach(async ({ signInApiService }) => {
+    token = await signInApiService.getAuthToken();
+  });
+
+  test.afterEach(async ({ ordersApiService }) => {
+    await ordersApiService.clear(token);
+  });
+
+  test(
+    'Should not mark products as received — Order status: DRAFT',
+    {
+      tag: ['@016_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createDraft(token);
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, prodID, token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_STATUS_INVALID);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark products as received - Order status: Draft with Delivery',
+    {
+      tag: ['@017_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createDraftWithDelivery(token);
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, prodID, token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_STATUS_INVALID);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark products as received - Order status: Canceled',
+    {
+      tag: ['@018_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createCanceled(token);
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, prodID, token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_STATUS_INVALID);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark products as received — Order status: Received',
+    {
+      tag: ['@019_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createInProcess(token);
+      const prodID = extractIds(order.products);
+      const orderReceived = await ordersApiService.receiveProduct(order._id, prodID, token);
+      const response = await ordersController.receiveProduct(orderReceived._id, prodID, token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_STATUS_INVALID);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+  test(
+    'Should not mark products as partialy received — Order status: DRAFT',
+    {
+      tag: ['@020_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createDraft(token, { productCount: 2 });
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, [prodID[0]], token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_STATUS_INVALID);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark products as partialy received - Order status: Draft with Delivery',
+    {
+      tag: ['@021_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createDraftWithDelivery(token, { productCount: 2 });
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, [prodID[0]], token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_STATUS_INVALID);
+      validateSchema(errorResponseSchema, response.body);
+    },
+  );
+
+  test(
+    'Should not mark products as partialy received - Order status: Canceled',
+    {
+      tag: ['@022_O_MR_PUT_API', TAGS.API, TAGS.SMOKE, TAGS.REGRESSION],
+    },
+    async ({ ordersController, ordersApiService }) => {
+      order = await ordersApiService.createCanceled(token, { productCount: 2 });
+      const prodID = extractIds(order.products);
+      const response = await ordersController.receiveProduct(order._id, [prodID[0]], token);
+
+      validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_STATUS_INVALID);
       validateSchema(errorResponseSchema, response.body);
     },
   );

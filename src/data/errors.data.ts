@@ -12,4 +12,5 @@ export const API_ERRORS = {
   PRODUCT_IN_ORDER: 'Not allowed to delete product, assigned to the order',
   CUSTOMER_IN_ORDER: 'Not allowed to delete customer, assigned to the order',
   PRODUCT_IS_NOT_REQUESTED: (id: string) => `Product with Id '${id}' is not requested`,
+  ORDER_STATUS_INVALID: 'Invalid order status',
 } as const;
