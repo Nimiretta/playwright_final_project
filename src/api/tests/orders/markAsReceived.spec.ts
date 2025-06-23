@@ -30,12 +30,20 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
         prodID.push(product._id);
       });
       const response = await ordersController.receiveProduct(order._id, prodID, token);
+
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
-      expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
-      expect.soft(response.body.Order.products.every((product) => product.received)).toBeTruthy();
+
+      await test.step('Validated order status is RECEIVED', () => {
+        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
+      });
+      await test.step('Validated order history has RECEIVED_ALL action and RECEIVED status', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
+        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
+      });
+      await test.step('Validated all products are marked as received', () => {
+        expect.soft(response.body.Order.products.every((product) => product.received)).toBeTruthy();
+      });
     },
   );
 
@@ -51,12 +59,20 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
         prodID.push(product._id);
       });
       const response = await ordersController.receiveProduct(order._id, prodID, token);
+
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
-      expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
-      expect.soft(response.body.Order.products[0]._id).toBeTruthy();
+
+      await test.step('Validated order status is RECEIVED', () => {
+        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
+      });
+      await test.step('Validated order history has RECEIVED_ALL action and RECEIVED status', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
+        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
+      });
+      await test.step('Validated product is marked as received', () => {
+        expect.soft(response.body.Order.products[0].received).toBeTruthy();
+      });
     },
   );
 
@@ -72,15 +88,27 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
         prodID.push(product._id);
       });
       const response = await ordersController.receiveProduct(order._id, [prodID[0]], token);
+
       validateResponse(response, STATUS_CODES.OK, true, null);
       validateSchema(orderSchema, response.body);
-      expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.PARTIALLY_RECEIVED);
-      expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED);
-      expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
-      expect.soft(response.body.Order.products[0]._id).toBeTruthy();
-      expect.soft(response.body.Order.history[1].action).toBe(ORDER_HISTORY_ACTIONS.PROCESSED);
-      expect.soft(response.body.Order.history[1].status).toBe(ORDER_STATUSES.IN_PROCESS);
-      expect.soft(response.body.Order.products[1].received).toBeFalsy();
+
+      await test.step('Validated order status is PARTIALLY_RECEIVED', () => {
+        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.PARTIALLY_RECEIVED);
+      });
+      await test.step('Validated first history action and status', () => {
+        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED);
+        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
+      });
+      await test.step('Validated first product is received', () => {
+        expect.soft(response.body.Order.products[0].received).toBeTruthy();
+      });
+      await test.step('Validated second history action and status', () => {
+        expect.soft(response.body.Order.history[1].action).toBe(ORDER_HISTORY_ACTIONS.PROCESSED);
+        expect.soft(response.body.Order.history[1].status).toBe(ORDER_STATUSES.IN_PROCESS);
+      });
+      await test.step('Validated second product is not received', () => {
+        expect.soft(response.body.Order.products[1].received).toBeFalsy();
+      });
     },
   );
 
@@ -93,6 +121,7 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       order = await ordersApiService.createInProcess(token, { productCount: 1 });
       const nonExistentProdID = [generateID()];
       const response = await ordersController.receiveProduct(order._id, nonExistentProdID, token);
+
       validateResponse(
         response,
         STATUS_CODES.BAD_REQUEST,
@@ -112,6 +141,7 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       order = await ordersApiService.createInProcess(token, { productCount: 1 });
       const invalidProdID = ['123'];
       const response = await ordersController.receiveProduct(order._id, invalidProdID, token);
+
       validateResponse(
         response,
         STATUS_CODES.BAD_REQUEST,
@@ -131,6 +161,7 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       order = await ordersApiService.createInProcess(token, { productCount: 1 });
       const emptyProdID = [''];
       const response = await ordersController.receiveProduct(order._id, emptyProdID, token);
+
       validateResponse(response, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.PRODUCT_IS_NOT_REQUESTED(emptyProdID[0]));
       validateSchema(errorResponseSchema, response.body);
     },
@@ -149,6 +180,7 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
         prodID.push(product._id);
       });
       const response = await ordersController.receiveProduct(order._id, prodID, emptyToken);
+
       validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.EMPTY_TOKEN);
       validateSchema(errorResponseSchema, response.body);
     },
@@ -167,6 +199,7 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
         prodID.push(product._id);
       });
       const response = await ordersController.receiveProduct(order._id, prodID, invalidToken);
+
       validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
       validateSchema(errorResponseSchema, response.body);
     },
