@@ -3,7 +3,7 @@ import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { ORDER_HISTORY_ACTIONS } from 'data/orders';
 import { errorResponseSchema, orderSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
-import { IOrderFromResponse, IResponse, IResponseFields } from 'types';
+import { IOrderFromResponse } from 'types';
 import { generateID } from 'utils';
 import { validateResponse, validateSchema } from 'utils/validations';
 
@@ -46,13 +46,8 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const incorrectToken = '12345';
       const response = await ordersController.unassignManager(orderWithManager._id, incorrectToken);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.INVALID_TOKEN,
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -64,13 +59,8 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const emptyToken = '';
       const response = await ordersController.unassignManager(orderWithManager._id, emptyToken);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.EMPTY_TOKEN,
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.EMPTY_TOKEN);
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -82,13 +72,8 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const orderId = '';
       const response = await ordersController.unassignManager(orderId, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(orderId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(orderId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -100,13 +85,8 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const invalidOrderId = '12345';
       const response = await ordersController.unassignManager(invalidOrderId, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(invalidOrderId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(invalidOrderId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -118,13 +98,8 @@ test.describe('[API] [Orders] [Unassign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const nonexistentOrderId = generateID();
       const response = await ordersController.unassignManager(nonexistentOrderId, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(nonexistentOrderId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(nonexistentOrderId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 

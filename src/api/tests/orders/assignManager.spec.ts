@@ -3,7 +3,7 @@ import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { ORDER_HISTORY_ACTIONS } from 'data/orders';
 import { errorResponseSchema, orderSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
-import { IOrderFromResponse, IResponse, IResponseFields } from 'types';
+import { IOrderFromResponse } from 'types';
 import { generateID } from 'utils';
 import { validateResponse, validateSchema } from 'utils/validations';
 
@@ -62,13 +62,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const incorrectToken = '12345';
       const response = await ordersController.assignManager(order._id, managerID, incorrectToken);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.INVALID_TOKEN,
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -80,13 +75,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const emptyToken = '';
       const response = await ordersController.assignManager(order._id, managerID, emptyToken);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.EMPTY_TOKEN,
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.EMPTY_TOKEN);
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -98,13 +88,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const emptyOrderId = '';
       const response = await ordersController.assignManager(emptyOrderId, managerID, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(emptyOrderId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(emptyOrderId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -116,13 +101,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const invalidOrderId = '12345';
       const response = await ordersController.assignManager(invalidOrderId, managerID, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(invalidOrderId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(invalidOrderId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -134,13 +114,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const nonexistentOrderId = generateID();
       const response = await ordersController.assignManager(nonexistentOrderId, managerID, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.ORDER_NOT_FOUND(nonexistentOrderId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.ORDER_NOT_FOUND(nonexistentOrderId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -152,13 +127,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const emptyManagerId = '';
       const response = await ordersController.assignManager(order._id, emptyManagerId, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.MANAGER_NOT_FOUND(emptyManagerId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.MANAGER_NOT_FOUND(emptyManagerId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -170,13 +140,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const invalidManagerId = '12345';
       const response = await ordersController.assignManager(order._id, invalidManagerId, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.MANAGER_NOT_FOUND(invalidManagerId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.MANAGER_NOT_FOUND(invalidManagerId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 
@@ -188,13 +153,8 @@ test.describe('[API] [Orders] [Assign Manager | status Draft]', () => {
     async ({ ordersController }) => {
       const nonexistentManagerId = generateID();
       const response = await ordersController.assignManager(order._id, nonexistentManagerId, token);
-      validateResponse(
-        response as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
-        false,
-        API_ERRORS.MANAGER_NOT_FOUND(nonexistentManagerId),
-      );
-      validateSchema(errorResponseSchema, response.body as unknown as IResponse<IResponseFields>);
+      validateResponse(response, STATUS_CODES.NOT_FOUND, false, API_ERRORS.MANAGER_NOT_FOUND(nonexistentManagerId));
+      validateSchema(errorResponseSchema, response.body);
     },
   );
 });
