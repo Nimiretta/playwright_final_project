@@ -4,7 +4,6 @@ import { validateResponse } from 'utils/validations/responseValidation.utils';
 import { TAGS } from 'data/tags.data';
 import { STATUS_CODES } from 'data/statusCodes.data';
 import { API_ERRORS } from 'data/errors.data';
-import { IResponse, IResponseFields } from 'types/api.types';
 import { errorResponseSchema } from 'data/schemas/errorResponse.schema';
 import { validateSchema } from 'utils/validations/schemaValidation.utils';
 import { allCustomersSchema } from 'data/schemas/customers/allCustomers.schema';
@@ -42,13 +41,8 @@ test.describe('[API] [Customers] [GET by ID]', () => {
     async ({ customersController }) => {
       const emptyToken = '';
       const responseGetID = await customersController.getAll(emptyToken);
-      validateResponse(
-        responseGetID as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.EMPTY_TOKEN,
-      );
-      validateSchema(errorResponseSchema, responseGetID.body as unknown as IResponse<IResponseFields>);
+      validateResponse(responseGetID, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.EMPTY_TOKEN);
+      validateSchema(errorResponseSchema, responseGetID.body);
     },
   );
 
@@ -58,13 +52,8 @@ test.describe('[API] [Customers] [GET by ID]', () => {
     async ({ customersController }) => {
       const incorrectToken = '12345';
       const responseGetID = await customersController.getAll(incorrectToken);
-      validateResponse(
-        responseGetID as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.UNAUTHORIZED,
-        false,
-        API_ERRORS.INVALID_TOKEN,
-      );
-      validateSchema(errorResponseSchema, responseGetID.body as unknown as IResponse<IResponseFields>);
+      validateResponse(responseGetID, STATUS_CODES.UNAUTHORIZED, false, API_ERRORS.INVALID_TOKEN);
+      validateSchema(errorResponseSchema, responseGetID.body);
     },
   );
 });
