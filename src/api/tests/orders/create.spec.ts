@@ -11,7 +11,7 @@ test.describe('[API] [Orders] [Create]', () => {
   let customer: ICustomerFromResponse;
   let products: IProductFromResponse[];
   let orderResponse: IResponse<IOrderResponse>;
-  let productIds: string[] = [];
+  let productIds: string[];
 
   test.beforeEach(async ({ signInApiService }) => {
     token = await signInApiService.getAuthToken();
