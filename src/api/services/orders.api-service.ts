@@ -10,12 +10,18 @@ import {
   IOrderOptionsWithDelivery,
   IDeliveryOptions,
   OrderCustomerUpdateOptions,
+  IResponse,
+  IOrderResponse,
+  IProductFromResponse,
+  ICustomerFromResponse,
 } from 'types';
 import { CustomersApiService, ProductsApiService } from '.';
 import { OrdersController } from 'api/controllers';
 import { STATUS_CODES } from 'data';
 import { orderSchema, ordersWithSortAndFilter } from 'data/schemas';
 import { validateDeleteResponse, validateResponse, validateSchema } from 'utils/validations';
+import { expect } from 'fixtures';
+import _ from 'lodash';
 
 export class OrdersApiService {
   private controller: OrdersController;
@@ -237,5 +243,27 @@ export class OrdersApiService {
     this.orders.clear();
     this.products.clear();
     this.customers.clear();
+  }
+
+  @logStep('Validate created order')
+  async validateOrder(
+    orderResponse: IResponse<IOrderResponse>,
+    products: IProductFromResponse[],
+    customer: ICustomerFromResponse,
+  ) {
+    expect
+      .soft(customer, 'Customer from order should match the expected customer')
+      .toMatchObject({ ...orderResponse.body.Order.customer });
+    products.forEach((product) => {
+      expect
+        .soft(product, 'Product from order should match the expected')
+        .toMatchObject(
+          _.omit({ ...orderResponse.body.Order.products.find((value) => product._id === value._id) }, ['received']),
+        );
+    });
+    expect.soft(orderResponse.body.Order.status, 'Order status should match  the expected').toBe('Draft');
+    expect
+      .soft(orderResponse.body.Order.total_price, 'Total price should match the expected')
+      .toBe(products.reduce((price, product) => price + product.price, 0));
   }
 }
