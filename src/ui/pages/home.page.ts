@@ -1,5 +1,5 @@
 import { Locator } from '@playwright/test';
-import { logStep } from 'utils/reporter.utils';
+import { logStep } from 'utils';
 import { SalesPortalPage } from './salePortal.page';
 import { CardName } from 'types';
 

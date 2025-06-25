@@ -1,6 +1,6 @@
 import { HeaderItem } from 'types';
 import { BaseProjectPage } from './baseProjectPage';
-import { logStep } from 'utils/reporter.utils';
+import { logStep } from 'utils';
 import { Locator } from '@playwright/test';
 import { ROUTES } from 'config/routes';
 
@@ -11,7 +11,7 @@ export abstract class SalesPortalPage extends BaseProjectPage {
   readonly ordersNavButton = this.page.getByRole('link', { name: 'Orders' });
   readonly customersNavButton = this.page.getByRole('link', { name: 'Customers' });
   readonly productsNavButton = this.page.getByRole('link', { name: 'Products' });
-  readonly managersNavButton = this.page.getByRole('link', { name: 'Manager' });
+  readonly managersNavButton = this.page.getByRole('link', { name: 'Managers' });
 
   @logStep('Open Page by route')
   async openPage(page: keyof typeof ROUTES, id?: string) {

@@ -1,4 +1,4 @@
-import { logStep } from 'utils/reporter.utils';
+import { logStep } from 'utils';
 import { SalesPortalPage } from '../salePortal.page';
 
 export class CustomersPage extends SalesPortalPage {

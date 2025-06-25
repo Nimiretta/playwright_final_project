@@ -1,5 +1,5 @@
 import { SalesPortalPage } from '../salePortal.page';
-import { logStep } from 'utils/reporter.utils';
+import { logStep } from 'utils';
 
 export class ProductsPage extends SalesPortalPage {
   //header menu

@@ -1,5 +1,5 @@
 import { ICredentials } from 'types/signIn.types';
-import { logStep } from 'utils/reporter.utils';
+import { logStep } from 'utils';
 import { BaseProjectPage } from './baseProjectPage';
 
 export class SignInPage extends BaseProjectPage {
