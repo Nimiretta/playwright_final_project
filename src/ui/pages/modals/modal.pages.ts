@@ -1,8 +1,8 @@
 import { expect } from '@playwright/test';
-import { SalesPortalPage } from 'ui/pages/salePortal.page';
+import { BaseProjectPage } from '../baseProjectPage';
 import { logStep } from 'utils';
 
-export abstract class Modal extends SalesPortalPage {
+export abstract class Modal extends BaseProjectPage {
   @logStep('UI: Wait for Modal to be Closed')
   async waitForClosed() {
     await expect(this.uniqueElement).not.toBeVisible();
