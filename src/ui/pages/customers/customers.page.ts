@@ -19,14 +19,14 @@ export class CustomersPage extends SalesPortalPage {
   readonly table = this.page.locator('#table-customers');
 
   //table -headers
-  readonly tableHeader = this.page.locator('#table-customers th div[current]');
+  readonly tableHeader = this.table.locator('th div[current]');
   readonly emailHeader = this.tableHeader.filter({ hasText: 'Email' });
   readonly nameHeader = this.tableHeader.filter({ hasText: 'Name' });
   readonly countryHeader = this.tableHeader.filter({ hasText: 'Country' });
   readonly createdOnHeader = this.tableHeader.filter({ hasText: 'Created On' });
 
   //table -row
-  readonly tableRow = this.page.locator('#table-customers tbody tr');
+  readonly tableRow = this.table.locator('tbody tr');
   readonly tableRowByEmail = (email: string) => this.tableRow.filter({ has: this.page.getByText(email) });
   readonly emailCell = (email: string) => this.tableRowByEmail(email).locator('td').nth(0);
   readonly nameCell = (email: string) => this.tableRowByEmail(email).locator('td').nth(1);

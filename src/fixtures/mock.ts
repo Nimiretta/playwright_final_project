@@ -46,8 +46,3 @@ export class Mock {
     });
   }
 }
-
-export interface ISortingMockOptions {
-  sortField: string;
-  sortDir: string;
-}

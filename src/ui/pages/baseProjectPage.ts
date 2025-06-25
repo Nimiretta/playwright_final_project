@@ -31,7 +31,7 @@ export abstract class BaseProjectPage extends BasePage {
     await expect(this.spinner).toHaveCount(0);
   }
 
-  @logStep('UI: Wait for Notification to Appear')
+  @logStep('UI: Check Notification text')
   async waitForNotification(text: string) {
     await expect(this.notification.last()).toHaveText(text);
   }

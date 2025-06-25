@@ -19,14 +19,14 @@ export class ProductsPage extends SalesPortalPage {
   readonly table = this.page.locator('#table-products');
 
   //table -headers
-  readonly tableHeader = this.page.locator('#table-products th div[current]');
+  readonly tableHeader = this.table.locator('th div[current]');
   readonly nameHeader = this.tableHeader.filter({ hasText: 'Name' });
   readonly priceHeader = this.tableHeader.filter({ hasText: 'Price' });
   readonly manufacturerHeader = this.tableHeader.filter({ hasText: 'Manufacturer' });
   readonly createdOnHeader = this.tableHeader.filter({ hasText: 'Created On' });
 
   //table -row
-  readonly tableRow = this.page.locator('#table-products tbody tr');
+  readonly tableRow = this.table.locator('tbody tr');
   readonly tableRowByName = (name: string) => this.tableRow.filter({ has: this.page.getByText(name, { exact: true }) }); //точное совпадение name
   readonly nameCell = (name: string) => this.tableRowByName(name).locator('td').nth(0);
   readonly priceCell = (name: string) => this.tableRowByName(name).locator('td').nth(1);
