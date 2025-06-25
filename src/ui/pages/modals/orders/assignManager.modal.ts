@@ -7,6 +7,7 @@ export class AssignManagerModal extends ConfirmationModal {
 
   @logStep('UI: Select manager on AssignManagerModal')
   async select(managerId: string) {
+    await expect(this.managerList).toBeVisible();
     const managerItem = this.managerList.locator(`li[data-managerid="${managerId}"]`);
     await managerItem.click();
     await expect(managerItem).toHaveClass(/active/);
