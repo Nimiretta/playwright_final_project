@@ -1,4 +1,4 @@
-import { test } from 'fixtures/api-services.fixture';
+import { test } from 'fixtures';
 const authFile = 'src/.auth/user.json';
 
 test('Login to Sales Portal', async ({ page, signInApiService }) => {
