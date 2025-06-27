@@ -13,7 +13,7 @@ export abstract class Modal extends BaseProjectPage {
     await this.waitForClosed();
   }
 
-  @logStep('UI: Wait for Modal to be Closed')
+  @logStep('Wait for Modal to be Closed')
   async waitForClosed() {
     await expect(this.uniqueElement).not.toBeVisible();
   }

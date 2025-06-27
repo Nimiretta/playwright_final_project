@@ -7,13 +7,13 @@ export class ConfirmationModal extends Modal {
   readonly cancelButton = this.modalContainer.locator('button.btn-secondary');
   uniqueElement = this.modalContainer;
 
-  @logStep('UI: Click SubmitButton')
+  @logStep('Click SubmitButton')
   async submit() {
     await this.confirmButton.click();
     await this.waitForClosed();
   }
 
-  @logStep('UI: Click CancelButton')
+  @logStep('Click CancelButton')
   async cancel() {
     await this.cancelButton.click();
     await this.waitForClosed();

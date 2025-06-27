@@ -8,7 +8,7 @@ export class AssignManagerModal extends Modal {
   readonly managerList = this.modalContainer.locator('#manager-list');
   uniqueElement = this.modalContainer;
 
-  @logStep('UI: Select manager on AssignManagerModal')
+  @logStep('Select manager on AssignManagerModal')
   async select(managerId: string) {
     await expect(this.managerList).toBeVisible();
     const managerItem = this.managerList.locator(`li[data-managerid="${managerId}"]`);
@@ -16,13 +16,13 @@ export class AssignManagerModal extends Modal {
     await expect(managerItem).toHaveClass(/active/);
   }
 
-  @logStep('UI: Click SubmitButton on AssignManagerModal')
+  @logStep('Click SubmitButton on AssignManagerModal')
   async submit() {
     await this.confirmButton.click();
     await this.waitForClosed();
   }
 
-  @logStep('UI: Click CancelButton on AssignManagerModal')
+  @logStep('Click CancelButton on AssignManagerModal')
   async cancel() {
     await this.cancelButton.click();
     await this.waitForClosed();
