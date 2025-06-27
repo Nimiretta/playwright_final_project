@@ -1,7 +1,7 @@
 import { HeaderItem } from 'types';
-import { BaseProjectPage } from './baseProjectPage';
 import { logStep } from 'utils';
 import { Locator } from '@playwright/test';
+import { BaseProjectPage } from './baseProject.page';
 
 export abstract class SalesPortalPage extends BaseProjectPage {
   readonly uniqueElement = this.page.locator('#main-header');

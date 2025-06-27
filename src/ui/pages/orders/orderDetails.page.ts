@@ -4,8 +4,6 @@ import { AssignManagerModal } from '../modals/orders/assignManager.modal';
 import { ConfirmationModal } from '../modals/orders/confirmation.modal';
 
 export class OrderDetailsPage extends SalesPortalPage {
-  url = (id: string) => `/orders/${id}`;
-
   //modals
   readonly confirmationModal = new ConfirmationModal(this.page);
   readonly assignManagerModal = new AssignManagerModal(this.page);
@@ -22,7 +20,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly assignedManagerName = this.orderInfoContainer.locator('#assigned-manager-link');
   readonly editAssignedManagerButton = this.orderInfoContainer.getByTitle('Edit Assigned Manager');
   readonly removeAssignedManagerButton = this.orderInfoContainer.getByTitle('Remove Assigned Manager');
-  readonly noAssignedManagerText = this.orderInfoContainer.locator('u');
+  readonly noAssignedManagerText = this.orderInfoContainer.getByText('Click to select manager');
   readonly refreshOrderButton = this.page.locator('#refresh-order');
   readonly cancelOrderButton = this.page.locator('#cancel-order');
   readonly reopenOrderButton = this.page.locator('#reopen-order');
@@ -87,7 +85,7 @@ export class OrderDetailsPage extends SalesPortalPage {
 
   @logStep('Click Add Assigned Manager Button')
   async clickAddAssignManager() {
-    await this.assignedManagerName.click();
+    await this.noAssignedManagerText.click();
     await this.assignManagerModal.waitForOpened();
   }
 
@@ -101,5 +99,10 @@ export class OrderDetailsPage extends SalesPortalPage {
   async clickUnassignManager() {
     await this.removeAssignedManagerButton.click();
     await this.unassignModal.waitForOpened();
+  }
+
+  @logStep('Click оn Assigned Manager link')
+  async clickAssignManagerLink() {
+    await this.assignedManagerName.click();
   }
 }

@@ -1,9 +1,9 @@
 import { expect } from '@playwright/test';
-import { BaseProjectPage } from '../baseProjectPage';
+import { BaseProjectPage } from '../baseProject.page';
 import { logStep } from 'utils';
 
 export abstract class Modal extends BaseProjectPage {
-  readonly modalContainer = this.page.locator(`div[role="dialog"]`);
+  readonly modalContainer = this.page.locator('div[role="dialog"]');
   readonly title = this.modalContainer.locator('.modal-title');
   readonly closeButton = this.modalContainer.locator('button[aria-label="Close"]');
 

@@ -1,6 +1,6 @@
 import { ICredentials } from 'types/signIn.types';
 import { logStep } from 'utils';
-import { BaseProjectPage } from './baseProjectPage';
+import { BaseProjectPage } from './baseProject.page';
 
 export class SignInPage extends BaseProjectPage {
   readonly emailInput = this.page.locator('#emailinput');

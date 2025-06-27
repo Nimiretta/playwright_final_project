@@ -1,11 +1,11 @@
-import { Modal } from '../modal.pages';
+import { Modal } from '../modal.page';
 import { logStep } from 'utils';
 
 export class ConfirmationModal extends Modal {
-  uniqueElement = this.page.locator(`.modal-dialog`);
-  description = this.uniqueElement.locator('p');
-  confirmButton = this.uniqueElement.locator(`button[type="submit"]`);
-  cancelButton = this.uniqueElement.locator('button.btn-secondary');
+  readonly description = this.modalContainer.locator('p');
+  readonly confirmButton = this.modalContainer.locator('button[type="submit"]');
+  readonly cancelButton = this.modalContainer.locator('button.btn-secondary');
+  uniqueElement = this.modalContainer;
 
   @logStep('UI: Click SubmitButton')
   async submit() {
