@@ -10,4 +10,4 @@ allure-report
 .env
 src/.auth/user.json
 .DS_Store
-.test.local.spec.ts
+test.local.spec.ts
