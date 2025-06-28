@@ -2,6 +2,7 @@ import { logStep } from 'utils';
 import { SalesPortalPage } from '../salePortal.page';
 import { AssignManagerModal } from '../modals/orders/assignManager.modal';
 import { ConfirmationModal } from '../modals/orders/confirmation.modal';
+import { DeliveryTab } from './tabs/delivery.tab';
 
 export class OrderDetailsPage extends SalesPortalPage {
   //modals
@@ -34,6 +35,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly createdOn = this.orderValues.nth(3);
 
   //tabs
+  readonly deliveryTab = new DeliveryTab(this.page);
   readonly deliveryTabButton = this.page.locator('#delivery-tab');
   readonly commentsTabButton = this.page.locator('#comments-tab');
   readonly historyTabButton = this.page.locator('#history-tab');
