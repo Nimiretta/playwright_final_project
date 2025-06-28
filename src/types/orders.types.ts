@@ -103,3 +103,9 @@ export type OrderCustomerUpdateOptions =
       customerData?: never;
       customerId: string;
     };
+
+export interface IComment {
+  createdOn: string;
+  text: string;
+  author: string;
+}

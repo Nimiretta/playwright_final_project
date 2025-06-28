@@ -3,6 +3,7 @@ import { SalesPortalPage } from '../salePortal.page';
 import { AssignManagerModal } from '../modals/orders/assignManager.modal';
 import { ConfirmationModal } from '../modals/orders/confirmation.modal';
 import { DeliveryTab } from './tabs/delivery.tab';
+import { CommentsTab } from './tabs/comments.tab';
 
 export class OrderDetailsPage extends SalesPortalPage {
   //modals
@@ -37,6 +38,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   //tabs
   readonly deliveryTab = new DeliveryTab(this.page);
   readonly deliveryTabButton = this.page.locator('#delivery-tab');
+  readonly commentsTab = new CommentsTab(this.page);
   readonly commentsTabButton = this.page.locator('#comments-tab');
   readonly historyTabButton = this.page.locator('#history-tab');
 
@@ -106,5 +108,17 @@ export class OrderDetailsPage extends SalesPortalPage {
   @logStep('Click оn Assigned Manager link')
   async clickAssignManagerLink() {
     await this.assignedManagerName.click();
+  }
+
+  @logStep('Click Delivery Tab Button')
+  async clickDeliveryTab() {
+    await this.deliveryTabButton.click();
+    await this.deliveryTab.waitForOpened();
+  }
+
+  @logStep('Click Comments Tab Button')
+  async clickCommentsTab() {
+    await this.commentsTabButton.click();
+    await this.commentsTab.waitForOpened();
   }
 }
