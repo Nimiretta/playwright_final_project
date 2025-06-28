@@ -4,5 +4,5 @@ export { SalesPortalPage } from './salePortal.page';
 export { SignInPage } from './signIn.page';
 export { CustomersPage } from './customers/customers.page';
 export { ProductsPage } from './products/products.page';
-export { Modal } from './modals/modal.pages';
-export { BaseProjectPage } from './baseProjectPage';
+export { Modal } from './modals/modal.page';
+export { BaseProjectPage } from './baseProject.page';
