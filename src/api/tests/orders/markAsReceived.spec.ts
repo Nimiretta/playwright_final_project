@@ -32,14 +32,27 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       validateSchema(orderSchema, response.body);
 
       await test.step('Validated order status is RECEIVED', () => {
-        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
+        expect.soft(response.body.Order.status, 'Order status is not RECEIVED').toEqual(ORDER_STATUSES.RECEIVED);
       });
-      await test.step('Validated order history has RECEIVED_ALL action and RECEIVED status', () => {
-        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
-        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
+      await test.step('Validated order history has RECEIVED_ALL action', () => {
+        expect
+          .soft(response.body.Order.history[0].action, 'Order history action is not RECEIVED_ALL')
+          .toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
       });
+
+      await test.step('Validated order history has RECEIVED status', () => {
+        expect
+          .soft(response.body.Order.history[0].status, 'Order history status is not RECEIVED')
+          .toBe(ORDER_STATUSES.RECEIVED);
+      });
+
       await test.step('Validated all products are marked as received', () => {
-        expect.soft(response.body.Order.products.every((product) => product.received)).toBeTruthy();
+        expect
+          .soft(
+            response.body.Order.products.every((product) => product.received),
+            'Not all products are marked as received',
+          )
+          .toBeTruthy();
       });
     },
   );
@@ -58,14 +71,21 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       validateSchema(orderSchema, response.body);
 
       await test.step('Validated order status is RECEIVED', () => {
-        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
+        expect.soft(response.body.Order.status, 'Order status is not RECEIVED').toEqual(ORDER_STATUSES.RECEIVED);
       });
+
       await test.step('Validated order history has RECEIVED_ALL action and RECEIVED status', () => {
-        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
-        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
+        expect
+          .soft(response.body.Order.history[0].action, 'Order history first action is not RECEIVED_ALL')
+          .toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
+
+        expect
+          .soft(response.body.Order.history[0].status, 'Order history first status is not RECEIVED')
+          .toBe(ORDER_STATUSES.RECEIVED);
       });
+
       await test.step('Validated product is marked as received', () => {
-        expect.soft(response.body.Order.products[0].received).toBeTruthy();
+        expect.soft(response.body.Order.products[0].received, 'Product is not marked as received').toBeTruthy();
       });
     },
   );
@@ -84,21 +104,39 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       validateSchema(orderSchema, response.body);
 
       await test.step('Validated order status is PARTIALLY_RECEIVED', () => {
-        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.PARTIALLY_RECEIVED);
+        expect
+          .soft(response.body.Order.status, 'Order status is not PARTIALLY_RECEIVED')
+          .toEqual(ORDER_STATUSES.PARTIALLY_RECEIVED);
       });
+
       await test.step('Validated first history action and status', () => {
-        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED);
-        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
+        expect
+          .soft(response.body.Order.history[0].action, 'First order history action is not RECEIVED')
+          .toBe(ORDER_HISTORY_ACTIONS.RECEIVED);
+
+        expect
+          .soft(response.body.Order.history[0].status, 'First order history status is not PARTIALLY_RECEIVED')
+          .toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
       });
+
       await test.step('Validated first product is received', () => {
-        expect.soft(response.body.Order.products[0].received).toBeTruthy();
+        expect.soft(response.body.Order.products[0].received, 'First product is not marked as received').toBeTruthy();
       });
+
       await test.step('Validated second history action and status', () => {
-        expect.soft(response.body.Order.history[1].action).toBe(ORDER_HISTORY_ACTIONS.PROCESSED);
-        expect.soft(response.body.Order.history[1].status).toBe(ORDER_STATUSES.IN_PROCESS);
+        expect
+          .soft(response.body.Order.history[1].action, 'Second order history action is not PROCESSED')
+          .toBe(ORDER_HISTORY_ACTIONS.PROCESSED);
+
+        expect
+          .soft(response.body.Order.history[1].status, 'Second order history status is not IN_PROCESS')
+          .toBe(ORDER_STATUSES.IN_PROCESS);
       });
+
       await test.step('Validated second product is not received', () => {
-        expect.soft(response.body.Order.products[1].received).toBeFalsy();
+        expect
+          .soft(response.body.Order.products[1].received, 'Second product is unexpectedly marked as received')
+          .toBeFalsy();
       });
     },
   );
@@ -118,21 +156,45 @@ test.describe('[API] [Orders] [Mark Products as Received | from status In Proces
       validateSchema(orderSchema, responseSecond.body);
 
       await test.step('Validated order status is PARTIALLY_RECEIVED', () => {
-        expect.soft(responseSecond.body.Order.status).toEqual(ORDER_STATUSES.PARTIALLY_RECEIVED);
+        expect
+          .soft(responseSecond.body.Order.status, 'Order status is not PARTIALLY_RECEIVED')
+          .toEqual(ORDER_STATUSES.PARTIALLY_RECEIVED);
       });
-      await test.step('Validated first history action and status', () => {
-        expect.soft(responseSecond.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED);
-        expect.soft(responseSecond.body.Order.history[0].status).toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
+
+      await test.step('Validated first history action is RECEIVED', () => {
+        expect
+          .soft(responseSecond.body.Order.history[0].action, 'First order history action is not RECEIVED')
+          .toBe(ORDER_HISTORY_ACTIONS.RECEIVED);
       });
+
+      await test.step('Validated first history status is PARTIALLY_RECEIVED', () => {
+        expect
+          .soft(responseSecond.body.Order.history[0].status, 'First order history status is not PARTIALLY_RECEIVED')
+          .toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
+      });
+
       await test.step('Validated first product is received', () => {
-        expect.soft(responseSecond.body.Order.products[0].received).toBeTruthy();
+        expect
+          .soft(responseSecond.body.Order.products[0].received, 'First product is not marked as received')
+          .toBeTruthy();
       });
-      await test.step('Validated second history action and status', () => {
-        expect.soft(responseSecond.body.Order.history[2].action).toBe(ORDER_HISTORY_ACTIONS.PROCESSED);
-        expect.soft(responseSecond.body.Order.history[2].status).toBe(ORDER_STATUSES.IN_PROCESS);
+
+      await test.step('Validated second history action is PROCESSED', () => {
+        expect
+          .soft(responseSecond.body.Order.history[2].action, 'Second order history action is not PROCESSED')
+          .toBe(ORDER_HISTORY_ACTIONS.PROCESSED);
       });
-      await test.step('Validated second product is not received', () => {
-        expect.soft(responseSecond.body.Order.products[2].received).toBeFalsy();
+
+      await test.step('Validated second history status is IN_PROCESS', () => {
+        expect
+          .soft(responseSecond.body.Order.history[2].status, 'Second order history status is not IN_PROCESS')
+          .toBe(ORDER_STATUSES.IN_PROCESS);
+      });
+
+      await test.step('Validated third product is not received', () => {
+        expect
+          .soft(responseSecond.body.Order.products[2].received, 'Third product is unexpectedly marked as received')
+          .toBeFalsy();
       });
     },
   );
@@ -251,14 +313,28 @@ test.describe('[API] [Orders] [Mark Products as Received | from  Partialy Receiv
       validateSchema(orderSchema, response.body);
 
       await test.step('Validated order status is RECEIVED', () => {
-        expect.soft(response.body.Order.status).toEqual(ORDER_STATUSES.RECEIVED);
+        expect.soft(response.body.Order.status, 'Order status is not RECEIVED').toEqual(ORDER_STATUSES.RECEIVED);
       });
-      await test.step('Validated order history has RECEIVED_ALL action and RECEIVED status', () => {
-        expect.soft(response.body.Order.history[0].action).toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
-        expect.soft(response.body.Order.history[0].status).toBe(ORDER_STATUSES.RECEIVED);
+
+      await test.step('Validated order history has RECEIVED_ALL action', () => {
+        expect
+          .soft(response.body.Order.history[0].action, 'Order history action is not RECEIVED_ALL')
+          .toBe(ORDER_HISTORY_ACTIONS.RECEIVED_ALL);
       });
+
+      await test.step('Validated order history has RECEIVED status', () => {
+        expect
+          .soft(response.body.Order.history[0].status, 'Order history status is not RECEIVED')
+          .toBe(ORDER_STATUSES.RECEIVED);
+      });
+
       await test.step('Validated all products are marked as received', () => {
-        expect.soft(response.body.Order.products.every((product) => product.received)).toBeTruthy();
+        expect
+          .soft(
+            response.body.Order.products.every((product) => product.received),
+            'Not all products are marked as received',
+          )
+          .toBeTruthy();
       });
     },
   );
