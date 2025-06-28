@@ -15,4 +15,6 @@ export const API_ERRORS = {
   ORDER_WITHOUT_CUSTOMER: 'Missing customer',
   PRODUCT_NAME_ALREADY_EXISTS: (name: string) => `Product with name '${name}' already exists`,
   MANAGER_NOT_FOUND: (id: string) => `Manager with id '${id}' wasn't found`,
+  PRODUCT_IS_NOT_REQUESTED: (id: string) => `Product with Id '${id}' is not requested`,
+  ORDER_STATUS_INVALID: 'Invalid order status',
 } as const;
