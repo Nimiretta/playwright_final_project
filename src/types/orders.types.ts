@@ -50,6 +50,17 @@ export interface IAddress {
   flat: number;
 }
 
+export type AddressHistoryUI = Omit<IAddress, 'country' | 'house' | 'flat'> & {
+  country: COUNTRIES | '-';
+  house: number | '-';
+  flat: number | '-';
+};
+
+export type DeliveryHistoryUI = Omit<IDelivery, 'condition' | 'address'> & {
+  condition: DELIVERY_CONDITIONS | '-';
+  address: AddressHistoryUI;
+};
+
 export interface IOrderCommentResponse {
   createdOn: string;
   text: string;
@@ -108,4 +119,15 @@ export interface IComment {
   createdOn: string;
   text: string;
   author: string;
+}
+
+export interface IHistoryItemUI {
+  action: ORDER_HISTORY_ACTIONS;
+  performer: string;
+  changedOn: string;
+}
+
+export interface IDetailedHistoryItemUI {
+  header: IHistoryItemUI;
+  details: Record<string, { previous: string; updated: string }>;
 }

@@ -4,6 +4,7 @@ import { AssignManagerModal } from '../modals/orders/assignManager.modal';
 import { ConfirmationModal } from '../modals/orders/confirmation.modal';
 import { DeliveryTab } from './tabs/delivery.tab';
 import { CommentsTab } from './tabs/comments.tab';
+import { HistoryTab } from './tabs/history.tab';
 
 export class OrderDetailsPage extends SalesPortalPage {
   //modals
@@ -40,6 +41,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly deliveryTabButton = this.page.locator('#delivery-tab');
   readonly commentsTab = new CommentsTab(this.page);
   readonly commentsTabButton = this.page.locator('#comments-tab');
+  readonly historyTab = new HistoryTab(this.page);
   readonly historyTabButton = this.page.locator('#history-tab');
 
   @logStep('Open Order Details page via URL')
@@ -120,5 +122,11 @@ export class OrderDetailsPage extends SalesPortalPage {
   async clickCommentsTab() {
     await this.commentsTabButton.click();
     await this.commentsTab.waitForOpened();
+  }
+
+  @logStep('Click History Tab Button')
+  async clickHistoryTab() {
+    await this.historyTabButton.click();
+    await this.historyTab.waitForOpened();
   }
 }

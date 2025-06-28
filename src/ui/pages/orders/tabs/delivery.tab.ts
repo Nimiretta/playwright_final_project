@@ -1,8 +1,7 @@
 import { DELIVERY_CONDITIONS, DELIVERY_INFO } from 'data/orders';
 import { OrderTab } from './tab.page';
 import { logStep } from 'utils';
-import { IDelivery } from 'types';
-import { COUNTRIES } from 'data/customers';
+import { DeliveryHistoryUI } from 'types';
 
 export class DeliveryTab extends OrderTab {
   readonly deliveryBtn = this.tabContainer.locator('#delivery-btn');
@@ -38,7 +37,7 @@ export class DeliveryTab extends OrderTab {
   }
 
   @logStep('UI: Get full delivery info')
-  async getDeliveryInfo(): Promise<IDelivery> {
+  async getDeliveryInfo(): Promise<DeliveryHistoryUI> {
     const [condition, finalDate, country, city, street, house, flat] = await Promise.all([
       this.getOptionValue(DELIVERY_INFO.DELIVERY_TYPE),
       this.getOptionValue(DELIVERY_INFO.DELIVERY_DATE),
@@ -52,11 +51,11 @@ export class DeliveryTab extends OrderTab {
       condition: condition as DELIVERY_CONDITIONS,
       finalDate,
       address: {
-        country: country as COUNTRIES,
+        country: country as DeliveryHistoryUI['address']['country'],
         city,
         street,
-        house: +house,
-        flat: +flat,
+        house: +house || '-',
+        flat: +flat || '-',
       },
     };
   }
