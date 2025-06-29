@@ -2,6 +2,8 @@ import { logStep } from 'utils';
 import { SalesPortalPage } from '../salePortal.page';
 import { AssignManagerModal } from '../modals/orders/assignManager.modal';
 import { ConfirmationModal } from '../modals/orders/confirmation.modal';
+import { EditCustomerModal } from '../modals/orders/editCustomer.modal';
+import { EditProductsModal } from '../modals/orders/editProducts.modal';
 
 export class OrderDetailsPage extends SalesPortalPage {
   //modals
@@ -11,6 +13,8 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly cancelModal = this.confirmationModal;
   readonly reopenModal = this.confirmationModal;
   readonly unassignModal = this.confirmationModal;
+  readonly editCustomerModal = new EditCustomerModal(this.page);
+  readonly editProductsModal = new EditProductsModal(this.page);
 
   uniqueElement = this.page.locator('#order-details-body');
 
@@ -25,6 +29,8 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly cancelOrderButton = this.page.locator('#cancel-order');
   readonly reopenOrderButton = this.page.locator('#reopen-order');
   readonly processOrderButton = this.page.locator('#process-order');
+  readonly editCutomerButton = this.page.locator('#edit-customer-pencil');
+  readonly editProductsButton = this.page.locator('#edit-products-pencil');
 
   readonly orderValuesContainer = this.orderInfoContainer.locator('div.h-m-width');
   readonly orderValues = this.orderValuesContainer.locator('span:not(.fw-bold)');
@@ -104,5 +110,17 @@ export class OrderDetailsPage extends SalesPortalPage {
   @logStep('Click оn Assigned Manager link')
   async clickAssignManagerLink() {
     await this.assignedManagerName.click();
+  }
+
+  @logStep('Click edit customer button')
+  async clickEditCustomerButton() {
+    await this.editCutomerButton.click();
+    await this.editCustomerModal.waitForOpened();
+  }
+
+  @logStep('Click edit products button')
+  async clickEditProductsButton() {
+    await this.editProductsButton.click();
+    await this.editProductsModal.waitForOpened();
   }
 }
