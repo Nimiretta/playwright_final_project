@@ -1,5 +1,5 @@
 import { test as base } from 'fixtures/mock.fixture';
-import { CustomersPage, HomePage, ProductsPage, SignInPage, OrderDetailsPage } from 'ui/pages';
+import { CustomersPage, HomePage, ProductsPage, SignInPage, OrderDetailsPage, DeliveryPage } from 'ui/pages';
 
 interface ISalesPortalPages {
   signInPage: SignInPage;
@@ -7,6 +7,7 @@ interface ISalesPortalPages {
   customersPage: CustomersPage;
   productsPage: ProductsPage;
   orderDetailsPage: OrderDetailsPage;
+  deliveryPare: DeliveryPage;
 }
 
 export const test = base.extend<ISalesPortalPages>({
@@ -24,6 +25,9 @@ export const test = base.extend<ISalesPortalPages>({
   },
   orderDetailsPage: async ({ page }, use) => {
     await use(new OrderDetailsPage(page));
+  },
+  deliveryPare: async ({ page }, use) => {
+    await use(new DeliveryPage(page));
   },
 });
 
