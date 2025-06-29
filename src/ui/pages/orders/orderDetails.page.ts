@@ -128,7 +128,8 @@ export class OrderDetailsPage extends SalesPortalPage {
   async clickEditProductsButton() {
     await this.editProductsButton.click();
     await this.editProductsModal.waitForOpened();
-    
+  }
+
   @logStep('Click Delivery Tab Button')
   async clickDeliveryTab() {
     await this.deliveryTabButton.click();

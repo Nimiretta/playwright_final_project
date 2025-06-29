@@ -21,10 +21,4 @@ export class AssignManagerModal extends Modal {
     await this.confirmButton.click();
     await this.waitForClosed();
   }
-
-  @logStep('Click CancelButton on AssignManagerModal')
-  async cancel() {
-    await this.cancelButton.click();
-    await this.waitForClosed();
-  }
 }
