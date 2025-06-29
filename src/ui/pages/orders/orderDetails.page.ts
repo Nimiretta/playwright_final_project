@@ -2,6 +2,9 @@ import { logStep } from 'utils';
 import { SalesPortalPage } from '../salePortal.page';
 import { AssignManagerModal } from '../modals/orders/assignManager.modal';
 import { ConfirmationModal } from '../modals/orders/confirmation.modal';
+import { DeliveryTab } from './tabs/delivery.tab';
+import { CommentsTab } from './tabs/comments.tab';
+import { HistoryTab } from './tabs/history.tab';
 
 export class OrderDetailsPage extends SalesPortalPage {
   //modals
@@ -34,8 +37,11 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly createdOn = this.orderValues.nth(3);
 
   //tabs
+  readonly deliveryTab = new DeliveryTab(this.page);
   readonly deliveryTabButton = this.page.locator('#delivery-tab');
+  readonly commentsTab = new CommentsTab(this.page);
   readonly commentsTabButton = this.page.locator('#comments-tab');
+  readonly historyTab = new HistoryTab(this.page);
   readonly historyTabButton = this.page.locator('#history-tab');
 
   @logStep('Open Order Details page via URL')
@@ -104,5 +110,23 @@ export class OrderDetailsPage extends SalesPortalPage {
   @logStep('Click оn Assigned Manager link')
   async clickAssignManagerLink() {
     await this.assignedManagerName.click();
+  }
+
+  @logStep('Click Delivery Tab Button')
+  async clickDeliveryTab() {
+    await this.deliveryTabButton.click();
+    await this.deliveryTab.waitForOpened();
+  }
+
+  @logStep('Click Comments Tab Button')
+  async clickCommentsTab() {
+    await this.commentsTabButton.click();
+    await this.commentsTab.waitForOpened();
+  }
+
+  @logStep('Click History Tab Button')
+  async clickHistoryTab() {
+    await this.historyTabButton.click();
+    await this.historyTab.waitForOpened();
   }
 }

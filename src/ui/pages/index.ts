@@ -6,3 +6,4 @@ export { CustomersPage } from './customers/customers.page';
 export { ProductsPage } from './products/products.page';
 export { Modal } from './modals/modal.page';
 export { BaseProjectPage } from './baseProject.page';
+export { OrderDetailsPage } from './orders/orderDetails.page';
