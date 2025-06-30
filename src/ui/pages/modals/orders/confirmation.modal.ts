@@ -12,10 +12,4 @@ export class ConfirmationModal extends Modal {
     await this.confirmButton.click();
     await this.waitForClosed();
   }
-
-  @logStep('Click CancelButton')
-  async cancel() {
-    await this.cancelButton.click();
-    await this.waitForClosed();
-  }
 }
