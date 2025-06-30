@@ -33,6 +33,16 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly saveReceivingButton = this.page.locator('#save-received-products');
   readonly selectAllProductsCheckBox = this.page.getByRole('checkbox', { name: 'Select All' });
   readonly singleProductCheckBox = this.page.locator('input[type="checkbox"]');
+  readonly productBodiesLocator = '#products-section .accordion-body';
+  readonly productHeadersLocator = '#products-section .accordion-header';
+  readonly statusTextLocator = '.received-label';
+  readonly productDetailsLocator = '.c-details';
+  readonly productDetailKeyLocator = '.strong-details';
+  readonly productDetailValueLocator = '.s-span';
+  readonly customerBodyLocator = '#customer-section .p-3';
+  readonly customerDetailsLocator = '.c-details';
+  readonly customerKeyLocator = '.strong-details';
+  readonly customerValueLocator = '.s-span';
 
   readonly orderValuesContainer = this.orderInfoContainer.locator('div.h-m-width');
   readonly orderValues = this.orderValuesContainer.locator('span:not(.fw-bold)');
@@ -73,37 +83,44 @@ export class OrderDetailsPage extends SalesPortalPage {
 
   @logStep('Get customer from order')
   async getCustomer(): Promise<Record<string, string>> {
-    return await this.page.evaluate(() => {
-      const details: Record<string, string> = {};
-      document.querySelectorAll('#customer-section .c-details').forEach((el) => {
-        const key = el.querySelector('.strong-details')!.textContent!.trim();
-        const value = el.querySelector('.s-span:last-child')!.textContent!.trim();
-        details[key] = value;
-      });
-      return details;
-    });
+    const numberOfCustomerDetails = await this.page
+      .locator(this.customerBodyLocator)
+      .locator(this.customerDetailsLocator)
+      .count();
+    const customer: Record<string, string> = {};
+    for (let i = 0; i < numberOfCustomerDetails; i++) {
+      const customerDetailRow = this.page.locator(this.customerBodyLocator).locator(this.customerDetailsLocator).nth(i);
+      const key = await customerDetailRow.locator(this.customerKeyLocator).textContent();
+      const value = await customerDetailRow.locator(this.customerValueLocator).last().textContent();
+      customer[key!.trim()] = value!.trim();
+    }
+    return customer;
   }
 
   @logStep('Get products from order')
   async getProducts(): Promise<Record<string, string>[]> {
-    return await this.page.evaluate(() => {
-      const products: Record<string, string>[] = [];
-      const bodies = document.querySelectorAll('#products-section .accordion-body');
-      const headers = document.querySelectorAll('#products-section .accordion-header');
-      bodies.forEach((body, index) => {
-        const product: Record<string, string> = {};
-        const header = headers[index];
-        const status = header.querySelector('.received-label')!.textContent!.trim();
-        product['Status'] = status;
-        body.querySelectorAll('.c-details').forEach((el) => {
-          const key = el.querySelector('.strong-details')!.textContent!.trim();
-          const value = el.querySelector('.s-span:last-child')!.textContent!.trim();
-          product[key] = value;
-        });
-        products.push(product);
-      });
-      return products;
-    });
+    const numberOfProducts = await this.page.locator(this.productBodiesLocator).count();
+    const products: Record<string, string>[] = [];
+    for (let i = 0; i < numberOfProducts; i++) {
+      const product: Record<string, string> = {};
+
+      const header = this.page.locator(this.productHeadersLocator).nth(i);
+      const status = await header.locator(this.statusTextLocator).textContent();
+      product['status'] = status!.trim();
+
+      const productDetails = this.page.locator(this.productBodiesLocator).nth(i).locator(this.productDetailsLocator);
+      const numberOfProductDetails = await productDetails.count();
+
+      for (let j = 0; j < numberOfProductDetails; j++) {
+        const productDetailRow = productDetails.nth(j);
+        const key = await productDetailRow.locator(this.productDetailKeyLocator).textContent();
+        const value = await productDetailRow.locator(this.productDetailValueLocator).last().textContent();
+        product[key!.trim()] = value!.trim();
+      }
+
+      products.push(product);
+    }
+    return products;
   }
 
   @logStep('Mark Single Product')
