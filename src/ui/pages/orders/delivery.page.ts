@@ -6,42 +6,41 @@ import { IDeliveryOptionsUI } from 'types';
 import { logStep } from 'utils';
 
 export class DeliveryPage extends SalesPortalPage {
-  readonly title = this.page.locator('#title');
+  readonly pageContainer = this.page.locator('#delivery-container');
+  readonly title = this.pageContainer.locator('#title');
 
   // Inputs
-  readonly typeInput = this.page.locator('#inputType');
-  readonly locationInput = this.page.locator('#inputLocation');
-  readonly countryInput = this.page.locator('[name="country"]');
-  readonly cityInput = this.page.locator('#inputCity');
-  readonly streetInput = this.page.locator('#inputStreet');
-  readonly houseInput = this.page.locator('#inputHouse');
-  readonly flatInput = this.page.locator('#inputFlat');
+  readonly typeInput = this.pageContainer.locator('#inputType');
+  readonly locationInput = this.pageContainer.locator('#inputLocation');
+  readonly countryInput = this.pageContainer.locator('[name="country"]');
+  readonly cityInput = this.pageContainer.locator('#inputCity');
+  readonly streetInput = this.pageContainer.locator('#inputStreet');
+  readonly houseInput = this.pageContainer.locator('#inputHouse');
+  readonly flatInput = this.pageContainer.locator('#inputFlat');
 
   // Datepicker
-  readonly dateInputField = this.page.locator('#date-input');
-  readonly dateInputIcon = this.page.locator('span.d-p-icon');
+  readonly dateInputField = this.pageContainer.locator('#date-input');
+  readonly dateInputIcon = this.pageContainer.locator('span.d-p-icon');
   readonly datepicker = this.page.locator('.datepicker');
   readonly datepickerSwitcherToMonths = this.datepicker.locator('.datepicker-days .datepicker-switch');
   readonly datepickerSwitcherToYears = this.datepicker.locator('.datepicker-months .datepicker-switch');
   readonly datepickerYear = (year: string) => this.datepicker.locator('.year', { hasText: year });
   readonly datepickerMonth = (month: DATE_PICKER_MONTHS) => this.datepicker.locator('.month', { hasText: month });
   readonly datepickerDay = (day: string) =>
-    this.datepicker.locator(
-      `//td[contains(@class,"day") and not(contains(@class,"disabled")) and not(contains(@class,"old")) and not(contains(@class,"new")) and normalize-space(text())="${day}"]`,
-    );
+    this.datepicker.locator(`td.day:not(.disabled):not(.old):not(.new):has-text('${day}')`);
 
   // Buttons
-  readonly saveBtn = this.page.locator('#save-delivery');
-  readonly cancelBtn = this.page.locator('#back-to-order-details-page');
+  readonly saveBtn = this.pageContainer.locator('#save-delivery');
+  readonly cancelBtn = this.pageContainer.locator('#back-to-order-details-page');
 
   // Errors
-  readonly countryError = this.page.locator('#error-inputCountry');
-  readonly cityError = this.page.locator('#error-inputCity');
-  readonly streetError = this.page.locator('#error-inputStreet');
-  readonly houseError = this.page.locator('#error-inputHouse');
-  readonly flatError = this.page.locator('#error-inputFlat');
+  readonly countryError = this.pageContainer.locator('#error-inputCountry');
+  readonly cityError = this.pageContainer.locator('#error-inputCity');
+  readonly streetError = this.pageContainer.locator('#error-inputStreet');
+  readonly houseError = this.pageContainer.locator('#error-inputHouse');
+  readonly flatError = this.pageContainer.locator('#error-inputFlat');
 
-  readonly uniqueElement = this.locationInput;
+  readonly uniqueElement = this.saveBtn;
 
   private async fillDateInput(date: string) {
     const parsedDate = new Date(date);

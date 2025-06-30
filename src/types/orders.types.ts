@@ -102,7 +102,7 @@ export interface IDeliveryOptions extends Omit<Partial<IDelivery>, 'address'> {
 }
 
 export interface IDeliveryOptionsUI extends IDeliveryOptions {
-  location?: 'Home' | 'Other';
+  location: 'Home' | 'Other';
   condition: DELIVERY_CONDITIONS;
 }
 

@@ -7,7 +7,7 @@ interface ISalesPortalPages {
   customersPage: CustomersPage;
   productsPage: ProductsPage;
   orderDetailsPage: OrderDetailsPage;
-  deliveryPare: DeliveryPage;
+  deliveryPage: DeliveryPage;
 }
 
 export const test = base.extend<ISalesPortalPages>({
@@ -26,7 +26,7 @@ export const test = base.extend<ISalesPortalPages>({
   orderDetailsPage: async ({ page }, use) => {
     await use(new OrderDetailsPage(page));
   },
-  deliveryPare: async ({ page }, use) => {
+  deliveryPage: async ({ page }, use) => {
     await use(new DeliveryPage(page));
   },
 });
