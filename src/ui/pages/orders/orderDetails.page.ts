@@ -28,6 +28,11 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly cancelOrderButton = this.page.locator('#cancel-order');
   readonly reopenOrderButton = this.page.locator('#reopen-order');
   readonly processOrderButton = this.page.locator('#process-order');
+  readonly receiveButton = this.page.locator('#start-receiving-products');
+  readonly cancelReceivingButton = this.page.locator('#cancel-receiving');
+  readonly saveReceivingButton = this.page.locator('#save-received-products');
+  readonly selectAllProductsCheckBox = this.page.getByRole('checkbox', { name: 'Select All' });
+  readonly singleProductCheckBox = this.page.locator('input[type="checkbox"]');
 
   readonly orderValuesContainer = this.orderInfoContainer.locator('div.h-m-width');
   readonly orderValues = this.orderValuesContainer.locator('span:not(.fw-bold)');
@@ -64,6 +69,77 @@ export class OrderDetailsPage extends SalesPortalPage {
     else assignedManagerName = await this.noAssignedManagerText.innerText();
 
     return { orderNumber, assignedManagerName, status, totalPrice, deliveryDate, createdOn };
+  }
+
+  @logStep('Get customer from order')
+  async getCustomer(): Promise<Record<string, string>> {
+    return await this.page.evaluate(() => {
+      const details: Record<string, string> = {};
+      document.querySelectorAll('#customer-section .c-details').forEach((el) => {
+        const key = el.querySelector('.strong-details')!.textContent!.trim();
+        const value = el.querySelector('.s-span:last-child')!.textContent!.trim();
+        details[key] = value;
+      });
+      return details;
+    });
+  }
+
+  @logStep('Get products from order')
+  async getProducts(): Promise<Record<string, string>[]> {
+    return await this.page.evaluate(() => {
+      const products: Record<string, string>[] = [];
+      const bodies = document.querySelectorAll('#products-section .accordion-body');
+      const headers = document.querySelectorAll('#products-section .accordion-header');
+      bodies.forEach((body, index) => {
+        const product: Record<string, string> = {};
+        const header = headers[index];
+        const status = header.querySelector('.received-label')!.textContent!.trim();
+        product['Status'] = status;
+        body.querySelectorAll('.c-details').forEach((el) => {
+          const key = el.querySelector('.strong-details')!.textContent!.trim();
+          const value = el.querySelector('.s-span:last-child')!.textContent!.trim();
+          product[key] = value;
+        });
+        products.push(product);
+      });
+      return products;
+    });
+  }
+
+  @logStep('Mark Single Product')
+  async markSingleProduct(productName: string, action: 'check' | 'uncheck') {
+    const productRow = this.page.locator('.accordion-header', {
+      hasText: productName,
+    });
+    const checkbox = productRow.locator('input[type="checkbox"]');
+    if (action === 'check') {
+      await checkbox.check();
+    } else await checkbox.uncheck();
+  }
+
+  @logStep('Select All products')
+  async markAllproducts(action: 'check' | 'uncheck') {
+    if (action === 'check') {
+      await this.selectAllProductsCheckBox.check();
+    } else await this.selectAllProductsCheckBox.uncheck();
+  }
+
+  @logStep('Click Receive Button')
+  async clickReceiveButton() {
+    await this.receiveButton.click();
+    await this.waitForSpinner();
+  }
+
+  @logStep('Click Cancel Button')
+  async clickCancelButton() {
+    await this.cancelReceivingButton.click();
+    await this.waitForSpinner();
+  }
+
+  @logStep('Click Save Button')
+  async clickSaveButton() {
+    await this.saveReceivingButton.click();
+    await this.waitForSpinner();
   }
 
   @logStep('Click Process Button')
