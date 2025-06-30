@@ -6,7 +6,8 @@ export class EditProductsModal extends Modal {
   readonly saveButton = this.modalContainer.locator('#update-products-btn');
   readonly cancelButton = this.modalContainer.locator('#cancel-edit-products-modal-btn');
   readonly totalPrice = this.modalContainer.locator('#total-price-order-modal');
-  readonly deleteProductButton = this.modalContainer.locator('.del-btn-modal');
+  readonly deleteButtonSelector = '.del-btn-modal';
+  readonly productsSection = this.modalContainer.locator('#edit-products-section ');
   readonly productDropdown = this.modalContainer.locator('select');
   uniqueElement = this.modalContainer;
 
@@ -17,16 +18,8 @@ export class EditProductsModal extends Modal {
 
   @logStep('Click delete product button')
   async delete(productName: string) {
-    for (let i = 0; i < (await this.productDropdown.count()); i++) {
-      const select = this.productDropdown.nth(i);
-      const selectedProduct = await select.inputValue();
-
-      if (selectedProduct === productName) {
-        const container = select.locator('..').locator('..');
-        await container.locator('.del-btn-modal').click();
-        return;
-      }
-    }
+    const productContainer = this.productsSection.locator(`div:has-text(${productName})`);
+    await productContainer.locator(this.deleteButtonSelector).click();
   }
 
   @logStep('Select product')
