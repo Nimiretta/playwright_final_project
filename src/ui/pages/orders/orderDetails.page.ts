@@ -32,6 +32,21 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly cancelOrderButton = this.page.locator('#cancel-order');
   readonly reopenOrderButton = this.page.locator('#reopen-order');
   readonly processOrderButton = this.page.locator('#process-order');
+  readonly receiveButton = this.page.locator('#start-receiving-products');
+  readonly cancelReceivingButton = this.page.locator('#cancel-receiving');
+  readonly saveReceivingButton = this.page.locator('#save-received-products');
+  readonly selectAllProductsCheckBox = this.page.getByRole('checkbox', { name: 'Select All' });
+  readonly singleProductCheckBox = this.page.locator('input[type="checkbox"]');
+  readonly productBodiesLocator = '#products-section .accordion-body';
+  readonly productHeadersLocator = '#products-section .accordion-header';
+  readonly statusTextLocator = '.received-label';
+  readonly productDetailsLocator = '.c-details';
+  readonly productDetailKeyLocator = '.strong-details';
+  readonly productDetailValueLocator = '.s-span';
+  readonly customerBodyLocator = '#customer-section .p-3';
+  readonly customerDetailsLocator = '.c-details';
+  readonly customerKeyLocator = '.strong-details';
+  readonly customerValueLocator = '.s-span';
   readonly editCutomerButton = this.page.locator('#edit-customer-pencil');
   readonly editProductsButton = this.page.locator('#edit-products-pencil');
 
@@ -70,6 +85,84 @@ export class OrderDetailsPage extends SalesPortalPage {
     else assignedManagerName = await this.noAssignedManagerText.innerText();
 
     return { orderNumber, assignedManagerName, status, totalPrice, deliveryDate, createdOn };
+  }
+
+  @logStep('Get customer from order')
+  async getCustomer(): Promise<Record<string, string>> {
+    const numberOfCustomerDetails = await this.page
+      .locator(this.customerBodyLocator)
+      .locator(this.customerDetailsLocator)
+      .count();
+    const customer: Record<string, string> = {};
+    for (let i = 0; i < numberOfCustomerDetails; i++) {
+      const customerDetailRow = this.page.locator(this.customerBodyLocator).locator(this.customerDetailsLocator).nth(i);
+      const key = await customerDetailRow.locator(this.customerKeyLocator).textContent();
+      const value = await customerDetailRow.locator(this.customerValueLocator).last().textContent();
+      customer[key!.trim()] = value!.trim();
+    }
+    return customer;
+  }
+
+  @logStep('Get products from order')
+  async getProducts(): Promise<Record<string, string>[]> {
+    const numberOfProducts = await this.page.locator(this.productBodiesLocator).count();
+    const products: Record<string, string>[] = [];
+    for (let i = 0; i < numberOfProducts; i++) {
+      const product: Record<string, string> = {};
+
+      const header = this.page.locator(this.productHeadersLocator).nth(i);
+      const status = await header.locator(this.statusTextLocator).textContent();
+      product['status'] = status!.trim();
+
+      const productDetails = this.page.locator(this.productBodiesLocator).nth(i).locator(this.productDetailsLocator);
+      const numberOfProductDetails = await productDetails.count();
+
+      for (let j = 0; j < numberOfProductDetails; j++) {
+        const productDetailRow = productDetails.nth(j);
+        const key = await productDetailRow.locator(this.productDetailKeyLocator).textContent();
+        const value = await productDetailRow.locator(this.productDetailValueLocator).last().textContent();
+        product[key!.trim()] = value!.trim();
+      }
+
+      products.push(product);
+    }
+    return products;
+  }
+
+  @logStep('Mark Single Product')
+  async markSingleProduct(productName: string, action: 'check' | 'uncheck') {
+    const productRow = this.page.locator('.accordion-header', {
+      hasText: productName,
+    });
+    const checkbox = productRow.locator('input[type="checkbox"]');
+    if (action === 'check') {
+      await checkbox.check();
+    } else await checkbox.uncheck();
+  }
+
+  @logStep('Select All products')
+  async markAllproducts(action: 'check' | 'uncheck') {
+    if (action === 'check') {
+      await this.selectAllProductsCheckBox.check();
+    } else await this.selectAllProductsCheckBox.uncheck();
+  }
+
+  @logStep('Click Receive Button')
+  async clickReceiveButton() {
+    await this.receiveButton.click();
+    await this.waitForSpinner();
+  }
+
+  @logStep('Click Cancel Button')
+  async clickCancelButton() {
+    await this.cancelReceivingButton.click();
+    await this.waitForSpinner();
+  }
+
+  @logStep('Click Save Button')
+  async clickSaveButton() {
+    await this.saveReceivingButton.click();
+    await this.waitForSpinner();
   }
 
   @logStep('Click Process Button')
