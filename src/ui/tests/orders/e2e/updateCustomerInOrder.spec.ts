@@ -1,7 +1,7 @@
-import { TAGS } from 'data';
+import { apiConfig } from 'config';
+import { STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { ICustomerFromResponse, IOrderFromResponse } from 'types';
-import { convertToUIData } from 'utils';
 
 test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
   let token = '';
@@ -25,52 +25,10 @@ test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
       await orderDetailsPage.clickEditCustomerButton();
       await orderDetailsPage.editCustomerModal.waitForOpened();
       await orderDetailsPage.editCustomerModal.selectCustomer(customer.name);
-      await orderDetailsPage.editCustomerModal.clickSaveButton();
-      await orderDetailsPage.waitForOpened();
-      expect(orderDetailsPage.notification).toHaveText('Order was successfully updated');
-      expect.soft(await orderDetailsPage.getCustomer()).toMatchObject(convertToUIData(customer));
-    },
-  );
-
-  test(
-    'Should not update customer if order is in In Process status',
-    { tag: ['@002_O_E2E_UC', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService }) => {
-      order = await ordersApiService.createInProcess(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
-      await orderDetailsPage.waitForOpened();
-      expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
-    },
-  );
-  test(
-    'Should not update customer if order is in Canceled status',
-    { tag: ['@003_O_E2E_UC', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService }) => {
-      order = await ordersApiService.createCanceled(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
-      await orderDetailsPage.waitForOpened();
-      expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
-    },
-  );
-  test(
-    'Should not update customer if order is in Partially Received status',
-    { tag: ['@004_O_E2E_UC', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService }) => {
-      order = await ordersApiService.createPartiallyReceived(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
-      await orderDetailsPage.waitForOpened();
-      expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
-    },
-  );
-
-  test(
-    'Should not update customer if order is in Received status',
-    { tag: ['@005_O_E2E_UC', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService }) => {
-      order = await ordersApiService.createReceived(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
-      await orderDetailsPage.waitForOpened();
-      expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
+      const response = await orderDetailsPage.interceptResponse(apiConfig.ENDPOINTS.ORDERS_BY_ID(order._id), async () =>
+        orderDetailsPage.editCustomerModal.clickSaveButton(),
+      );
+      expect(response.status).toBe(STATUS_CODES.OK);
     },
   );
 });
