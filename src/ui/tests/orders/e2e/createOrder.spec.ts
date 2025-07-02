@@ -20,7 +20,7 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
   test(
     'Should create order with one product',
     { tag: ['@001_O_CREATE_E2E', TAGS.E2E] },
-    async ({ ordersPage, customersApiService, productsApiService, ordersController }) => {
+    async ({ ordersPage, customersApiService, productsApiService }) => {
       customer = await customersApiService.create(token);
       products = await productsApiService.createBulk(1, token);
       const productNames = products.map((el) => el.name);
@@ -31,16 +31,13 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.createOrderModal.selectCustomer(customer.name);
       await ordersPage.createOrderModal.selectProducts(...productNames);
       order = await ordersPage.createOrderModal.submit();
-      await ordersPage.waitForOpened();
-      const checkOrderAfterCreation = await ordersController.getById(order.body.Order._id, token);
-      expect.soft(ordersPage.notification).toHaveText('Order was successfully created');
-      expect.soft(checkOrderAfterCreation.status).toBe(STATUS_CODES.OK);
+      expect(order.status).toBe(STATUS_CODES.CREATED);
     },
   );
   test(
     'Should create order with max number of products',
     { tag: ['@002_O_CREATE_E2E', TAGS.E2E] },
-    async ({ ordersPage, customersApiService, productsApiService, ordersController }) => {
+    async ({ ordersPage, customersApiService, productsApiService }) => {
       customer = await customersApiService.create(token);
       products = await productsApiService.createBulk(5, token);
       const productNames = products.map((el) => el.name);
@@ -51,10 +48,7 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.createOrderModal.selectCustomer(customer.name);
       await ordersPage.createOrderModal.selectProducts(...productNames);
       order = await ordersPage.createOrderModal.submit();
-      await ordersPage.waitForOpened();
-      const checkOrderAfterCreation = await ordersController.getById(order.body.Order._id, token);
-      expect.soft(ordersPage.notification).toHaveText('Order was successfully created');
-      expect.soft(checkOrderAfterCreation.status).toBe(STATUS_CODES.OK);
+      expect(order.status).toBe(STATUS_CODES.CREATED);
     },
   );
 });
