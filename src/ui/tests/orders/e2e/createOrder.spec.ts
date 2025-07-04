@@ -56,8 +56,13 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       expect(order.status).toBe(STATUS_CODES.CREATED);
       expect(order.status).toBe(STATUS_CODES.CREATED);
       await ordersPage.waitForOpened();
-      expect(ordersPage.notification).toHaveText('Order was successfully created');
-      expect(ordersPage.tableRowByOrderNumber(order.body.Order._id)).toBeVisible();
+      expect(ordersPage.notification, 'Success notification should be displayed').toHaveText(
+        'Order was successfully created',
+      );
+      expect(
+        ordersPage.tableRowByOrderNumber(order.body.Order._id),
+        'Created should be displayed on the table',
+      ).toBeVisible();
     },
   );
 });
