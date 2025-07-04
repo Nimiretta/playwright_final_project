@@ -2,14 +2,17 @@ import { apiConfig } from 'config';
 import { STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { IOrderFromResponse, IProductFromResponse } from 'types';
+import { convertToUIData } from 'utils/convertAPIDataToUIData.utils';
 
 test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   let token = '';
   let order: IOrderFromResponse;
   let products: IProductFromResponse[];
+
   test.beforeEach(async ({ signInApiService }) => {
     token = await signInApiService.getAuthToken();
   });
+
   test.afterEach(async ({ ordersApiService, productsApiService }) => {
     await ordersApiService.clear(token);
     if (!products) return;
@@ -36,6 +39,12 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
         async () => await orderDetailsPage.editProductsModal.clickSaveButton(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      const productInOrder = await orderDetailsPage.getProducts();
+      productInOrder.forEach((el) =>
+        expect(el).toMatchObject(convertToUIData(products.find((product) => product.name === el.Name)!)),
+      );
     },
   );
 
@@ -63,6 +72,12 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
         async () => await orderDetailsPage.editProductsModal.clickSaveButton(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      const productInOrder = await orderDetailsPage.getProducts();
+      productInOrder.forEach((el) =>
+        expect(el).toMatchObject(convertToUIData(products.find((product) => product.name === el.Name)!)),
+      );
     },
   );
 
@@ -85,6 +100,10 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
         async () => await orderDetailsPage.editProductsModal.clickSaveButton(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      const productsInOrder = await orderDetailsPage.getProducts();
+      expect(productsInOrder.length).toBe(order.products.length + 1);
     },
   );
 
@@ -107,6 +126,10 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
         async () => await orderDetailsPage.editProductsModal.clickSaveButton(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      const productsInOrder = await orderDetailsPage.getProducts();
+      expect(productsInOrder.length).toBe(order.products.length - 1);
     },
   );
 });
