@@ -32,6 +32,9 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.createOrderModal.selectProducts(...productNames);
       order = await ordersPage.createOrderModal.submit();
       expect(order.status).toBe(STATUS_CODES.CREATED);
+      await ordersPage.waitForOpened();
+      expect(ordersPage.notification).toHaveText('Order was successfully created');
+      expect(ordersPage.tableRowByOrderNumber(order.body.Order._id)).toBeVisible();
     },
   );
   test(
@@ -51,6 +54,10 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.createOrderModal.selectProducts(...productNames);
       order = await ordersPage.createOrderModal.submit();
       expect(order.status).toBe(STATUS_CODES.CREATED);
+      expect(order.status).toBe(STATUS_CODES.CREATED);
+      await ordersPage.waitForOpened();
+      expect(ordersPage.notification).toHaveText('Order was successfully created');
+      expect(ordersPage.tableRowByOrderNumber(order.body.Order._id)).toBeVisible();
     },
   );
 });
