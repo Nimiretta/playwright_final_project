@@ -33,6 +33,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
         async () => await orderDetailsPage.unassignModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
   );
 
@@ -55,6 +59,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
         async () => await orderDetailsPage.unassignModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
   );
 
@@ -77,6 +85,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
         async () => await orderDetailsPage.unassignModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
   );
 
@@ -99,6 +111,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
         async () => await orderDetailsPage.unassignModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
   );
 
@@ -121,6 +137,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
         async () => await orderDetailsPage.unassignModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
   );
 });

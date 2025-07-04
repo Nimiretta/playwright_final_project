@@ -6,7 +6,7 @@ import { IOrderFromResponse } from 'types';
 test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   let token = '';
   let order: IOrderFromResponse;
-  const userId = '6806a732d006ba3d475fc11c';
+  const firstMangerData = { id: '6806a732d006ba3d475fc11c', name: 'Aleksandr Zhuk' };
 
   test.beforeEach(async ({ signInApiService }) => {
     token = await signInApiService.getAuthToken();
@@ -28,12 +28,16 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
-      await orderDetailsPage.assignManagerModal.select(userId);
+      await orderDetailsPage.assignManagerModal.select(firstMangerData.id);
       const response = await orderDetailsPage.interceptResponse(
-        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, userId),
+        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, firstMangerData.id),
         async () => await orderDetailsPage.assignManagerModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Manager was successfully assigned to the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Assigned manager name should be displayed').toBe(firstMangerData.name);
     },
   );
 
@@ -50,12 +54,16 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
-      await orderDetailsPage.assignManagerModal.select(userId);
+      await orderDetailsPage.assignManagerModal.select(firstMangerData.id);
       const response = await orderDetailsPage.interceptResponse(
-        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, userId),
+        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, firstMangerData.id),
         async () => await orderDetailsPage.assignManagerModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Manager was successfully assigned to the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Assigned manager name should be displayed').toBe(firstMangerData.name);
     },
   );
 
@@ -72,12 +80,16 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
-      await orderDetailsPage.assignManagerModal.select(userId);
+      await orderDetailsPage.assignManagerModal.select(firstMangerData.id);
       const response = await orderDetailsPage.interceptResponse(
-        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, userId),
+        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, firstMangerData.id),
         async () => await orderDetailsPage.assignManagerModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Manager was successfully assigned to the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Assigned manager name should be displayed').toBe(firstMangerData.name);
     },
   );
 
@@ -94,12 +106,16 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
-      await orderDetailsPage.assignManagerModal.select(userId);
+      await orderDetailsPage.assignManagerModal.select(firstMangerData.id);
       const response = await orderDetailsPage.interceptResponse(
-        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, userId),
+        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, firstMangerData.id),
         async () => await orderDetailsPage.assignManagerModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Manager was successfully assigned to the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName, 'Assigned manager name should be displayed').toBe(firstMangerData.name);
     },
   );
 
@@ -116,12 +132,16 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
-      await orderDetailsPage.assignManagerModal.select(userId);
+      await orderDetailsPage.assignManagerModal.select(firstMangerData.id);
       const response = await orderDetailsPage.interceptResponse(
-        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, userId),
+        apiConfig.ENDPOINTS.ASSIGN_MANAGER(order._id, firstMangerData.id),
         async () => await orderDetailsPage.assignManagerModal.submit(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification('Manager was successfully assigned to the order');
+      const orderValues = await orderDetailsPage.getOrderValues();
+      expect(orderValues.assignedManagerName).toBe(firstMangerData.id);
     },
   );
 });
