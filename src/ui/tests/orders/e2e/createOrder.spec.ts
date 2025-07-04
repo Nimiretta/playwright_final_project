@@ -37,11 +37,13 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
   test(
     'Should create order with max number of products',
     { tag: ['@002_O_CREATE_E2E', TAGS.E2E] },
-    async ({ ordersPage, customersApiService, productsApiService }) => {
+    async ({ ordersPage, customersApiService, productsApiService, homePage }) => {
       customer = await customersApiService.create(token);
       products = await productsApiService.createBulk(5, token);
       const productNames = products.map((el) => el.name);
-      await ordersPage.openPage('ORDERS');
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
       await ordersPage.waitForOpened();
       await ordersPage.clickCreateButton();
       await ordersPage.createOrderModal.waitForOpened();
