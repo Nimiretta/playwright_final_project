@@ -18,9 +18,13 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to assign manager to order "Draft"',
     { tag: ['@001_O_AM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage }) => {
+    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
       order = await ordersApiService.createDraft(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
@@ -36,9 +40,13 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to assign manager to order "In Process"',
     { tag: ['@002_O_AM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage }) => {
-      order = await ordersApiService.createInProcess(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+      order = await ordersApiService.createDraft(token);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
@@ -54,9 +62,13 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to assign manager to order "Canceled"',
     { tag: ['@003_O_AM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage }) => {
-      order = await ordersApiService.createCanceled(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+      order = await ordersApiService.createDraft(token);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
@@ -72,9 +84,13 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to assign manager to order "Partially Received"',
     { tag: ['@004_O_AM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage }) => {
-      order = await ordersApiService.createPartiallyReceived(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+      order = await ordersApiService.createDraft(token);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
@@ -90,9 +106,13 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to assign manager to order "Received"',
     { tag: ['@005_O_AM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage }) => {
-      order = await ordersApiService.createPartiallyReceived(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+      order = await ordersApiService.createDraft(token);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickAddAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();

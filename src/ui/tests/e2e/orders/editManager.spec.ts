@@ -19,10 +19,14 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to edit manager in order',
     { tag: ['@001_O_EM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage }) => {
+    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, userId, token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
