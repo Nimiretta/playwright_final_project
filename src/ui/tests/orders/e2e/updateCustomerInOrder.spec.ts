@@ -36,7 +36,9 @@ test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
       orderDetailsPage.waitForNotification('Order was successfully updated');
-      expect(await orderDetailsPage.getCustomer()).toMatchObject(convertToUIData(customer));
+      expect(await orderDetailsPage.getCustomer(), 'New products should match expected').toMatchObject(
+        convertToUIData(customer),
+      );
     },
   );
 });
