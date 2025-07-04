@@ -11,15 +11,23 @@ export abstract class SalesPortalPage extends BaseProjectPage {
   readonly customersNavButton = this.page.getByRole('link', { name: 'Customers' });
   readonly productsNavButton = this.page.getByRole('link', { name: 'Products' });
   readonly managersNavButton = this.page.getByRole('link', { name: 'Managers' });
+  readonly notificationsButton = this.page.locator('#notification-bell');
+  readonly switchThemeButton = this.page.locator('#theme-toggle');
+  readonly userMenuButton = this.page.locator('#user-menu-button');
+  readonly signOutButton = this.page.locator('#signOut');
 
   @logStep('Click on Header item ')
-  async clickNavigationButton(headerItem: HeaderItem) {
+  async clickHeaderButton(headerItem: HeaderItem) {
     const headerButtons: Record<HeaderItem, Locator> = {
       Home: this.homeNavButton,
       Orders: this.ordersNavButton,
       Customers: this.customersNavButton,
       Products: this.productsNavButton,
       Managers: this.managersNavButton,
+      Notifications: this.notificationsButton,
+      SwitchTheme: this.switchThemeButton,
+      User: this.userMenuButton,
+      SignOut: this.signOutButton,
     };
 
     await headerButtons[headerItem].click();
