@@ -19,10 +19,14 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should update one product in order',
     { tag: ['@001_0_UPP_E2E', TAGS.E2E] },
-    async ({ productsApiService, orderDetailsPage, ordersApiService }) => {
+    async ({ productsApiService, orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
       products = await productsApiService.createBulk(1, token);
       order = await ordersApiService.createDraft(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
@@ -38,10 +42,14 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should update order with several products',
     { tag: ['@002_0_UPP_E2E', TAGS.E2E] },
-    async ({ productsApiService, orderDetailsPage, ordersApiService }) => {
+    async ({ productsApiService, orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
       products = await productsApiService.createBulk(5, token);
       order = await ordersApiService.createDraft(token, { productCount: 5 });
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
@@ -61,9 +69,13 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should be possible to add one more product to order',
     { tag: ['@003_0_UPP_E2E', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService }) => {
+    async ({ orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
       order = await ordersApiService.createDraft(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
@@ -79,9 +91,13 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should be possible to delete product from order',
     { tag: ['@004_0_UPP_E2E', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService }) => {
+    async ({ orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
       order = await ordersApiService.createDraft(token, { productCount: 2 });
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await homePage.openPage('HOME');
+      await homePage.waitForOpened();
+      await homePage.clickCardButton('Orders');
+      await ordersPage.waitForOpened();
+      await ordersPage.clickOrderDetails(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
