@@ -2,6 +2,7 @@ import { apiConfig } from 'config';
 import { STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { ICustomerFromResponse, IOrderFromResponse } from 'types';
+import { convertToUIData } from 'utils';
 
 test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
   let token = '';
@@ -33,6 +34,9 @@ test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
         orderDetailsPage.editCustomerModal.clickSaveButton(),
       );
       expect(response.status).toBe(STATUS_CODES.OK);
+      await orderDetailsPage.waitForOpened();
+      orderDetailsPage.waitForNotification('Order was successfully updated');
+      expect(await orderDetailsPage.getCustomer()).toMatchObject(convertToUIData(customer));
     },
   );
 });
