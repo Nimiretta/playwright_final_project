@@ -17,7 +17,7 @@ test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
   });
   test(
     'Sould update customer if order is in Draft status',
-    { tag: ['@001_O_E2E_UC', TAGS.E2E] },
+    { tag: ['@001_O_UC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
