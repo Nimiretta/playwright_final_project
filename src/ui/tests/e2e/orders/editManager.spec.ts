@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { STATUS_CODES, TAGS } from 'data';
+import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { IOrderFromResponse } from 'types';
 
@@ -19,14 +19,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to edit manager in order',
     { tag: ['@001_O_EM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+    async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, firstMangerData.id, token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditAssignManager();
       await orderDetailsPage.assignManagerModal.waitForOpened();
@@ -37,7 +33,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification('Manager was successfully assigned to the order');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_ASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Updated manager name should be displayed').toBe(secondUserId.name);
     },

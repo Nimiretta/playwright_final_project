@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { STATUS_CODES, TAGS } from 'data';
+import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { IOrderFromResponse } from 'types';
 
@@ -17,14 +17,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to unassign manager from order "Draft"',
     { tag: ['@001_O_UM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+    async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, userId, token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickUnassignManager();
       await orderDetailsPage.unassignModal.waitForOpened();
@@ -34,7 +30,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -43,14 +39,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to unassign manager from order "In Process"',
     { tag: ['@002_O_UM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+    async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, userId, token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickUnassignManager();
       await orderDetailsPage.unassignModal.waitForOpened();
@@ -60,7 +52,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -69,14 +61,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to unassign manager from order "Canceled"',
     { tag: ['@003_O_UM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+    async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, userId, token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickUnassignManager();
       await orderDetailsPage.unassignModal.waitForOpened();
@@ -86,7 +74,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -95,14 +83,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to unassign manager from order "Partially Received"',
     { tag: ['@004_O_UM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+    async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, userId, token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickUnassignManager();
       await orderDetailsPage.unassignModal.waitForOpened();
@@ -112,7 +96,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -121,14 +105,10 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
   test(
     'Should be possible to unassign manager from order "Received"',
     { tag: ['@005_O_UM_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+    async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, userId, token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickUnassignManager();
       await orderDetailsPage.unassignModal.waitForOpened();
@@ -138,7 +118,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification('Manager was successfully unassigned from the order');
+      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
