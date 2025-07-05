@@ -2,7 +2,7 @@ import { apiConfig } from 'config';
 import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { ICustomerFromResponse, IOrderFromResponse } from 'types';
-import { convertCustomerToUIData } from 'utils';
+import { convertCustomerToUIData } from 'data/orders';
 
 test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
   let token = '';
