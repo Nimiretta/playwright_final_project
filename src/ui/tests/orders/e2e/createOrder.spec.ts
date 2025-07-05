@@ -31,12 +31,14 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.createOrderModal.selectCustomer(customer.name);
       await ordersPage.createOrderModal.selectProducts(...productNames);
       order = await ordersPage.createOrderModal.submit();
-      expect(order.status).toBe(STATUS_CODES.CREATED);
       await ordersPage.waitForOpened();
-      expect(ordersPage.notification).toHaveText('Order was successfully created');
+
+      expect(order.status).toBe(STATUS_CODES.CREATED);
+      await ordersPage.waitForNotification(NOTIFICATIONS.ORDER_CREATED);
       expect(ordersPage.tableRowByOrderNumber(order.body.Order._id)).toBeVisible();
     },
   );
+
   test(
     'Should create order with max number of products',
     { tag: ['@002_O_CREATE_E2E', TAGS.E2E] },
@@ -53,9 +55,9 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.createOrderModal.selectCustomer(customer.name);
       await ordersPage.createOrderModal.selectProducts(...productNames);
       order = await ordersPage.createOrderModal.submit();
-      expect(order.status).toBe(STATUS_CODES.CREATED);
-      expect(order.status).toBe(STATUS_CODES.CREATED);
       await ordersPage.waitForOpened();
+
+      expect(order.status).toBe(STATUS_CODES.CREATED);
       await ordersPage.waitForNotification(NOTIFICATIONS.ORDER_CREATED);
       expect(
         ordersPage.tableRowByOrderNumber(order.body.Order._id),
