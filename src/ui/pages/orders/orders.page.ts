@@ -11,7 +11,8 @@ export class OrdersPage extends SalesPortalPage {
   readonly tableRow = this.page.locator('#table-orders tbody tr');
   readonly tableRowByOrderNumber = (orderNumber: string) =>
     this.tableRow.filter({ has: this.page.getByText(orderNumber) });
-  readonly detailsButton = (orderNumber: string) => this.tableRowByOrderNumber(orderNumber).getByTitle('Details');
+  readonly detailsButton = (orderNumber: string) =>
+    this.tableRowByOrderNumber(orderNumber).locator('a[title="Details"]');
 
   @logStep('Open Orders page via URL')
   async open() {
