@@ -1,8 +1,8 @@
 import { apiConfig } from 'config';
-import { STATUS_CODES, TAGS } from 'data';
+import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { IOrderFromResponse, IProductFromResponse } from 'types';
-import { convertToUIData } from 'utils/convertAPIDataToUIData.utils';
+import { convertProductToUIData } from 'data/orders';
 
 test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   let token = '';
@@ -22,14 +22,10 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should update one product in order',
     { tag: ['@001_0_UPP_E2E', TAGS.E2E] },
-    async ({ productsApiService, orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
+    async ({ productsApiService, orderDetailsPage, ordersApiService }) => {
       products = await productsApiService.createBulk(1, token);
       order = await ordersApiService.createDraft(token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
@@ -40,10 +36,10 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
       const productInOrder = await orderDetailsPage.getProducts();
       productInOrder.forEach((el) =>
-        expect(el).toMatchObject(convertToUIData(products.find((product) => product.name === el.Name)!)),
+        expect(el).toMatchObject(convertProductToUIData(products.find((product) => product.name === el.Name)!)),
       );
     },
   );
@@ -51,14 +47,10 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should update order with several products',
     { tag: ['@002_0_UPP_E2E', TAGS.E2E] },
-    async ({ productsApiService, orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
+    async ({ productsApiService, orderDetailsPage, ordersApiService }) => {
       products = await productsApiService.createBulk(5, token);
       order = await ordersApiService.createDraft(token, { productCount: 5 });
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
@@ -73,10 +65,10 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
       const productInOrder = await orderDetailsPage.getProducts();
       productInOrder.forEach((el) =>
-        expect(el).toMatchObject(convertToUIData(products.find((product) => product.name === el.Name)!)),
+        expect(el).toMatchObject(convertProductToUIData(products.find((product) => product.name === el.Name)!)),
       );
     },
   );
@@ -84,13 +76,9 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should be possible to add one more product to order',
     { tag: ['@003_0_UPP_E2E', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
+    async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createDraft(token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
@@ -101,7 +89,7 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
       const productsInOrder = await orderDetailsPage.getProducts();
       expect(productsInOrder.length).toBe(order.products.length + 1);
     },
@@ -110,13 +98,9 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
   test(
     'Should be possible to delete product from order',
     { tag: ['@004_0_UPP_E2E', TAGS.E2E] },
-    async ({ orderDetailsPage, ordersApiService, homePage, ordersPage }) => {
+    async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createDraft(token, { productCount: 2 });
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditProductsButton();
       await orderDetailsPage.editProductsModal.waitForOpened();
@@ -127,7 +111,7 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification('Order was successfully updated');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
       const productsInOrder = await orderDetailsPage.getProducts();
       expect(productsInOrder.length).toBe(order.products.length - 1);
     },

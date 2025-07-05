@@ -5,3 +5,4 @@ export * from './notifications.data';
 export * from './sortFields.data';
 export * from './generateDelivery.data';
 export * from './generateComment.data';
+export * from './convertAPIDataToUIData.utils';
