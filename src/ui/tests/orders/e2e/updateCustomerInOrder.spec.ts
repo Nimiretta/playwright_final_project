@@ -1,8 +1,8 @@
 import { apiConfig } from 'config';
-import { STATUS_CODES, TAGS } from 'data';
+import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { ICustomerFromResponse, IOrderFromResponse } from 'types';
-import { convertToUIData } from 'utils';
+import { convertCustomerToUIData } from 'utils';
 
 test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
   let token = '';
@@ -19,13 +19,9 @@ test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
   test(
     'Sould update customer if order is in Draft status',
     { tag: ['@001_O_UC_E2E', TAGS.E2E] },
-    async ({ ordersApiService, orderDetailsPage, homePage, ordersPage }) => {
+    async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraft(token);
-      await homePage.openPage('HOME');
-      await homePage.waitForOpened();
-      await homePage.clickCardButton('Orders');
-      await ordersPage.waitForOpened();
-      await ordersPage.clickOrderDetails(order._id);
+      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickEditCustomerButton();
       await orderDetailsPage.editCustomerModal.waitForOpened();
@@ -35,9 +31,9 @@ test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification('Order was successfully updated');
+      orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
       expect(await orderDetailsPage.getCustomer(), 'New products should match expected').toMatchObject(
-        convertToUIData(customer),
+        convertCustomerToUIData(customer),
       );
     },
   );

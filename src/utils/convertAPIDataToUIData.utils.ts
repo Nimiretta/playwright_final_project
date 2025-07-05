@@ -1,7 +1,7 @@
 import { ICustomerFromResponse } from 'types';
 import { convertToDateAndTime } from 'utils';
 
-export function convertToUIData(data: ICustomerFromResponse): Record<string, string> {
+export function convertCustomerToUIData(data: ICustomerFromResponse): Record<string, string> {
   return {
     Email: data.email,
     Name: data.name,
