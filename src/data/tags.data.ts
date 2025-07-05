@@ -4,4 +4,5 @@ export enum TAGS {
   UI = '@UI',
   API = '@API',
   VISUAL_REGRESSION = '@Visual_Regression',
+  E2E = '@E2E',
 }

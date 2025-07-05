@@ -18,8 +18,16 @@ export class EditProductsModal extends Modal {
 
   @logStep('Click delete product button')
   async delete(productName: string) {
-    const productContainer = this.productsSection.locator(`div:has-text(${productName})`);
-    await productContainer.locator(this.deleteButtonSelector).click();
+    for (let i = 0; i < (await this.productDropdown.count()); i++) {
+      const select = this.productDropdown.nth(i);
+      const selectedProduct = await select.inputValue();
+
+      if (selectedProduct === productName) {
+        const container = select.locator('..').locator('..');
+        await container.locator(this.deleteButtonSelector).click();
+        return;
+      }
+    }
   }
 
   @logStep('Select product')
