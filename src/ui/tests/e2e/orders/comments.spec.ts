@@ -1,9 +1,8 @@
 import { apiConfig } from 'config';
 import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
-import { generateCommentData, ORDER_STATUSES } from 'data/orders';
+import { generateCommentData } from 'data/orders';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse, IOrderResponse } from 'types';
-import { getRandromEnumValue } from 'utils';
 
 test.describe('[E2E] [Orders] [Comments]', () => {
   test.describe.configure({ mode: 'serial' });
@@ -12,26 +11,7 @@ test.describe('[E2E] [Orders] [Comments]', () => {
 
   test.beforeEach(async ({ signInApiService, ordersApiService }) => {
     token = await signInApiService.getAuthToken();
-    const orderStatus = getRandromEnumValue(ORDER_STATUSES);
-    switch (orderStatus) {
-      case ORDER_STATUSES.DRAFT:
-        order = await ordersApiService.createDraft(token);
-        break;
-      case ORDER_STATUSES.IN_PROCESS:
-        order = await ordersApiService.createInProcess(token);
-        break;
-      case ORDER_STATUSES.PARTIALLY_RECEIVED:
-        order = await ordersApiService.createPartiallyReceived(token);
-        break;
-      case ORDER_STATUSES.RECEIVED:
-        order = await ordersApiService.createReceived(token);
-        break;
-      case ORDER_STATUSES.CANCELED:
-        order = await ordersApiService.createCanceled(token);
-        break;
-      default:
-        throw new Error(`Unexpected order status: ${orderStatus}`);
-    }
+    order = await ordersApiService.createOrderInRandomStatus(token);
   });
 
   test.afterEach(async ({ ordersApiService }) => {
