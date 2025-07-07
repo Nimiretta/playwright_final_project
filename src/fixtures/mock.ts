@@ -27,7 +27,7 @@ export class Mock {
   }
 
   async products(body: IProductsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    await this.page.route(/\/api\/products(\/all)?(\?.*)?$/, async (route) => {
+    this.page.route(/\/api\/products(\/all)?(\?.*)?$/, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
