@@ -11,6 +11,7 @@ test.describe('[UI] [Orders] Assign Manager Modal', async function () {
     token = await signInApiService.getAuthToken();
     order = await ordersApiService.createDraft(token);
     await orderDetailsPage.open(order._id);
+    await orderDetailsPage.waitForOpened();
     await mock.users({
       Users: [mockManager],
       IsSuccess: true,
