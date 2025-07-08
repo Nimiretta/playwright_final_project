@@ -1,13 +1,13 @@
-import { Modal } from './modal.page';
 import { INotificationsFromModal, NotificationMsg } from 'types';
+import { BaseProjectPage } from '../baseProject.page';
 
-export class NotificationsModal extends Modal {
+export class NotificationsModal extends BaseProjectPage {
   readonly notificationsModal = this.page.locator('#notification-popover');
   readonly notificationsList = this.notificationsModal.locator('#notification-list');
   readonly readAllButton = this.notificationsModal.locator('#mark-all-read');
   readonly closeButton = this.notificationsModal.locator('.btn-close');
   readonly notifications = this.notificationsList.locator('.list-group-item');
-  readonly topNotification = this.notification.nth(0);
+  readonly topNotification = this.notifications.nth(0);
 
   uniqueElement = this.notificationsModal;
 
