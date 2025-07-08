@@ -41,7 +41,7 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
       await expect(createOrderModal.closeButton).toBeVisible();
 
       await createOrderModal.clickCreate();
-      await expect(createOrderModal.modalContainer).not.toBeVisible();
+      await createOrderModal.waitForClosed();
     },
   );
 
@@ -72,7 +72,7 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
       await expect(createOrderModal.addProductButton).not.toBeVisible();
 
       await createOrderModal.clickCreate();
-      await expect(createOrderModal.modalContainer).not.toBeVisible();
+      await createOrderModal.waitForClosed();
     },
   );
 });
