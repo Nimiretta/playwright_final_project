@@ -5,7 +5,7 @@ import { mockData } from 'data/orders/mockOrder.data';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse } from 'types';
 
-test.describe('[Component] [Orders] [Customer Details]', () => {
+test.describe('[Integration] [Orders] [Customer Details]', () => {
   let token = '';
   let order: IOrderFromResponse;
   test.beforeEach(async ({ signInApiService }) => {
