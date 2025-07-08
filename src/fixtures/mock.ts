@@ -1,7 +1,14 @@
 import { Page } from '@playwright/test';
 import { apiConfig } from 'config';
 import { STATUS_CODES } from 'data';
-import { ICustomerResponse, ICustomersResponse, IOrdersResponse, IProductResponse, IProductsResponse } from 'types';
+import {
+  ICustomerResponse,
+  ICustomersResponse,
+  IOrdersResponse,
+  IProductResponse,
+  IProductsResponse,
+  IUsersResponse,
+} from 'types';
 
 export class Mock {
   constructor(private page: Page) {}
@@ -78,5 +85,15 @@ export class Mock {
 
   async createOrder(body: { customers: ICustomersResponse; products: IProductsResponse }) {
     await Promise.all([this.customersAll(body.customers), this.productsAll(body.products)]);
+  }
+
+  async users(body: IUsersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/users$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
   }
 }

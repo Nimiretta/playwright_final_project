@@ -1,6 +1,7 @@
 import { COUNTRIES } from 'data/customers';
 import { generateID } from 'utils';
 import { MANUFACTURERS } from 'data/products';
+import { ROLES } from 'data/roles.data';
 
 export const mockCustomer = {
   _id: generateID(),
@@ -25,4 +26,13 @@ export const mockProduct = {
   amount: 3,
   notes: '',
   createdOn: new Date(Date.now()).toISOString(),
+};
+
+export const mockManager = {
+  _id: '6804f272d006ba3d475fb3e0',
+  username: 'Vita',
+  firstName: 'Vitaliya',
+  lastName: 'Tsitova',
+  roles: [ROLES.USER],
+  createdOn: '2025/04/20 13:11:14',
 };
