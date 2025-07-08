@@ -7,7 +7,7 @@ export class Mock {
   constructor(private page: Page) {}
 
   async customers(body: ICustomersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    this.page.route(/\/api\/customers(\/all)?(\?.*)?$/, async (route) => {
+    this.page.route(/\/api\/customers(\?.*)?$/, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
@@ -27,7 +27,7 @@ export class Mock {
   }
 
   async products(body: IProductsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    this.page.route(/\/api\/products(\/all)?(\?.*)?$/, async (route) => {
+    this.page.route(/\/api\/products(\?.*)?$/, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
@@ -54,5 +54,29 @@ export class Mock {
         body: JSON.stringify(body),
       });
     });
+  }
+
+  async customersAll(body: ICustomersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/customers\/all$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async productsAll(body: IProductsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/products\/all$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async createOrder(body: { customers: ICustomersResponse; products: IProductsResponse }) {
+    await Promise.all([this.customersAll(body.customers), this.productsAll(body.products)]);
   }
 }
