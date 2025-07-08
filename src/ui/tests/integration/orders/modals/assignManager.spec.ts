@@ -23,7 +23,7 @@ test.describe('[UI] [Orders] Assign Manager Modal', async function () {
   });
 
   test(
-    'Add New Assign',
+    'Assign a New Manager',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
     async function ({ orderDetailsPage, assignManagerModal }) {
       await orderDetailsPage.clickAddAssignManager();
@@ -42,11 +42,16 @@ test.describe('[UI] [Orders] Assign Manager Modal', async function () {
 
       await assignManagerModal.submit();
       await assignManagerModal.waitForClosed();
+
+      await test.step('Verify Manager name on orderDetailsPage ', async () => {
+        const mockManagerName = `${mockManager.firstName} ${mockManager.lastName}`;
+        await expect.soft(orderDetailsPage.assignedManagerName).toHaveText(mockManagerName);
+      });
     },
   );
 
   test(
-    'Add New Assign choose from search',
+    'Assign Manager via Search',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
     async function ({ orderDetailsPage, assignManagerModal }) {
       await orderDetailsPage.clickAddAssignManager();
@@ -74,6 +79,11 @@ test.describe('[UI] [Orders] Assign Manager Modal', async function () {
 
       await assignManagerModal.submit();
       await assignManagerModal.waitForClosed();
+
+      await test.step('Verify Manager name on orderDetailsPage ', async () => {
+        const mockManagerName = `${mockManager.firstName} ${mockManager.lastName}`;
+        await expect.soft(orderDetailsPage.assignedManagerName).toHaveText(mockManagerName);
+      });
     },
   );
 });

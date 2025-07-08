@@ -40,6 +40,7 @@ export class AssignManagerModal extends Modal {
     return info.trim();
   }
 
+  @logStep('Check UI element')
   async checkCommonUI(titleText: string) {
     await expect.soft(this.title).toContainText(titleText);
     await expect.soft(this.confirmButton).toBeVisible();
