@@ -36,9 +36,13 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
       const nameProduct = await createOrderModal.getProductsInDropdown();
       expect.soft(nameProduct[0]).toBe(mockProduct.name);
 
-      await expect(createOrderModal.createButton).toBeVisible();
-      await expect(createOrderModal.cancelButton).toBeVisible();
-      await expect(createOrderModal.closeButton).toBeVisible();
+      await expect.soft(createOrderModal.title).toContainText('Create Order');
+      await expect.soft(createOrderModal.createButton).toBeVisible();
+      await expect.soft(createOrderModal.createButton).toBeEnabled();
+      await expect.soft(createOrderModal.cancelButton).toBeVisible();
+      await expect.soft(createOrderModal.cancelButton).toBeEnabled();
+      await expect.soft(createOrderModal.closeButton).toBeVisible();
+      await expect.soft(createOrderModal.closeButton).toBeEnabled();
 
       await createOrderModal.clickCreate();
       await createOrderModal.waitForClosed();
