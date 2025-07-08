@@ -8,6 +8,7 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
   test.beforeEach(async ({ signInApiService, ordersPage, mock }) => {
     token = await signInApiService.getAuthToken();
     await ordersPage.open();
+    await ordersPage.waitForOpened();
     await mock.createOrder({
       customers: { Customers: [mockCustomer], IsSuccess: true, ErrorMessage: null },
       products: { Products: [mockProduct], IsSuccess: true, ErrorMessage: null },
