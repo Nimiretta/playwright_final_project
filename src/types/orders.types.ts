@@ -101,6 +101,11 @@ export interface IDeliveryOptions extends Omit<Partial<IDelivery>, 'address'> {
   address?: Partial<IAddress>;
 }
 
+export interface IDeliveryOptionsUI extends IDeliveryOptions {
+  location: 'Home' | 'Other';
+  condition: DELIVERY_CONDITIONS;
+}
+
 export interface IOrderOptionsWithDelivery extends IOrderOptions {
   deliveryData?: IDeliveryOptions;
 }
