@@ -7,6 +7,7 @@ export class AssignManagerModal extends Modal {
   readonly cancelButton = this.modalContainer.locator('#cancel-edit-manager-modal-btn');
   readonly managerList = this.modalContainer.locator('#manager-list');
   readonly searchInput = this.modalContainer.locator('#manager-search-input');
+  readonly activeManager = this.managerList.locator('li[data-managerid].active');
   uniqueElement = this.modalContainer;
 
   @logStep('Select manager on AssignManagerModal')
@@ -17,19 +18,30 @@ export class AssignManagerModal extends Modal {
     await expect(managerItem).toHaveClass(/active/);
   }
 
+  @logStep('Get active manager info')
+  async getActiveManagerInfo() {
+    const activeInfo = await this.activeManager.innerText();
+    return activeInfo.trim();
+  }
+
   @logStep('Click SubmitButton on AssignManagerModal')
   async submit() {
     await this.confirmButton.click();
     await this.waitForClosed();
   }
 
-  @logStep('Select manager from Search Field on AssignManagerModal')
+  @logStep('Search and Select manager on AssignManagerModal')
   async search(value: string) {
     await this.searchInput.fill(value);
     const managerItem = this.managerList.locator('li.list-group-item', { hasText: value }).first();
     await expect(managerItem).toBeVisible();
     await managerItem.click();
     await expect(managerItem).toHaveClass(/active/);
+  }
+
+  @logStep('Fill Search field on AssignManagerModal')
+  async fillSearch(value: string) {
+    await this.searchInput.fill(value);
   }
 
   @logStep('Get manager info on AssignManagerModal')

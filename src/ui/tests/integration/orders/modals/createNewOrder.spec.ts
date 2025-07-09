@@ -2,7 +2,7 @@ import { TAGS } from 'data';
 import { mockCustomer, mockProduct } from 'data/orders/mock.data';
 import { expect, test } from 'fixtures';
 
-test.describe(`[UI] [Orders] New Order modal`, async function () {
+test.describe(`[UI] [Orders] New Order modal`, async () => {
   let token = '';
 
   test.beforeEach(async ({ signInApiService, ordersPage, mock }) => {
@@ -21,7 +21,7 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
   test(
     'Create Order Smoke test with 1 product',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
-    async function ({ ordersPage, createOrderModal }) {
+    async ({ ordersPage, createOrderModal }) => {
       await ordersPage.clickCreateButton();
 
       await createOrderModal.selectCustomer(mockCustomer.name);
@@ -43,14 +43,13 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
       await expect.soft(createOrderModal.closeButton).toBeEnabled();
 
       await createOrderModal.clickCreate();
-      await createOrderModal.waitForClosed();
     },
   );
 
   test(
     'Create Order Smoke test with 5 product',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
-    async function ({ ordersPage, createOrderModal }) {
+    async ({ ordersPage, createOrderModal }) => {
       await ordersPage.clickCreateButton();
 
       await createOrderModal.selectCustomer(mockCustomer.name);
@@ -74,7 +73,6 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
       await expect(createOrderModal.addProductButton).not.toBeVisible();
 
       await createOrderModal.clickCreate();
-      await createOrderModal.waitForClosed();
     },
   );
 });
