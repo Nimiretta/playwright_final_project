@@ -19,7 +19,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
   mockData.forEach((el) =>
     test(el.testName, { tag: el.tag }, async ({ orderDetailsPage, mock }) => {
       await mock.orderDetails(el.response);
-      await orderDetailsPage.openPage('ORDER_DETAILS', el.response.Order._id);
+      await orderDetailsPage.open(el.response.Order._id);
       await orderDetailsPage.waitForOpened();
       const customer = await orderDetailsPage.getCustomer();
       expect(convertCustomerToUIData(el.response.Order.customer)).toMatchObject(customer);
@@ -31,7 +31,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
     { tag: ['@003_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.SMOKE] },
     async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createDraft(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await orderDetailsPage.open(order._id);
       await orderDetailsPage.waitForOpened();
       expect(orderDetailsPage.editCutomerButton).toBeVisible();
     },
@@ -42,7 +42,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
     { tag: ['@004_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION] },
     async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createInProcess(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await orderDetailsPage.open(order._id);
       await orderDetailsPage.waitForOpened();
       expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
     },
@@ -53,11 +53,11 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
     { tag: ['@005_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.SMOKE] },
     async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createDraft(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await orderDetailsPage.open(order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.editCutomerButton.click();
       await orderDetailsPage.clickEditCustomerButton();
-      orderDetailsPage.editCustomerModal.waitForOpened();
+      await orderDetailsPage.editCustomerModal.waitForOpened();
     },
   );
 
@@ -66,7 +66,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
     { tag: ['@006_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION] },
     async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createDraft(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await orderDetailsPage.open(order._id);
       await orderDetailsPage.waitForOpened();
       const request = await orderDetailsPage.interceptRequest(apiConfig.ENDPOINTS.CUSTOMERS_ALL, () =>
         orderDetailsPage.clickEditCustomerButton(),
@@ -80,7 +80,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
     { tag: ['@007_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION] },
     async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createCanceled(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await orderDetailsPage.open(order._id);
       await orderDetailsPage.waitForOpened();
       expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
     },
@@ -91,7 +91,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
     { tag: ['@008_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION] },
     async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createPartiallyReceived(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await orderDetailsPage.open(order._id);
       await orderDetailsPage.waitForOpened();
       expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
     },
@@ -102,7 +102,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
     { tag: ['@009_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION] },
     async ({ orderDetailsPage, ordersApiService }) => {
       order = await ordersApiService.createReceived(token);
-      await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
+      await orderDetailsPage.open(order._id);
       await orderDetailsPage.waitForOpened();
       expect(orderDetailsPage.editCutomerButton).not.toBeVisible();
     },
