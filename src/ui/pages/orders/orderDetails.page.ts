@@ -49,6 +49,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly customerValueLocator = '.s-span';
   readonly editCutomerButton = this.page.locator('#edit-customer-pencil');
   readonly editProductsButton = this.page.locator('#edit-products-pencil');
+  readonly customerDetailsTitle = this.page.locator('#customer-section h4.modal-title');
 
   readonly orderValuesContainer = this.orderInfoContainer.locator('div.h-m-width');
   readonly orderValues = this.orderValuesContainer.locator('span:not(.fw-bold)');
