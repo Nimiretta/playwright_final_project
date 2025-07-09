@@ -1,5 +1,7 @@
 import { INotificationsFromModal, NotificationMsg } from 'types';
 import { BaseProjectPage } from '../baseProject.page';
+import { logStep } from 'utils';
+import { expect } from 'fixtures';
 
 export class NotificationsModal extends BaseProjectPage {
   readonly notificationsModal = this.page.locator('#notification-popover');
@@ -11,6 +13,7 @@ export class NotificationsModal extends BaseProjectPage {
 
   uniqueElement = this.notificationsModal;
 
+  @logStep('Get the full list of notifications')
   async getNotifications(): Promise<INotificationsFromModal[]> {
     const count = await this.notifications.count();
     const notifications: INotificationsFromModal[] = [];
@@ -39,18 +42,53 @@ export class NotificationsModal extends BaseProjectPage {
     return notifications;
   }
 
+  @logStep('Get the number of notifications')
+  async countNotifications() {
+    return this.notifications.count();
+  }
+
+  @logStep('Click on notification by index')
+  async clickReadNotificationByIndex(index: number) {
+    await this.notifications.nth(index).click();
+  }
+
+  @logStep('Click on Read All button')
+  async readAllNotifications() {
+    await this.readAllButton.click();
+  }
+
+  @logStep('Get notification by id')
   async getNotificationById(id: string): Promise<INotificationsFromModal | undefined> {
     const notifications = await this.getNotifications();
     return notifications.find((notification) => notification.id === id);
   }
 
-  async getNotificationByOrderId(orderId: string): Promise<INotificationsFromModal | undefined> {
+  @logStep('Get all notifications for specific order by orderId')
+  async getAllNotificationsByOrderId(orderId: string): Promise<INotificationsFromModal[]> {
+    const notifications = await this.getNotifications();
+    return notifications.filter((notification) => notification.orderId === orderId);
+  }
+
+  @logStep('Get newest notification by orderId')
+  async getFirstNotificationByOrderId(orderId: string): Promise<INotificationsFromModal | undefined> {
     const notifications = await this.getNotifications();
     return notifications.find((notification) => notification.orderId === orderId);
   }
 
+  @logStep('Get notification by index')
   async getNotificationByIndex(index: number): Promise<INotificationsFromModal | undefined> {
     const notifications = await this.getNotifications();
     return notifications[index];
+  }
+
+  @logStep('Wait for Notifications Modal to be Closed')
+  async waitForClosed() {
+    await expect(this.uniqueElement).not.toBeVisible();
+  }
+
+  @logStep('Close notifications modal')
+  async closeNotificationsModal() {
+    await this.closeButton.click();
+    await this.waitForClosed();
   }
 }
