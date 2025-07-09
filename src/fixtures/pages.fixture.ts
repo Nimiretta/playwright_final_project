@@ -8,6 +8,13 @@ import {
   DeliveryPage,
   OrdersPage,
 } from 'ui/pages';
+import {
+  AssignManagerModal,
+  ConfirmationModal,
+  CreateOrderModal,
+  EditCustomerModal,
+  EditProductsModal,
+} from 'ui/pages/modals/orders';
 
 interface ISalesPortalPages {
   signInPage: SignInPage;
@@ -17,6 +24,11 @@ interface ISalesPortalPages {
   orderDetailsPage: OrderDetailsPage;
   deliveryPage: DeliveryPage;
   ordersPage: OrdersPage;
+  createOrderModal: CreateOrderModal;
+  editCustomerModal: EditCustomerModal;
+  assignManagerModal: AssignManagerModal;
+  editProductsModal: EditProductsModal;
+  confirmationModal: ConfirmationModal;
 }
 
 export const test = base.extend<ISalesPortalPages>({
@@ -40,6 +52,21 @@ export const test = base.extend<ISalesPortalPages>({
   },
   ordersPage: async ({ page }, use) => {
     await use(new OrdersPage(page));
+  },
+  createOrderModal: async ({ page }, use) => {
+    await use(new CreateOrderModal(page));
+  },
+  editCustomerModal: async ({ page }, use) => {
+    await use(new EditCustomerModal(page));
+  },
+  assignManagerModal: async ({ page }, use) => {
+    await use(new AssignManagerModal(page));
+  },
+  editProductsModal: async ({ page }, use) => {
+    await use(new EditProductsModal(page));
+  },
+  confirmationModal: async ({ page }, use) => {
+    await use(new ConfirmationModal(page));
   },
 });
 

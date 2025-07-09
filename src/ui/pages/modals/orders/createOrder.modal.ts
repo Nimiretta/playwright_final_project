@@ -2,6 +2,7 @@ import { IOrderResponse } from 'types';
 import { Modal } from '../modal.page';
 import { logStep } from 'utils/reporter.utils';
 import { apiConfig } from 'config';
+import numeral from 'numeral';
 
 export class CreateOrderModal extends Modal {
   readonly uniqueElement = this.page.locator(`#add-order-modal`);
@@ -14,6 +15,7 @@ export class CreateOrderModal extends Modal {
   readonly createButton = this.uniqueElement.locator('#create-order-btn');
   readonly cancelButton = this.uniqueElement.locator('#cancel-order-modal-btn');
   readonly totalPrice = this.uniqueElement.locator('#total-price-order-modal');
+  readonly deleteProductButton = this.uniqueElement.locator('button.del-btn-modal');
 
   @logStep('Select customer in dropdown on Create Order Modal')
   async selectCustomer(customerName: string) {
@@ -57,5 +59,21 @@ export class CreateOrderModal extends Modal {
     );
     await this.waitForClosed();
     return response;
+  }
+
+  @logStep('Get total price')
+  async getTotalPrice(): Promise<number> {
+    const price = await this.totalPrice.textContent();
+    return numeral(price?.trim()).value() ?? 0;
+  }
+
+  @logStep('Click Add Product button on Create Order Modal')
+  async clickAddProduct() {
+    await this.addProductButton.click();
+  }
+
+  @logStep('Click Delete Product button on Create Order Modal')
+  async clickDeleteProductButton(index: number = 0) {
+    await this.deleteProductButton.nth(index).click();
   }
 }
