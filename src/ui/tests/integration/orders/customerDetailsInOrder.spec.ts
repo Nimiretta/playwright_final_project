@@ -1,11 +1,7 @@
 import { apiConfig } from 'config';
 import { TAGS } from 'data';
 import { convertCustomerToUIData } from 'data/orders';
-import {
-  customerDetails,
-  orderInDefaultStatus,
-  orderWithDifferentStatuses,
-} from 'data/orders/customerInOrderTest.data';
+import { customerDetails, orderInDefaultStatus, orderWithDifferentStatuses } from 'data/orders/testData';
 import { expect, test } from 'fixtures';
 
 test.describe('[Integration] [Orders] [Customer Details]', () => {

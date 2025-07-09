@@ -1,5 +1,5 @@
 import { TAGS } from 'data';
-import { orderInDefaultStatus } from 'data/orders/customerInOrderTest.data';
+import { orderInDefaultStatus } from 'data/orders/testData';
 import { expect, test } from 'fixtures';
 
 test.describe('[Integration] [Orders] [Customer Details]', () => {

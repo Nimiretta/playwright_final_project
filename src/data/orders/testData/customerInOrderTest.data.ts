@@ -2,8 +2,8 @@ import { generateCustomerData } from 'data/customers';
 import { generateProductData } from 'data/products';
 import { ICustomerFromResponse } from 'types';
 import { generateID } from 'utils';
-import { ORDER_STATUSES } from './statuses.data';
-import { ORDER_HISTORY_ACTIONS } from './historyActions.data';
+import { ORDER_STATUSES } from '..';
+import { ORDER_HISTORY_ACTIONS } from '..';
 import { ROLES } from 'data/roles.data';
 import { TAGS } from 'data';
 
