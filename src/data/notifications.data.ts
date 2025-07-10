@@ -6,10 +6,11 @@ export const NOTIFICATIONS = {
   ORDER_CREATED: 'Order was successfully created',
   MANAGER_ASSIGNED: 'Manager was successfully assigned to the order',
   MANAGER_UNASSIGNED: 'Manager was successfully unassigned from the order',
-  ORDER_UPDATED: 'Order was successfully updated',
   DELIVERY_SAVED: 'Delivery was successfully saved',
   COMMENT_CREATED: 'Comment was successfully posted',
   COMMENT_DELETED: 'Comment was successfully deleted',
+  UPDATE_CUSTOMRE_IS_UNABLE: 'Unable to update customer. Please try again later.',
+  UPDATE_CUSTOMER_FAILED: 'Failed to update customer. Please try again later.',
 };
 
 export const EMPTY_TABLE_ROW_TEXT = 'No records created yet';

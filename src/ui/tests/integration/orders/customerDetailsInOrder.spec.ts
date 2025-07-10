@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { TAGS } from 'data';
+import { NOTIFICATIONS, TAGS } from 'data';
 import { convertCustomerToUIData } from 'data/orders';
 import {
   customerDetails,
@@ -63,7 +63,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
       await orderDetailsPage.waitForOpened();
       await mock.allCustomersWithError(el.Response, el.statusCode);
       await orderDetailsPage.editCutomerButton.click();
-      expect(orderDetailsPage.notification).toHaveText('Unable to update customer. Please try again later.');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_CUSTOMRE_IS_UNABLE);
     });
   });
 
@@ -88,7 +88,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
 
   test(
     'Should display notification after successful update',
-    { tag: ['@013_O_CM_UI', TAGS.INTEGRATION] },
+    { tag: ['@014_O_CM_UI', TAGS.INTEGRATION] },
     async ({ orderDetailsPage, mock }) => {
       await mock.orderDetails(orderInDefaultStatus);
       await orderDetailsPage.open(orderInDefaultStatus.Order._id);
@@ -101,7 +101,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
       await mock.orderDetails(UpdatedOrder);
       await orderDetailsPage.editCustomerModal.clickSaveButton();
       await orderDetailsPage.waitForOpened();
-      expect(orderDetailsPage.notification).toHaveText('Order was successfully updated');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
     },
   );
 
@@ -116,7 +116,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
       await mock.orderDetailsWithError(orderInDefaultStatus, el.response, el.statusCode);
       await orderDetailsPage.editCustomerModal.clickSaveButton();
       await orderDetailsPage.waitForOpened();
-      expect(orderDetailsPage.notification).toHaveText('Failed to update customer. Please try again later.');
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_CUSTOMER_FAILED);
     });
   });
 
