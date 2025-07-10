@@ -9,6 +9,7 @@ export const NOTIFICATIONS = {
   DELIVERY_SAVED: 'Delivery was successfully saved',
   COMMENT_CREATED: 'Comment was successfully posted',
   COMMENT_DELETED: 'Comment was successfully deleted',
+  UPDATE_PRODUCT_FAILED: 'Unable to update products. Please try again later.',
 };
 
 export const EMPTY_TABLE_ROW_TEXT = 'No records created yet';

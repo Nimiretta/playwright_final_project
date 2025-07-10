@@ -36,7 +36,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly cancelReceivingButton = this.page.locator('#cancel-receiving');
   readonly saveReceivingButton = this.page.locator('#save-received-products');
   readonly selectAllProductsCheckBox = this.page.getByRole('checkbox', { name: 'Select All' });
-  readonly singleProductCheckBox = this.page.locator('input[type="checkbox"]');
+  readonly singleProductCheckBox = this.page.getByRole('checkbox', { name: 'Received' });
   readonly productBodiesLocator = '#products-section .accordion-body';
   readonly productHeadersLocator = '#products-section .accordion-header';
   readonly statusTextLocator = '.received-label';

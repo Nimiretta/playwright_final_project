@@ -1,7 +1,15 @@
 import { Page } from '@playwright/test';
 import { apiConfig } from 'config';
 import { STATUS_CODES } from 'data';
-import { ICustomerResponse, ICustomersResponse, IOrdersResponse, IProductResponse, IProductsResponse } from 'types';
+import {
+  ICustomerResponse,
+  ICustomersResponse,
+  IOrderResponse,
+  IOrdersResponse,
+  IProductResponse,
+  IProductsResponse,
+  IResponseFields,
+} from 'types';
 
 export class Mock {
   constructor(private page: Page) {}
@@ -78,5 +86,26 @@ export class Mock {
 
   async createOrder(body: { customers: ICustomersResponse; products: IProductsResponse }) {
     await Promise.all([this.customersAll(body.customers), this.productsAll(body.products)]);
+  }
+
+  async orderDetails(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id));
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id), async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async allProductsWithError(errorBody: IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.BAD_REQUEST) {
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.PRODUCTS_ALL, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(errorBody),
+      });
+    });
   }
 }
