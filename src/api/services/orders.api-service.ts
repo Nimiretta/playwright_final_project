@@ -1,6 +1,6 @@
 import { APIRequestContext } from '@playwright/test';
 import { generateDeliveryData, ORDER_STATUSES, generateCommentData } from 'data/orders';
-import { logStep, extractIds } from 'utils';
+import { logStep, extractIds, getRandromEnumValue } from 'utils';
 import {
   IOrderOptions,
   IOrderSortRequest,
@@ -14,6 +14,7 @@ import {
   IOrderResponse,
   IProductFromResponse,
   ICustomerFromResponse,
+  IOrderFromResponse,
 } from 'types';
 import { CustomersApiService, ProductsApiService } from '.';
 import { OrdersController } from 'api/controllers';
@@ -265,5 +266,31 @@ export class OrdersApiService {
     expect
       .soft(orderResponse.body.Order.total_price, 'Total price should match the expected')
       .toBe(products.reduce((price, product) => price + product.price, 0));
+  }
+
+  @logStep('Create order in random status via API')
+  async createOrderInRandomStatus(token: string) {
+    let order: IOrderFromResponse;
+    const orderStatus = getRandromEnumValue(ORDER_STATUSES);
+    switch (orderStatus) {
+      case ORDER_STATUSES.DRAFT:
+        order = await this.createDraft(token);
+        break;
+      case ORDER_STATUSES.IN_PROCESS:
+        order = await this.createInProcess(token);
+        break;
+      case ORDER_STATUSES.PARTIALLY_RECEIVED:
+        order = await this.createPartiallyReceived(token);
+        break;
+      case ORDER_STATUSES.RECEIVED:
+        order = await this.createReceived(token);
+        break;
+      case ORDER_STATUSES.CANCELED:
+        order = await this.createCanceled(token);
+        break;
+      default:
+        throw new Error(`Unexpected order status: ${orderStatus}`);
+    }
+    return order;
   }
 }

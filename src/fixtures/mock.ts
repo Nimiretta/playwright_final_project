@@ -1,7 +1,7 @@
 import { Page } from '@playwright/test';
 import { apiConfig } from 'config';
 import { STATUS_CODES } from 'data';
-import { ICustomerResponse, ICustomersResponse, IProductResponse, IProductsResponse } from 'types';
+import { ICustomerResponse, ICustomersResponse, IOrdersResponse, IProductResponse, IProductsResponse } from 'types';
 
 export class Mock {
   constructor(private page: Page) {}
@@ -44,5 +44,39 @@ export class Mock {
         body: JSON.stringify(body),
       });
     });
+  }
+
+  async orders(body: IOrdersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/orders(\?.*)?$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async customersAll(body: ICustomersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/customers\/all$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async productsAll(body: IProductsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/products\/all$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async createOrder(body: { customers: ICustomersResponse; products: IProductsResponse }) {
+    await Promise.all([this.customersAll(body.customers), this.productsAll(body.products)]);
   }
 }
