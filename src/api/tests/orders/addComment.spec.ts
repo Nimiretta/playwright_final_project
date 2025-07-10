@@ -1,6 +1,6 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
 import { generateCommentData } from 'data/orders';
-import { commentTestData } from 'data/orders/commentTest.data';
+import { commentTestData } from 'data/orders/testData';
 import { errorResponseSchema, orderSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
 import { IOrderCommentRequest, IOrderFromResponse } from 'types';

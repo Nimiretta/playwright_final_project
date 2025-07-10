@@ -3,9 +3,7 @@ import { generateProductData } from 'data/products';
 import { ICustomerFromResponse } from 'types';
 import { generateID } from 'utils';
 import { ORDER_STATUSES } from '..';
-import { ORDER_HISTORY_ACTIONS } from '..';
-import { ROLES } from 'data/roles.data';
-import { TAGS } from 'data';
+import { STATUS_CODES, TAGS } from 'data';
 
 const customerWithNotes: ICustomerFromResponse = {
   ...generateCustomerData(),
@@ -56,26 +54,7 @@ export const customerDetails = [
         total_price: product.price,
         createdOn: '2025-07-08T13:23:56.000Z',
         comments: [],
-        history: [
-          {
-            status: ORDER_STATUSES.DRAFT,
-            customer: customerWithoutNotes._id,
-            products: [product],
-            total_price: product.price,
-            delivery: null,
-            changedOn: '2025-07-08T13:23:56.000Z',
-            action: ORDER_HISTORY_ACTIONS.CREATED,
-            performer: {
-              _id: '6806a732d006ba3d475fc11c',
-              username: 'a.zhuk',
-              firstName: 'Aleksandr',
-              lastName: 'Zhuk',
-              roles: [ROLES.USER],
-              createdOn: '2025/04/21 20:14:42',
-            },
-            assignedManager: null,
-          },
-        ],
+        history: [],
         assignedManager: null,
       },
       IsSuccess: true,
@@ -185,4 +164,40 @@ export const orderInDefaultStatus = {
   },
   IsSuccess: true,
   ErrorMessage: null,
+};
+
+export const errorResponseForCustomerDetailsInOrder = [
+  {
+    testName: 'Should displaye error notification if getAllCustomers request returns 400 error',
+    tag: ['@011_O_CM_UI', TAGS.INTEGRATION],
+    statusCode: STATUS_CODES.BAD_REQUEST,
+    Response: { IsSuccess: false, ErrorMessage: 'Bad request' },
+  },
+  {
+    testName: 'Should displaye error notification if getAllCustomers request returns 500 error',
+    tag: ['@012_O_CM_UI', TAGS.INTEGRATION],
+    statusCode: STATUS_CODES.SERVER_ERROR,
+    Response: { IsSuccess: false, ErrorMessage: 'Internal server error' },
+  },
+];
+
+export const errorResponseForUpdateCustomer = [
+  {
+    testName: 'Should displaye error notification if UpdateOrder request returns 400 error',
+    tag: ['@015_O_CM_UI', TAGS.INTEGRATION],
+    statusCode: STATUS_CODES.BAD_REQUEST,
+    response: { IsSuccess: false, ErrorMessage: 'Bad request' },
+  },
+  {
+    testName: 'Should displaye error notification if UpdateOrder request returns 500 error',
+    tag: ['@016_O_CM_UI', TAGS.INTEGRATION],
+    statusCode: STATUS_CODES.SERVER_ERROR,
+    response: { IsSuccess: false, ErrorMessage: 'Internal server error' },
+  },
+];
+
+export const getAllCustomersResponselist = {
+  IsSuccess: true,
+  ErrorMessage: null,
+  Customers: [customerWithNotes, customerWithoutNotes],
 };
