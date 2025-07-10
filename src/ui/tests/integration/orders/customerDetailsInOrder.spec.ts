@@ -43,7 +43,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
   });
 
   test(
-    'Should send correct request after clicking customer order',
+    'Should send correct request after clicking edit customer in order (getAllCustomers)',
     { tag: ['@009_O_CM_UI', TAGS.INTEGRATION] },
     async ({ orderDetailsPage, mock }) => {
       await mock.orderDetails(orderInDefaultStatus);
@@ -119,4 +119,18 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
       expect(orderDetailsPage.notification).toHaveText('Failed to update customer. Please try again later.');
     });
   });
+
+  test(
+    'Should send correct request after clicking edit customer in order (getOrderByID)',
+    { tag: ['@017_O_CM_UI', TAGS.INTEGRATION] },
+    async ({ orderDetailsPage, mock }) => {
+      await mock.orderDetails(orderInDefaultStatus);
+      await orderDetailsPage.open(orderInDefaultStatus.Order._id);
+      await orderDetailsPage.waitForOpened();
+      const request = await orderDetailsPage.interceptRequest(apiConfig.ENDPOINTS.CUSTOMERS_ALL, () =>
+        orderDetailsPage.clickEditCustomerButton(),
+      );
+      expect(request.url()).toBe(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(orderInDefaultStatus.Order._id));
+    },
+  );
 });
