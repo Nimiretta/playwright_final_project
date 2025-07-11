@@ -70,9 +70,9 @@ export class NotificationsModal extends BaseProjectPage {
   }
 
   @logStep('Get newest notification by orderId')
-  async getFirstNotificationByOrderId(orderId: string): Promise<INotificationsFromModal | undefined> {
+  async getNotificationByOrderId(orderId: string, index = 0): Promise<INotificationsFromModal | undefined> {
     const notifications = await this.getNotifications();
-    return notifications.find((notification) => notification.orderId === orderId);
+    return notifications.filter((notification) => notification.orderId === orderId)[index];
   }
 
   @logStep('Get notification by index')
