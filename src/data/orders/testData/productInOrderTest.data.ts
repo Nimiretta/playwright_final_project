@@ -4,6 +4,7 @@ import { ICustomerFromResponse } from 'types';
 import { generateID } from 'utils';
 import { ORDER_STATUSES } from '..';
 import { STATUS_CODES, TAGS } from 'data';
+import _ from 'lodash';
 
 const customerWithNotes: ICustomerFromResponse = {
   ...generateCustomerData(),
@@ -11,8 +12,18 @@ const customerWithNotes: ICustomerFromResponse = {
   createdOn: new Date().toISOString(),
 };
 
-const productWithNotes = { ...generateProductData(), received: true, _id: generateID() };
-const productWithoutNotes = { ...generateProductData({ notes: '' }), received: false, _id: generateID() };
+const productWithNotes = {
+  ...generateProductData({ name: 'testProduct1' }),
+  received: true,
+  _id: generateID(),
+  createdOn: new Date().toISOString(),
+};
+const productWithoutNotes = {
+  ...generateProductData({ name: 'TestProduct2', notes: '' }),
+  received: false,
+  _id: generateID(),
+  createdOn: new Date().toISOString(),
+};
 export const productDetails = [
   {
     tag: [TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.INTEGRATION],
@@ -194,7 +205,7 @@ export const errorResponseForAllProductsRequest = [
   },
 ];
 
-export const errorResponseForUpdateCustomer = [
+export const errorResponseForUpdateProduct = [
   {
     testName: 'Should displaye error notification if UpdateOrder request returns 400 error',
     tag: [TAGS.INTEGRATION],
@@ -212,5 +223,5 @@ export const errorResponseForUpdateCustomer = [
 export const getAllProductsResponselist = {
   IsSuccess: true,
   ErrorMessage: null,
-  Customers: [productWithNotes, productWithoutNotes],
+  Products: [_.omit(productWithNotes, 'recieved'), _.omit(productWithoutNotes, 'recieved')],
 };

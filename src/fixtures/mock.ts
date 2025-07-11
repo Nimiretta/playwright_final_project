@@ -108,4 +108,28 @@ export class Mock {
       });
     });
   }
+  async allProducts(body: IProductsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.PRODUCTS_ALL, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async updateProductInOrderWithError(
+    body: IOrderResponse,
+    errorBody: IResponseFields,
+    statusCode: STATUS_CODES = STATUS_CODES.BAD_REQUEST,
+  ) {
+    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id));
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id), async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(errorBody),
+      });
+    });
+  }
 }

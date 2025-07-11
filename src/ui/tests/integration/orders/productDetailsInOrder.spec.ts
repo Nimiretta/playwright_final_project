@@ -3,6 +3,8 @@ import { NOTIFICATIONS, TAGS } from 'data';
 import { convertAPIProductStatusTOUI, convertProductToUIData } from 'data/orders';
 import {
   errorResponseForAllProductsRequest,
+  errorResponseForUpdateProduct,
+  getAllProductsResponselist,
   orderInDraftStatus,
   orderInProcessStatus,
   orderWithDifferentStatuses,
@@ -90,8 +92,24 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
       await mock.orderDetails(orderInDraftStatus);
       await orderDetailsPage.open(orderInDraftStatus.Order._id);
       await mock.allProductsWithError(el.Response, el.statusCode);
+      await orderDetailsPage.editProductsButton.click();
+      await orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_PRODCUT_UNABLED);
+    });
+  });
+
+  errorResponseForUpdateProduct.forEach((el) => {
+    test(el.testName, { tag: el.tag }, async ({ orderDetailsPage, mock }) => {
+      await mock.orderDetails(orderInDraftStatus);
+      await orderDetailsPage.open(orderInDraftStatus.Order._id);
+      await mock.allProducts(getAllProductsResponselist);
       await orderDetailsPage.clickEditProductsButton();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_PRODUCT_FAILED);
+      await orderDetailsPage.editProductsModal.selectProduct(
+        getAllProductsResponselist.Products[0].name,
+        getAllProductsResponselist.Products[1].name,
+      );
+      await mock.updateProductInOrderWithError(orderInDraftStatus, el.response, el.statusCode);
+      await orderDetailsPage.editProductsModal.clickSaveButton();
+      orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_PRODUCT_FAILED);
     });
   });
 });
