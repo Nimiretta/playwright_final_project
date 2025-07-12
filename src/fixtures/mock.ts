@@ -108,7 +108,7 @@ export class Mock {
     });
   }
 
-  async unAssignManager(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+  async unassignManager(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
     this.page.route(/\/api\/orders\/[\w\d]+\/unassign-manager$/, async (route) => {
       await route.fulfill({
         status: statusCode,

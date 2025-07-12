@@ -1,32 +1,14 @@
 import { ALERTS, TAGS } from 'data';
-import { generateCustomerData } from 'data/customers';
-import { generateDeliveryData, ORDER_STATUSES, mockManager } from 'data/orders';
-import { generateProductData } from 'data/products';
+import { generateDeliveryData, ORDER_STATUSES, mockManager, generateMockOrder } from 'data/orders';
 import { expect, test } from 'fixtures';
 import { IOrderResponse } from 'types';
-import { generateID } from 'utils';
 
 test.describe('[UI] [Orders] [Integration] [Cancel modal]', async () => {
   let mockOrder: IOrderResponse;
   let updatedOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = {
-      Order: {
-        customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-        products: [{ ...generateProductData(), _id: generateID(), received: false }],
-        createdOn: new Date().toISOString(),
-        total_price: 100,
-        comments: [],
-        history: [],
-        assignedManager: null,
-        status: ORDER_STATUSES.DRAFT,
-        delivery: null,
-        _id: generateID(),
-      },
-      IsSuccess: true,
-      ErrorMessage: null,
-    };
+    mockOrder = generateMockOrder();
 
     updatedOrder = {
       ...mockOrder,
@@ -59,7 +41,7 @@ test.describe('[UI] [Orders] [Integration] [Cancel modal]', async () => {
   );
 
   test(
-    'Should close modal without cancelling order',
+    'Should not cancel order when modal is closed',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickCancel();
@@ -74,7 +56,7 @@ test.describe('[UI] [Orders] [Integration] [Cancel modal]', async () => {
   );
 
   test(
-    'Should cancel modal without cancelling order',
+    'Should not cancel order when modal is canceled',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickCancel();
@@ -94,22 +76,7 @@ test.describe('[UI] [Orders] [Integration] [Reopen modal]', async () => {
   let updatedOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = {
-      Order: {
-        customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-        products: [{ ...generateProductData(), _id: generateID(), received: false }],
-        createdOn: new Date().toISOString(),
-        total_price: 100,
-        comments: [],
-        history: [],
-        assignedManager: null,
-        status: ORDER_STATUSES.CANCELED,
-        delivery: null,
-        _id: generateID(),
-      },
-      IsSuccess: true,
-      ErrorMessage: null,
-    };
+    mockOrder = generateMockOrder({ status: ORDER_STATUSES.CANCELED });
 
     updatedOrder = {
       ...mockOrder,
@@ -143,7 +110,7 @@ test.describe('[UI] [Orders] [Integration] [Reopen modal]', async () => {
   );
 
   test(
-    'Should close modal without reopen order',
+    'Should not reopen canceled order when modal is closed',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickReopen();
@@ -156,7 +123,7 @@ test.describe('[UI] [Orders] [Integration] [Reopen modal]', async () => {
   );
 
   test(
-    'Should cancel modal without reopen order',
+    'Should not reopen canceled order when modal is canceled',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickReopen();
@@ -174,22 +141,8 @@ test.describe('[UI] [Orders] [Integration][Unassign Manager] ', async () => {
   let updatedOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = {
-      Order: {
-        customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-        products: [{ ...generateProductData(), _id: generateID(), received: false }],
-        createdOn: new Date().toISOString(),
-        total_price: 100,
-        comments: [],
-        history: [],
-        assignedManager: mockManager,
-        status: ORDER_STATUSES.DRAFT,
-        delivery: generateDeliveryData(),
-        _id: generateID(),
-      },
-      IsSuccess: true,
-      ErrorMessage: null,
-    };
+    mockOrder = generateMockOrder({ assignedManager: mockManager });
+
     updatedOrder = {
       ...mockOrder,
       Order: {
@@ -208,11 +161,11 @@ test.describe('[UI] [Orders] [Integration][Unassign Manager] ', async () => {
     await orderDetailsPage.open(mockOrder.Order._id);
   });
   test(
-    'Should successfully unassign manager from order',
+    'Should successfully unassigning  manager from order',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE, TAGS.INTEGRATION] },
     async ({ confirmationModal, orderDetailsPage, mock }) => {
       await orderDetailsPage.clickUnassignManager();
-      await mock.unAssignManager(updatedOrder);
+      await mock.unassignManager(updatedOrder);
       await mock.orderDetails(updatedOrder);
 
       await confirmationModal.submit();
@@ -233,7 +186,7 @@ test.describe('[UI] [Orders] [Integration][Unassign Manager] ', async () => {
   );
 
   test(
-    'Should close modal without unassign manager from order',
+    'Should not unassign manager when modal is closed',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickUnassignManager();
@@ -256,7 +209,7 @@ test.describe('[UI] [Orders] [Integration][Unassign Manager] ', async () => {
   );
 
   test(
-    'Should cancel modal without unassign manager from order',
+    'Should not unassign manager when modal is canceled',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickUnassignManager();
@@ -284,22 +237,8 @@ test.describe('[UI] [Orders] [Integration][Process Order]', async () => {
   let updatedOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = {
-      Order: {
-        customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-        products: [{ ...generateProductData(), _id: generateID(), received: false }],
-        createdOn: new Date().toISOString(),
-        total_price: 100,
-        comments: [],
-        history: [],
-        assignedManager: null,
-        status: ORDER_STATUSES.DRAFT,
-        delivery: generateDeliveryData(),
-        _id: generateID(),
-      },
-      IsSuccess: true,
-      ErrorMessage: null,
-    };
+    mockOrder = generateMockOrder({ delivery: generateDeliveryData() });
+
     updatedOrder = {
       ...mockOrder,
       Order: {
@@ -330,7 +269,7 @@ test.describe('[UI] [Orders] [Integration][Process Order]', async () => {
   );
 
   test(
-    'Should close modal without processing order',
+    'Should not process order when modal is closed',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickProcess();
@@ -343,7 +282,7 @@ test.describe('[UI] [Orders] [Integration][Process Order]', async () => {
   );
 
   test(
-    'Should cancel modal without processing order',
+    'Should not process order when modal is canceled',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, confirmationModal }) => {
       await orderDetailsPage.clickProcess();

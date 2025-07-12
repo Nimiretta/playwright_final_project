@@ -1,10 +1,14 @@
 import { TAGS } from 'data';
-import { generateCustomerData } from 'data/customers';
-import { generateDeliveryData, ORDER_STATUSES, modalDescription, modalTitle, mockManager } from 'data/orders';
-import { generateProductData } from 'data/products';
+import {
+  generateDeliveryData,
+  ORDER_STATUSES,
+  modalDescription,
+  modalTitle,
+  mockManager,
+  generateMockOrder,
+} from 'data/orders';
 import { expect, test } from 'fixtures';
 import { IOrderResponse } from 'types';
-import { generateID } from 'utils';
 
 test.describe('[UI] [Orders] [Component] Confirmation Modals', async () => {
   let mockOrder: IOrderResponse;
@@ -13,22 +17,7 @@ test.describe('[UI] [Orders] [Component] Confirmation Modals', async () => {
     '[Cancel modal] Should display all buttons & title modal',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE, TAGS.COMPONENT] },
     async ({ confirmationModal, orderDetailsPage, mock }) => {
-      mockOrder = {
-        Order: {
-          customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-          products: [{ ...generateProductData(), _id: generateID(), received: false }],
-          createdOn: new Date().toISOString(),
-          total_price: 100,
-          comments: [],
-          history: [],
-          assignedManager: null,
-          status: ORDER_STATUSES.DRAFT,
-          delivery: null,
-          _id: generateID(),
-        },
-        IsSuccess: true,
-        ErrorMessage: null,
-      };
+      mockOrder = generateMockOrder();
 
       await mock.orderDetails(mockOrder);
       await orderDetailsPage.open(mockOrder.Order._id);
@@ -49,22 +38,7 @@ test.describe('[UI] [Orders] [Component] Confirmation Modals', async () => {
     '[Reopen modal] Should display all buttons & title modal',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE, TAGS.COMPONENT] },
     async ({ confirmationModal, orderDetailsPage, mock }) => {
-      mockOrder = {
-        Order: {
-          customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-          products: [{ ...generateProductData(), _id: generateID(), received: false }],
-          createdOn: new Date().toISOString(),
-          total_price: 100,
-          comments: [],
-          history: [],
-          assignedManager: null,
-          status: ORDER_STATUSES.CANCELED,
-          delivery: null,
-          _id: generateID(),
-        },
-        IsSuccess: true,
-        ErrorMessage: null,
-      };
+      mockOrder = generateMockOrder({ status: ORDER_STATUSES.CANCELED });
 
       await mock.orderDetails(mockOrder);
       await orderDetailsPage.open(mockOrder.Order._id);
@@ -85,22 +59,7 @@ test.describe('[UI] [Orders] [Component] Confirmation Modals', async () => {
     '[Unassign Manager] Should display all buttons & title modal',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE, TAGS.COMPONENT] },
     async ({ confirmationModal, orderDetailsPage, mock }) => {
-      mockOrder = {
-        Order: {
-          customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-          products: [{ ...generateProductData(), _id: generateID(), received: false }],
-          createdOn: new Date().toISOString(),
-          total_price: 100,
-          comments: [],
-          history: [],
-          assignedManager: mockManager,
-          status: ORDER_STATUSES.DRAFT,
-          delivery: null,
-          _id: generateID(),
-        },
-        IsSuccess: true,
-        ErrorMessage: null,
-      };
+      mockOrder = generateMockOrder({ assignedManager: mockManager });
 
       await mock.users({
         Users: [mockManager],
@@ -127,22 +86,7 @@ test.describe('[UI] [Orders] [Component] Confirmation Modals', async () => {
     '[Process Order] Should display all buttons & title modal',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE, TAGS.COMPONENT] },
     async ({ confirmationModal, orderDetailsPage, mock }) => {
-      mockOrder = {
-        Order: {
-          customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-          products: [{ ...generateProductData(), _id: generateID(), received: false }],
-          createdOn: new Date().toISOString(),
-          total_price: 100,
-          comments: [],
-          history: [],
-          assignedManager: null,
-          status: ORDER_STATUSES.DRAFT,
-          delivery: generateDeliveryData(),
-          _id: generateID(),
-        },
-        IsSuccess: true,
-        ErrorMessage: null,
-      };
+      mockOrder = generateMockOrder({ delivery: generateDeliveryData() });
 
       await mock.orderDetails(mockOrder);
       await orderDetailsPage.open(mockOrder.Order._id);

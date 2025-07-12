@@ -1,31 +1,13 @@
 import { TAGS } from 'data';
-import { generateCustomerData } from 'data/customers';
-import { modalTitle, ORDER_STATUSES, mockManager } from 'data/orders';
-import { generateProductData } from 'data/products';
+import { modalTitle, mockManager, generateMockOrder } from 'data/orders';
 import { expect, test } from 'fixtures';
 import { IOrderResponse } from 'types';
-import { generateID } from 'utils';
 
 test.describe('[UI] [Orders] [Component] Assign New Manager Modal', async () => {
   let mockOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = {
-      Order: {
-        customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-        products: [{ ...generateProductData(), _id: generateID(), received: false }],
-        createdOn: new Date().toISOString(),
-        total_price: 100,
-        comments: [],
-        history: [],
-        assignedManager: null,
-        status: ORDER_STATUSES.DRAFT,
-        delivery: null,
-        _id: generateID(),
-      },
-      IsSuccess: true,
-      ErrorMessage: null,
-    };
+    mockOrder = generateMockOrder();
 
     await mock.users({
       Users: [mockManager],
@@ -96,22 +78,7 @@ test.describe('[UI] [Orders] [Component] Edit Assigned Manager Modal', async () 
   let mockOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = {
-      Order: {
-        customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-        products: [{ ...generateProductData(), _id: generateID(), received: false }],
-        createdOn: new Date().toISOString(),
-        total_price: 100,
-        comments: [],
-        history: [],
-        assignedManager: mockManager,
-        status: ORDER_STATUSES.DRAFT,
-        delivery: null,
-        _id: generateID(),
-      },
-      IsSuccess: true,
-      ErrorMessage: null,
-    };
+    mockOrder = generateMockOrder({ assignedManager: mockManager });
 
     await mock.users({
       Users: [mockManager],
