@@ -1,6 +1,6 @@
 import { TAGS } from 'data';
 import { generateCustomerData } from 'data/customers';
-import { generateDeliveryData, ORDER_STATUSES } from 'data/orders';
+import { generateDeliveryData, modalTitle, ORDER_STATUSES } from 'data/orders';
 import { mockManager } from 'data/orders/mock.data';
 import { generateProductData } from 'data/products';
 import { expect, test } from 'fixtures';
@@ -44,7 +44,7 @@ test.describe('[UI] [Orders] [Component] Assign New Manager Modal', async () => 
       await orderDetailsPage.clickAddAssignManager();
       await assignManagerModal.select(mockManager._id);
 
-      await expect.soft(assignManagerModal.title).toContainText('Assign Manager');
+      await expect.soft(assignManagerModal.title).toContainText(modalTitle.assignManager);
       await expect.soft(assignManagerModal.confirmButton).toBeVisible();
       await expect.soft(assignManagerModal.confirmButton).toBeEnabled();
       await expect.soft(assignManagerModal.cancelButton).toBeVisible();
@@ -129,7 +129,7 @@ test.describe('[UI] [Orders] [Component] Edit Assigned Manager Modal', async () 
     async ({ orderDetailsPage, assignManagerModal }) => {
       await orderDetailsPage.clickEditAssignManager();
 
-      await expect.soft(assignManagerModal.title).toContainText('Edit Assigned Manager');
+      await expect.soft(assignManagerModal.title).toContainText(modalTitle.editAssignManager);
       await expect.soft(assignManagerModal.confirmButton).toBeVisible();
       await expect
         .soft(assignManagerModal.confirmButton, 'Verify Save is disabled if new  Manager not selected')
