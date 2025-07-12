@@ -1,5 +1,5 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
-import { orderTestData } from 'data/orders/createOrderTestData';
+import { orderTestData } from 'data/orders/testData/createOrderTestData';
 import { errorResponseSchema, orderSchema } from 'data/schemas';
 import { test } from 'fixtures';
 import { ICustomerFromResponse, IOrderResponse, IProductFromResponse, IResponse } from 'types';

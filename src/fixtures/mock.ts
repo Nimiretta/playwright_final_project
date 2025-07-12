@@ -5,10 +5,10 @@ import {
   ICustomerResponse,
   ICustomersResponse,
   IOrderResponse,
-  IOrdersResponse,
   IProductResponse,
   IProductsResponse,
   IResponseFields,
+  IUsersResponse,
 } from 'types';
 
 export class Mock {
@@ -54,8 +54,9 @@ export class Mock {
     });
   }
 
-  async orders(body: IOrdersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    this.page.route(/\/api\/orders(\?.*)?$/, async (route) => {
+  async orderDetails(id: string, body: IOrderResponse | IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(id));
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(id), async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
@@ -64,12 +65,12 @@ export class Mock {
     });
   }
 
-  async customersAll(body: ICustomersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    this.page.route(/\/api\/customers\/all$/, async (route) => {
+  async allCustomers(data: ICustomersResponse | IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.CUSTOMERS_ALL, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
-        body: JSON.stringify(body),
+        body: JSON.stringify(data),
       });
     });
   }
@@ -85,12 +86,11 @@ export class Mock {
   }
 
   async createOrder(body: { customers: ICustomersResponse; products: IProductsResponse }) {
-    await Promise.all([this.customersAll(body.customers), this.productsAll(body.products)]);
+    await Promise.all([this.allCustomers(body.customers), this.productsAll(body.products)]);
   }
 
-  async orderDetails(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id));
-    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id), async (route) => {
+  async users(body: IUsersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/users$/, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
@@ -99,17 +99,8 @@ export class Mock {
     });
   }
 
-  async allProductsWithError(errorBody: IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.BAD_REQUEST) {
-    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.PRODUCTS_ALL, async (route) => {
-      await route.fulfill({
-        status: statusCode,
-        contentType: 'application/json',
-        body: JSON.stringify(errorBody),
-      });
-    });
-  }
-  async allProducts(body: IProductsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.PRODUCTS_ALL, async (route) => {
+  async assignManager(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/orders\/[\w\d]+\/assign-manager\/[\w\d]+$/, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
@@ -118,17 +109,32 @@ export class Mock {
     });
   }
 
-  async updateProductInOrderWithError(
-    body: IOrderResponse,
-    errorBody: IResponseFields,
-    statusCode: STATUS_CODES = STATUS_CODES.BAD_REQUEST,
-  ) {
-    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id));
-    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id), async (route) => {
+  async unassignManager(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/orders\/[\w\d]+\/unassign-manager$/, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
-        body: JSON.stringify(errorBody),
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async changeOrderStatus(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/orders\/[\w\d]+\/status$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async allProducts(body: IProductsResponse | IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.PRODUCTS_ALL, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
       });
     });
   }

@@ -79,7 +79,7 @@ test.describe('[API] [Orders] [Delete]', () => {
       deleteResponse = await ordersController.delete(emptyId, token);
       validateResponse(
         deleteResponse as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.BAD_REQUEST,
+        STATUS_CODES.NOT_FOUND,
         false,
         API_ERRORS.ORDER_NOT_FOUND(emptyId),
       );

@@ -46,6 +46,7 @@ test.describe('[API] [Orders] [Update Order]', () => {
       );
     },
   );
+
   test(
     'Should not update order with invalid token',
     { tag: ['@002_O_PUT_API', TAGS.API, TAGS.REGRESSION] },
@@ -92,7 +93,7 @@ test.describe('[API] [Orders] [Update Order]', () => {
       productIds = products.map((el) => el._id);
       const updateResponse = await ordersController.update(order._id, { customer: '', products: productIds }, token);
 
-      validateResponse(updateResponse, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_BAD_REQUEST);
+      validateResponse(updateResponse, STATUS_CODES.BAD_REQUEST, false, API_ERRORS.ORDER_MISSING_CUSTOMER);
       validateSchema(errorResponseSchema, updateResponse.body);
     },
   );

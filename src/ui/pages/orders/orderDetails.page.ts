@@ -51,6 +51,7 @@ export class OrderDetailsPage extends SalesPortalPage {
   readonly editProductsButton = this.page.locator('#edit-products-pencil');
   readonly expandProductDetailsArrow = this.page.locator('#products-accordion-section .accordion-button');
   readonly productDetailsTitle = this.page.locator('#products-section .modal-title');
+  readonly customerDetailsTitle = this.page.locator('#customer-section h4.modal-title');
 
   readonly orderValuesContainer = this.orderInfoContainer.locator('div.h-m-width');
   readonly orderValues = this.orderValuesContainer.locator('span:not(.fw-bold)');
@@ -155,13 +156,13 @@ export class OrderDetailsPage extends SalesPortalPage {
     await this.waitForSpinner();
   }
 
-  @logStep('Click Cancel Button')
+  @logStep('Click on Cancel Button in Product Section')
   async clickCancelButton() {
     await this.cancelReceivingButton.click();
     await this.waitForSpinner();
   }
 
-  @logStep('Click Save Button')
+  @logStep('Click on Save Button in Product Section')
   async clickSaveButton() {
     await this.saveReceivingButton.click();
     await this.waitForSpinner();

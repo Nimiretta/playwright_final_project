@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { NOTIFICATIONS, TAGS } from 'data';
+import { ALERTS, TAGS } from 'data';
 import { convertAPIProductStatusTOUI, convertProductToUIData } from 'data/orders';
 import {
   errorResponseForAllProductsRequest,
@@ -15,7 +15,7 @@ import { expect, test } from 'fixtures';
 test.describe('[Integration] [Orders] [Product Details]', () => {
   productDetails.forEach((el) => {
     test(el.testName, { tag: el.tag }, async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(el.response);
+      await mock.orderDetails(el.response.Order._id, el.response);
       await orderDetailsPage.open(el.response.Order._id);
       const productInOrder = await orderDetailsPage.getProducts();
       expect(productInOrder[0]).toMatchObject(convertProductToUIData(el.response.Order.products[0]));
@@ -26,7 +26,7 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
 
   orderWithDifferentStatuses.forEach((el) => {
     test(el.testName, { tag: el.tag }, async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(el.response);
+      await mock.orderDetails(el.response.Order._id, el.response);
       await orderDetailsPage.open(el.response.Order._id);
       expect(orderDetailsPage.editProductsButton).not.toBeVisible();
     });
@@ -36,7 +36,7 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
     'Should display edit button if order is in Draft status',
     { tag: TAGS.INTEGRATION },
     async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(orderInDraftStatus);
+      await mock.orderDetails(orderInDraftStatus.Order._id, orderInDraftStatus);
       await orderDetailsPage.open(orderInDraftStatus.Order._id);
       expect(orderDetailsPage.editProductsButton).toBeVisible();
     },
@@ -44,9 +44,9 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
 
   test(
     'Should display Receive button if order is in the In Process status',
-    { tag: TAGS.INTEGRATION },
+    { tag: [TAGS.UI, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(orderInProcessStatus);
+      await mock.orderDetails(orderInProcessStatus.Order._id, orderInProcessStatus);
       await orderDetailsPage.open(orderInProcessStatus.Order._id);
       expect(orderDetailsPage.receiveButton).toBeVisible();
     },
@@ -54,9 +54,9 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
 
   test(
     'Should send correct request after clickin on Edit button (GetOrderByID)',
-    { tag: [TAGS.INTEGRATION] },
+    { tag: [TAGS.UI, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(orderInDraftStatus);
+      await mock.orderDetails(orderInDraftStatus.Order._id, orderInDraftStatus);
       await orderDetailsPage.open(orderInDraftStatus.Order._id);
       const request = await orderDetailsPage.interceptRequest(
         apiConfig.BASE_URL + apiConfig.ENDPOINTS.PRODUCTS_ALL,
@@ -68,9 +68,9 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
 
   test(
     'Should send Update Status request after clicing on Save button',
-    { tag: TAGS.INTEGRATION },
+    { tag: [TAGS.UI, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(orderInProcessStatus);
+      await mock.orderDetails(orderInProcessStatus.Order._id, orderInProcessStatus);
       await orderDetailsPage.open(orderInProcessStatus.Order._id);
       await orderDetailsPage.clickReceiveButton();
       await orderDetailsPage.markAllproducts('check');
@@ -89,17 +89,17 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
 
   errorResponseForAllProductsRequest.forEach((el) => {
     test(el.testName, { tag: el.tag }, async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(orderInDraftStatus);
+      await mock.orderDetails(orderInDraftStatus.Order._id, orderInDraftStatus);
       await orderDetailsPage.open(orderInDraftStatus.Order._id);
-      await mock.allProductsWithError(el.Response, el.statusCode);
+      await mock.allProducts(el.Response, el.statusCode);
       await orderDetailsPage.editProductsButton.click();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_PRODCUT_UNABLED);
+      await orderDetailsPage.waitForNotification(ALERTS.UPDATE_PRODCUT_UNABLED);
     });
   });
 
   errorResponseForUpdateProduct.forEach((el) => {
     test(el.testName, { tag: el.tag }, async ({ orderDetailsPage, mock }) => {
-      await mock.orderDetails(orderInDraftStatus);
+      await mock.orderDetails(orderInDraftStatus.Order._id, orderInDraftStatus);
       await orderDetailsPage.open(orderInDraftStatus.Order._id);
       await mock.allProducts(getAllProductsResponselist);
       await orderDetailsPage.clickEditProductsButton();
@@ -107,9 +107,9 @@ test.describe('[Integration] [Orders] [Product Details]', () => {
         getAllProductsResponselist.Products[0].name,
         getAllProductsResponselist.Products[1].name,
       );
-      await mock.updateProductInOrderWithError(orderInDraftStatus, el.response, el.statusCode);
+      await mock.orderDetails(orderInDraftStatus.Order._id, el.response, el.statusCode);
       await orderDetailsPage.editProductsModal.clickSaveButton();
-      orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_PRODUCT_FAILED);
+      orderDetailsPage.waitForNotification(ALERTS.UPDATE_PRODUCT_FAILED);
     });
   });
 });

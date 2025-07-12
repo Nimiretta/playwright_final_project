@@ -1,5 +1,5 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
-import { deleteCommentTestData } from 'data/orders/commentTest.data';
+import { deleteCommentTestData } from 'data/orders/testData';
 import { errorResponseSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse, IResponse, IResponseFields } from 'types';
@@ -73,7 +73,7 @@ test.describe('[API] [Orders] [Add Comment]', () => {
       const deleteCommentResponse = await ordersController.deleteComment(order._id, invalidCommentId, token);
       validateResponse(
         deleteCommentResponse as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
+        STATUS_CODES.BAD_REQUEST,
         false,
         API_ERRORS.COMMENT_NOT_FOUND,
       );

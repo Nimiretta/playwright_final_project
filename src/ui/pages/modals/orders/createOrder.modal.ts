@@ -49,6 +49,7 @@ export class CreateOrderModal extends Modal {
   @logStep('Click Create button on Create Order Modal')
   async clickCreate() {
     await this.createButton.click();
+    await this.waitForClosed();
   }
 
   @logStep('Submit order on Create Order Modal')
