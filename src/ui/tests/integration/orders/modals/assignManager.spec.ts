@@ -1,6 +1,6 @@
 import { ALERTS, TAGS } from 'data';
 import { generateCustomerData } from 'data/customers';
-import { generateDeliveryData, ORDER_STATUSES } from 'data/orders';
+import { ORDER_STATUSES } from 'data/orders';
 import { mockManager, secondMockManager } from 'data/orders/mock.data';
 import { generateProductData } from 'data/products';
 import { expect, test } from 'fixtures';
@@ -22,7 +22,7 @@ test.describe('[UI] [Orders] [Integration] Assign New Manager Modal', async () =
         history: [],
         assignedManager: null,
         status: ORDER_STATUSES.DRAFT,
-        delivery: generateDeliveryData(),
+        delivery: null,
         _id: generateID(),
       },
       IsSuccess: true,
@@ -117,7 +117,7 @@ test.describe('[UI] [Orders] [Integration] Edit Assigned Manager Modal', async (
         history: [],
         assignedManager: mockManager,
         status: ORDER_STATUSES.DRAFT,
-        delivery: generateDeliveryData(),
+        delivery: null,
         _id: generateID(),
       },
       IsSuccess: true,

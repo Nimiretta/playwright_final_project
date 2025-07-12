@@ -1,7 +1,6 @@
 import { TAGS } from 'data';
 import { generateCustomerData } from 'data/customers';
-import { generateDeliveryData, modalTitle, ORDER_STATUSES } from 'data/orders';
-import { mockManager } from 'data/orders/mock.data';
+import { modalTitle, ORDER_STATUSES, mockManager } from 'data/orders';
 import { generateProductData } from 'data/products';
 import { expect, test } from 'fixtures';
 import { IOrderResponse } from 'types';
@@ -21,7 +20,7 @@ test.describe('[UI] [Orders] [Component] Assign New Manager Modal', async () => 
         history: [],
         assignedManager: null,
         status: ORDER_STATUSES.DRAFT,
-        delivery: generateDeliveryData(),
+        delivery: null,
         _id: generateID(),
       },
       IsSuccess: true,
@@ -107,7 +106,7 @@ test.describe('[UI] [Orders] [Component] Edit Assigned Manager Modal', async () 
         history: [],
         assignedManager: mockManager,
         status: ORDER_STATUSES.DRAFT,
-        delivery: generateDeliveryData(),
+        delivery: null,
         _id: generateID(),
       },
       IsSuccess: true,

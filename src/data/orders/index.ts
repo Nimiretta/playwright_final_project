@@ -7,3 +7,4 @@ export * from './generateDelivery.data';
 export * from './generateComment.data';
 export * from './convertAPIDataToUIData.utils';
 export * from './modalText.data';
+export * from './mock.data';
