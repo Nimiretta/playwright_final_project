@@ -2,27 +2,19 @@ import { TAGS } from 'data';
 import { mockCustomer, mockProduct } from 'data/orders/mock.data';
 import { expect, test } from 'fixtures';
 
-test.describe(`[UI] [Orders] New Order modal`, async function () {
-  let token = '';
-
-  test.beforeEach(async ({ signInApiService, ordersPage, mock }) => {
-    token = await signInApiService.getAuthToken();
+test.describe(`[UI] [Orders] [Integration] New Order modal`, async () => {
+  test.beforeEach(async ({ ordersPage, mock }) => {
     await ordersPage.open();
-    await ordersPage.waitForOpened();
     await mock.createOrder({
       customers: { Customers: [mockCustomer], IsSuccess: true, ErrorMessage: null },
       products: { Products: [mockProduct], IsSuccess: true, ErrorMessage: null },
     });
   });
 
-  test.afterEach(async ({ ordersApiService }) => {
-    await ordersApiService.clear(token);
-  });
-
   test(
     'Create Order Smoke test with 1 product',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
-    async function ({ ordersPage, createOrderModal }) {
+    async ({ ordersPage, createOrderModal }) => {
       await ordersPage.clickCreateButton();
 
       await createOrderModal.selectCustomer(mockCustomer.name);
@@ -44,14 +36,13 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
       await expect.soft(createOrderModal.closeButton).toBeEnabled();
 
       await createOrderModal.clickCreate();
-      await createOrderModal.waitForClosed();
     },
   );
 
   test(
     'Create Order Smoke test with 5 product',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE] },
-    async function ({ ordersPage, createOrderModal }) {
+    async ({ ordersPage, createOrderModal }) => {
       await ordersPage.clickCreateButton();
 
       await createOrderModal.selectCustomer(mockCustomer.name);
@@ -75,7 +66,6 @@ test.describe(`[UI] [Orders] New Order modal`, async function () {
       await expect(createOrderModal.addProductButton).not.toBeVisible();
 
       await createOrderModal.clickCreate();
-      await createOrderModal.waitForClosed();
     },
   );
 });
