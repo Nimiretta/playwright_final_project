@@ -6,6 +6,7 @@ import { Locator } from '@playwright/test';
 export class CommentsTab extends OrderTab {
   readonly commentsInput = this.tabContainer.locator('#textareaComments');
   readonly createBtn = this.tabContainer.locator('#create-comment-btn');
+  readonly commentsTitle = this.title('comments');
 
   // Existing comments
   readonly deletBtn = (commentId: string) => this.tabContainer.locator(`[id="${commentId}"]`);
@@ -81,5 +82,10 @@ export class CommentsTab extends OrderTab {
   @logStep('UI: Click delete button for comment')
   async clickDeleteButton(commentId: string) {
     await this.deletBtn(commentId).click();
+  }
+
+  @logStep('UI: Get comment error message')
+  async getCommentErrorMessage(): Promise<string> {
+    return this.tabContainer.locator('#error-textareaComments').innerText();
   }
 }
