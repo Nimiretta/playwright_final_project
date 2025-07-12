@@ -18,3 +18,7 @@ export interface IUser {
 export interface ILoginResponse extends IResponseFields {
   User: IUser;
 }
+
+export interface IUsersResponse extends IResponseFields {
+  Users: IUser[];
+}

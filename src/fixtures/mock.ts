@@ -8,6 +8,7 @@ import {
   IProductResponse,
   IProductsResponse,
   IResponseFields,
+  IUsersResponse,
 } from 'types';
 
 export class Mock {
@@ -70,6 +71,40 @@ export class Mock {
         status: statusCode,
         contentType: 'application/json',
         body: JSON.stringify(data),
+      });
+    });
+  }
+
+  async productsAll(body: IProductsResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/products\/all$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async createOrder(body: { customers: ICustomersResponse; products: IProductsResponse }) {
+    await Promise.all([this.allCustomers(body.customers), this.productsAll(body.products)]);
+  }
+
+  async users(body: IUsersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/users$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async assignManager(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/orders\/[\w\d]+\/assign-manager\/[\w\d]+$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
       });
     });
   }

@@ -20,3 +20,11 @@ export interface INotificationFromResponse {
 export interface INotificationsResponse extends IResponseFields {
   Notifications: INotificationFromResponse[];
 }
+
+export interface INotificationsFromModal {
+  id: string;
+  date: string;
+  text: NotificationMsg;
+  read: boolean;
+  orderId: string;
+}
