@@ -7,7 +7,7 @@ import { expect, test } from 'fixtures';
 import { IOrderResponse } from 'types';
 import { generateID } from 'utils';
 
-test.describe('[UI] [Orders] Assign New Manager Modal', async () => {
+test.describe('[UI] [Orders] [Integration] Assign New Manager Modal', async () => {
   let mockOrder: IOrderResponse;
   let updatedOrder: IOrderResponse;
 
@@ -102,7 +102,7 @@ test.describe('[UI] [Orders] Assign New Manager Modal', async () => {
   );
 });
 
-test.describe('[UI] [Orders] Edit Assigned Manager Modal', async () => {
+test.describe('[UI] [Orders] [Integration] Edit Assigned Manager Modal', async () => {
   let mockOrder: IOrderResponse;
   let updatedOrder: IOrderResponse;
 

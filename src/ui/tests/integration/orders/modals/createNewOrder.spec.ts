@@ -2,7 +2,7 @@ import { TAGS } from 'data';
 import { mockCustomer, mockProduct } from 'data/orders/mock.data';
 import { expect, test } from 'fixtures';
 
-test.describe(`[UI] [Orders] New Order modal`, async () => {
+test.describe(`[UI] [Orders] [Integration] New Order modal`, async () => {
   test.beforeEach(async ({ ordersPage, mock }) => {
     await ordersPage.open();
     await mock.createOrder({
