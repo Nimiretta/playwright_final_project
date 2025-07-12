@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { NOTIFICATIONS, TAGS } from 'data';
+import { ALERTS, TAGS } from 'data';
 import { convertCustomerToUIData } from 'data/orders';
 import {
   getAllCustomersResponselist,
@@ -31,7 +31,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
       await orderDetailsPage.waitForOpened();
       await mock.allCustomers(el.Response, el.statusCode);
       await orderDetailsPage.editCutomerButton.click();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_CUSTOMRE_IS_UNABLE);
+      await orderDetailsPage.waitForNotification(ALERTS.UPDATE_CUSTOMRE_IS_UNABLE);
     });
   });
 
@@ -69,7 +69,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
       await mock.orderDetails(UpdatedOrder.Order._id, UpdatedOrder);
       await orderDetailsPage.editCustomerModal.clickSaveButton();
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
+      await orderDetailsPage.waitForNotification(ALERTS.ORDER_UPDATED);
     },
   );
 
@@ -84,7 +84,7 @@ test.describe('[Integration] [Orders] [Customer Details]', () => {
       await mock.orderDetails(orderInDefaultStatus.Order._id, el.response, el.statusCode);
       await orderDetailsPage.editCustomerModal.saveButton.click();
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.UPDATE_CUSTOMER_FAILED);
+      await orderDetailsPage.waitForNotification(ALERTS.UPDATE_CUSTOMER_FAILED);
     });
   });
 });
