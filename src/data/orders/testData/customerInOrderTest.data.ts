@@ -1,27 +1,17 @@
-import { generateCustomerData } from 'data/customers';
-import { generateProductData } from 'data/products';
-import { ICustomerFromResponse } from 'types';
+import { generateFullCustomerData } from 'data/customers';
+import { generateProductDataForOrder } from 'data/products';
+import { ICustomerFromResponse, IProductInOrder } from 'types';
 import { generateID } from 'utils';
 import { ORDER_STATUSES } from '..';
 import { STATUS_CODES, TAGS } from 'data';
 
-const customerWithNotes: ICustomerFromResponse = {
-  ...generateCustomerData(),
-  _id: generateID(),
-  createdOn: new Date().toISOString(),
-};
-
-const customerWithoutNotes = {
-  ...generateCustomerData({ notes: '' }),
-  _id: generateID(),
-  createdOn: new Date().toISOString(),
-};
-
-const product = { ...generateProductData(), received: false, _id: generateID() };
+const customerWithNotes: ICustomerFromResponse = generateFullCustomerData();
+const customerWithoutNotes: ICustomerFromResponse = generateFullCustomerData({ notes: '' });
+const product: IProductInOrder = generateProductDataForOrder();
 
 export const customerDetails = [
   {
-    tag: ['@001_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.INTEGRATION],
+    tag: ['@001_O_CM_UI', TAGS.UI, TAGS.COMPONENT],
     testName: 'Should display correct data in Customer Details table after openning the page',
     response: {
       Order: {
@@ -42,7 +32,7 @@ export const customerDetails = [
   },
 
   {
-    tag: ['@002_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.INTEGRATION],
+    tag: ['@002_O_CM_UI', TAGS.UI, TAGS.COMPONENT],
     testName: 'Should display correct data in Customer Details table after openning the page(without Notes)',
     response: {
       Order: {
@@ -65,7 +55,7 @@ export const customerDetails = [
 
 export const orderWithDifferentStatuses = [
   {
-    tag: ['@004_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.INTEGRATION],
+    tag: ['@004_O_CM_UI', TAGS.UI, TAGS.COMPONENT],
     testName: 'Should not display edit button if order is in In Process status',
     response: {
       Order: {
@@ -86,7 +76,7 @@ export const orderWithDifferentStatuses = [
   },
 
   {
-    tag: ['@006_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.INTEGRATION],
+    tag: ['@006_O_CM_UI', TAGS.UI, TAGS.COMPONENT],
     testName: 'Should not display edit button if order is in Received status',
     response: {
       Order: {
@@ -107,7 +97,7 @@ export const orderWithDifferentStatuses = [
   },
 
   {
-    tag: ['@007_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.INTEGRATION],
+    tag: ['@007_O_CM_UI', TAGS.UI, TAGS.COMPONENT],
     testName: 'Should not display edit button if order is in Canceled status',
     response: {
       Order: {
@@ -128,7 +118,7 @@ export const orderWithDifferentStatuses = [
   },
 
   {
-    tag: ['@008_O_CM_UI', TAGS.UI, TAGS.VISUAL_REGRESSION, TAGS.INTEGRATION],
+    tag: ['@008_O_CM_UI', TAGS.UI, TAGS.COMPONENT],
     testName: 'Should not display edit button if order is in Partially Received status',
     response: {
       Order: {

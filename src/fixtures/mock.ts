@@ -53,9 +53,9 @@ export class Mock {
     });
   }
 
-  async orderDetails(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
-    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id));
-    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id), async (route) => {
+  async orderDetails(id: string, body: IOrderResponse | IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(id));
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(id), async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
@@ -64,37 +64,12 @@ export class Mock {
     });
   }
 
-  async orderDetailsWithError(
-    body: IOrderResponse,
-    error: IResponseFields,
-    statusCode: STATUS_CODES = STATUS_CODES.BAD_REQUEST,
-  ) {
-    await this.page.unroute(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id));
-    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id), async (route) => {
-      await route.fulfill({
-        status: statusCode,
-        contentType: 'application/json',
-        body: JSON.stringify(error),
-      });
-    });
-  }
-
-  async allCustomers(customers: ICustomersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+  async allCustomers(data: ICustomersResponse | IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.OK) {
     this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.CUSTOMERS_ALL, async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',
-        body: JSON.stringify(customers),
-      });
-    });
-  }
-
-  async allCustomersWithError(errorBody: IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.BAD_REQUEST) {
-    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.CUSTOMERS_ALL, async (route) => {
-      await route.fulfill({
-        status: statusCode,
-        contentType: 'application/json',
-        body: JSON.stringify(errorBody),
+        body: JSON.stringify(data),
       });
     });
   }
