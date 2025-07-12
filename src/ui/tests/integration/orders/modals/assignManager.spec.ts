@@ -158,6 +158,7 @@ test.describe('[UI] [Orders] Edit Assigned Manager Modal', async () => {
       await expect
         .soft(orderDetailsPage.assignedManagerName, 'Verify Manager name on orderDetailsPage')
         .toHaveText(mockManagerName);
+      await orderDetailsPage.waitForNotification(ALERTS.MANAGER_ASSIGNED);
     },
   );
 
