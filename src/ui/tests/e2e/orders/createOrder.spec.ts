@@ -1,4 +1,4 @@
-import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
+import { ALERTS, STATUS_CODES, TAGS } from 'data';
 import { expect, test } from 'fixtures';
 import { ICustomerFromResponse, IOrderResponse, IProductFromResponse, IResponse } from 'types';
 
@@ -34,7 +34,7 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.waitForOpened();
 
       expect(order.status).toBe(STATUS_CODES.CREATED);
-      await ordersPage.waitForNotification(NOTIFICATIONS.ORDER_CREATED);
+      await ordersPage.waitForNotification(ALERTS.ORDER_CREATED);
       expect(ordersPage.tableRowByOrderNumber(order.body.Order._id)).toBeVisible();
     },
   );
@@ -58,7 +58,7 @@ test.describe('[E2E] [UI] [Orders] [Create]', () => {
       await ordersPage.waitForOpened();
 
       expect(order.status).toBe(STATUS_CODES.CREATED);
-      await ordersPage.waitForNotification(NOTIFICATIONS.ORDER_CREATED);
+      await ordersPage.waitForNotification(ALERTS.ORDER_CREATED);
       expect(
         ordersPage.tableRowByOrderNumber(order.body.Order._id),
         'Created should be displayed on the table',

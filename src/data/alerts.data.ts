@@ -9,6 +9,8 @@ export const ALERTS = {
   DELIVERY_SAVED: 'Delivery was successfully saved',
   COMMENT_CREATED: 'Comment was successfully posted',
   COMMENT_DELETED: 'Comment was successfully deleted',
+  UPDATE_CUSTOMRE_IS_UNABLE: 'Unable to update customer. Please try again later.',
+  UPDATE_CUSTOMER_FAILED: 'Failed to update customer. Please try again later.',
   ORDER_REOPEN: 'Order was successfully reopened',
   ORDER_CANCELED: 'Order was successfully canceled',
   ORDER_PROCESS: 'Order processing was successfully started',

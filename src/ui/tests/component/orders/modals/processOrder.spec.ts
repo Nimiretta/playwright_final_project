@@ -11,7 +11,7 @@ test.describe('[UI] [Orders] [Component] Process Order Modal', async () => {
     async ({ confirmationModal, orderDetailsPage, mock }) => {
       mockOrder = generateMockOrder({ delivery: generateDeliveryData() });
 
-      await mock.orderDetails(mockOrder);
+      await mock.orderDetails(mockOrder.Order._id, mockOrder);
       await orderDetailsPage.open(mockOrder.Order._id);
       await orderDetailsPage.clickProcess();
 

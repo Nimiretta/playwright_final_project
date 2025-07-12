@@ -18,7 +18,7 @@ test.describe('[UI] [Orders] [Integration] [Reopen Order Modal]', async () => {
       },
     };
 
-    await mock.orderDetails(mockOrder);
+    await mock.orderDetails(mockOrder.Order._id, mockOrder);
     await orderDetailsPage.open(mockOrder.Order._id);
   });
 
@@ -29,7 +29,7 @@ test.describe('[UI] [Orders] [Integration] [Reopen Order Modal]', async () => {
       await orderDetailsPage.clickReopen();
 
       await mock.changeOrderStatus(updatedOrder);
-      await mock.orderDetails(updatedOrder);
+      await mock.orderDetails(updatedOrder.Order._id, updatedOrder);
 
       await confirmationModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_REOPEN);

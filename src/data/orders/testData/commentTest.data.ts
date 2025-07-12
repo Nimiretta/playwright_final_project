@@ -1,7 +1,7 @@
 import { API_ERRORS } from 'data/errors.data';
 import { STATUS_CODES } from 'data/statusCodes.data';
 import { TAGS } from 'data/tags.data';
-import { generateCommentData } from './generateComment.data';
+import { generateCommentData } from '..';
 
 export const commentTestData = [
   {

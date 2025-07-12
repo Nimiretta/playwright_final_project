@@ -21,5 +21,6 @@ export function convertCustomerToUIData(data: ICustomerFromResponse): Record<str
     Flat: data.flat.toString(),
     Phone: data.phone,
     'Created On': convertToDateAndTime(data.createdOn),
+    Notes: data.notes || '-',
   };
 }

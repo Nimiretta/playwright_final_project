@@ -3,7 +3,7 @@ import { generateProductData } from 'data/products';
 import { convertToDate, generateID } from 'utils';
 import { expect, test } from 'fixtures';
 import { TAGS } from 'data';
-import { deliveryTabTestdata } from 'data/orders/testdata';
+import { deliveryTabTestdata } from 'data/orders/testData';
 import { generateDeliveryData, ORDER_STATUSES } from 'data/orders';
 import { DeliveryHistoryUI, IOrderResponse } from 'types';
 
@@ -13,7 +13,7 @@ test.describe('[UI] [Orders] [Integration] Delivery tab', () => {
       `Delivery button is ${isBtn ? `visible with ${btnName} text` : 'not visible'} for order in ${statusName} status`,
       { tag: [idTag, TAGS.UI, TAGS.INTEGRATION, TAGS.REGRESSION] },
       async ({ orderDetailsPage, mock }) => {
-        await mock.orderDetails({
+        await mock.orderDetails(mockOrder._id, {
           Order: {
             customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
             products: [{ ...generateProductData(), _id: generateID(), received: false }],
@@ -71,7 +71,7 @@ test.describe('[UI] [Orders] [Integration] Delivery tab', () => {
           flat: '-',
         },
       };
-      await mock.orderDetails(mockOrder);
+      await mock.orderDetails(mockOrder.Order._id, mockOrder);
 
       await orderDetailsPage.open(mockOrder.Order._id);
       await orderDetailsPage.clickDeliveryTab();
@@ -106,7 +106,7 @@ test.describe('[UI] [Orders] [Integration] Delivery tab', () => {
         ...(mockOrder.Order.delivery as DeliveryHistoryUI),
         finalDate: convertToDate(mockOrder.Order.delivery!.finalDate),
       };
-      await mock.orderDetails(mockOrder);
+      await mock.orderDetails(mockOrder.Order._id, mockOrder);
 
       await orderDetailsPage.open(mockOrder.Order._id);
       await orderDetailsPage.clickDeliveryTab();

@@ -14,7 +14,7 @@ test.describe('[UI] [Orders] [Component] Assign New Manager Modal', async () => 
       IsSuccess: true,
       ErrorMessage: null,
     });
-    await mock.orderDetails(mockOrder);
+    await mock.orderDetails(mockOrder.Order._id, mockOrder);
     await orderDetailsPage.open(mockOrder.Order._id);
   });
 

@@ -12,7 +12,7 @@ test.describe('[UI] [Orders] [Component] Cancel Order Modal', async () => {
     async ({ confirmationModal, orderDetailsPage, mock }) => {
       mockOrder = generateMockOrder();
 
-      await mock.orderDetails(mockOrder);
+      await mock.orderDetails(mockOrder.Order._id, mockOrder);
       await orderDetailsPage.open(mockOrder.Order._id);
 
       await orderDetailsPage.clickCancel();

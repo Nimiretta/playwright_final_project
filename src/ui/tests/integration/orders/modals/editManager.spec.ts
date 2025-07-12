@@ -24,7 +24,7 @@ test.describe('[UI] [Orders] [Integration] Edit Assigned Manager Modal', async (
       ErrorMessage: null,
     });
 
-    await mock.orderDetails(mockOrder);
+    await mock.orderDetails(mockOrder.Order._id, mockOrder);
     await orderDetailsPage.open(mockOrder.Order._id);
   });
 
@@ -37,7 +37,7 @@ test.describe('[UI] [Orders] [Integration] Edit Assigned Manager Modal', async (
       await assignManagerModal.select(secondMockManager._id);
 
       await mock.assignManager(updatedOrder);
-      await mock.orderDetails(updatedOrder);
+      await mock.orderDetails(updatedOrder.Order._id, updatedOrder);
       await assignManagerModal.submit();
 
       const mockManagerName = `${secondMockManager.firstName} ${secondMockManager.lastName}`;

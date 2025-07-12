@@ -15,7 +15,7 @@ test.describe('[UI] [Orders] [Component] Edit Assigned Manager Modal', async () 
       ErrorMessage: null,
     });
 
-    await mock.orderDetails(mockOrder);
+    await mock.orderDetails(mockOrder.Order._id, mockOrder);
     await orderDetailsPage.open(mockOrder.Order._id);
   });
   test(

@@ -24,7 +24,7 @@ test.describe('[UI] [Orders] [Integration][Unassign Manager Modal] ', async () =
       ErrorMessage: null,
     });
 
-    await mock.orderDetails(mockOrder);
+    await mock.orderDetails(mockOrder.Order._id, mockOrder);
     await orderDetailsPage.open(mockOrder.Order._id);
   });
   test(
@@ -33,7 +33,7 @@ test.describe('[UI] [Orders] [Integration][Unassign Manager Modal] ', async () =
     async ({ confirmationModal, orderDetailsPage, mock }) => {
       await orderDetailsPage.clickUnassignManager();
       await mock.unassignManager(updatedOrder);
-      await mock.orderDetails(updatedOrder);
+      await mock.orderDetails(updatedOrder.Order._id, updatedOrder);
 
       await confirmationModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.MANAGER_UNASSIGNED);

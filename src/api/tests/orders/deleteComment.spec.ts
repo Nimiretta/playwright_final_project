@@ -1,5 +1,5 @@
 import { API_ERRORS, STATUS_CODES, TAGS } from 'data';
-import { deleteCommentTestData } from 'data/orders/commentTest.data';
+import { deleteCommentTestData } from 'data/orders/testData';
 import { errorResponseSchema } from 'data/schemas';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse, IResponse, IResponseFields } from 'types';
