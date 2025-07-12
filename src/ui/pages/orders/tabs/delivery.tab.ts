@@ -5,6 +5,7 @@ import { DeliveryHistoryUI } from 'types';
 
 export class DeliveryTab extends OrderTab {
   readonly deliveryBtn = this.tabContainer.locator('#delivery-btn');
+  readonly deliveryTitle = this.title('delivery');
   private readonly deliveryOptions = this.tabContainer.locator('.c-details');
   private readonly optionLocators = {
     [DELIVERY_INFO.DELIVERY_TYPE]: this.getOptionValueLocator(DELIVERY_INFO.DELIVERY_TYPE),

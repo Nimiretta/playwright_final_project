@@ -14,7 +14,7 @@ export const mockCustomer: ICustomerFromResponse = {
   house: 321,
   flat: 123,
   phone: '+1111111111111111111',
-  createdOn: new Date(Date.now()).toISOString(),
+  createdOn: new Date().toISOString(),
   notes: 'test',
 };
 
@@ -25,7 +25,7 @@ export const mockProduct: IProductFromResponse = {
   manufacturer: MANUFACTURERS.Amazon,
   amount: 3,
   notes: '',
-  createdOn: new Date(Date.now()).toISOString(),
+  createdOn: new Date().toISOString(),
 };
 
 export const mockManager: IUser = {
@@ -35,4 +35,13 @@ export const mockManager: IUser = {
   lastName: 'Tsitova',
   roles: [ROLES.USER],
   createdOn: '2025/04/20 13:11:14',
+};
+
+export const secondMockManager: IUser = {
+  _id: '6807a561d006ba3d475fcb36',
+  firstName: 'Tatiana',
+  lastName: 'Korol',
+  username: 'nimiretta',
+  roles: [ROLES.USER],
+  createdOn: '2025/04/22 14:19:13',
 };

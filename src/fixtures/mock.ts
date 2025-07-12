@@ -3,6 +3,7 @@ import { apiConfig } from 'config';
 import { STATUS_CODES } from 'data';
 import {
   ICustomerResponse,
+  IOrderResponse,
   ICustomersResponse,
   IOrdersResponse,
   IProductResponse,
@@ -89,6 +90,26 @@ export class Mock {
 
   async users(body: IUsersResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
     this.page.route(/\/api\/users$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async assignManager(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(/\/api\/orders\/[\w\d]+\/assign-manager\/[\w\d]+$/, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
+
+  async orderDetails(body: IOrderResponse, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.ORDERS_BY_ID(body.Order._id), async (route) => {
       await route.fulfill({
         status: statusCode,
         contentType: 'application/json',

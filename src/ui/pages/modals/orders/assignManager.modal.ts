@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { expect, Locator } from '@playwright/test';
 import { logStep } from 'utils';
 import { Modal } from '../modal.page';
 
@@ -8,14 +8,26 @@ export class AssignManagerModal extends Modal {
   readonly managerList = this.modalContainer.locator('#manager-list');
   readonly searchInput = this.modalContainer.locator('#manager-search-input');
   readonly activeManager = this.managerList.locator('li[data-managerid].active');
+  readonly managerID = (managerId: string) => this.managerList.locator(`li[data-managerid="${managerId}"]`);
+  readonly managerItem = this.managerList.locator('li.list-group-item');
   uniqueElement = this.modalContainer;
+
+  @logStep('Check Select Manager')
+  async checkActiveManager(managerItem: Locator) {
+    await expect(managerItem).toHaveClass(/active/);
+  }
+
+  @logStep('Get list of managers on AssignManagerModal')
+  async getManagersList() {
+    await expect(this.managerList).toBeVisible();
+  }
 
   @logStep('Select manager on AssignManagerModal')
   async select(managerId: string) {
     await expect(this.managerList).toBeVisible();
-    const managerItem = this.managerList.locator(`li[data-managerid="${managerId}"]`);
+    const managerItem = this.managerID(managerId);
     await managerItem.click();
-    await expect(managerItem).toHaveClass(/active/);
+    await this.checkActiveManager(managerItem);
   }
 
   @logStep('Get active manager info')
@@ -33,10 +45,10 @@ export class AssignManagerModal extends Modal {
   @logStep('Search and Select manager on AssignManagerModal')
   async search(value: string) {
     await this.searchInput.fill(value);
-    const managerItem = this.managerList.locator('li.list-group-item', { hasText: value }).first();
-    await expect(managerItem).toBeVisible();
-    await managerItem.click();
-    await expect(managerItem).toHaveClass(/active/);
+    const managerFirstItem = this.managerItem.filter({ hasText: value }).first();
+    await expect(managerFirstItem).toBeVisible();
+    await managerFirstItem.click();
+    await this.checkActiveManager(managerFirstItem);
   }
 
   @logStep('Fill Search field on AssignManagerModal')
@@ -50,16 +62,5 @@ export class AssignManagerModal extends Modal {
     const managerItem = this.managerList.locator(`li[data-managerid="${managerId}"]`);
     const info = await managerItem.innerText();
     return info.trim();
-  }
-
-  @logStep('Check UI element')
-  async checkCommonUI(titleText: string) {
-    await expect.soft(this.title).toContainText(titleText);
-    await expect.soft(this.confirmButton).toBeVisible();
-    await expect.soft(this.confirmButton).toBeEnabled();
-    await expect.soft(this.cancelButton).toBeVisible();
-    await expect.soft(this.cancelButton).toBeEnabled();
-    await expect.soft(this.closeButton).toBeVisible();
-    await expect.soft(this.closeButton).toBeEnabled();
   }
 }

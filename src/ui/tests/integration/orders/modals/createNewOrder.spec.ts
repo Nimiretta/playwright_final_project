@@ -3,19 +3,12 @@ import { mockCustomer, mockProduct } from 'data/orders/mock.data';
 import { expect, test } from 'fixtures';
 
 test.describe(`[UI] [Orders] New Order modal`, async () => {
-  let token = '';
-
-  test.beforeEach(async ({ signInApiService, ordersPage, mock }) => {
-    token = await signInApiService.getAuthToken();
+  test.beforeEach(async ({ ordersPage, mock }) => {
     await ordersPage.open();
     await mock.createOrder({
       customers: { Customers: [mockCustomer], IsSuccess: true, ErrorMessage: null },
       products: { Products: [mockProduct], IsSuccess: true, ErrorMessage: null },
     });
-  });
-
-  test.afterEach(async ({ ordersApiService }) => {
-    await ordersApiService.clear(token);
   });
 
   test(
