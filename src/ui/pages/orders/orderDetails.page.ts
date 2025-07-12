@@ -153,13 +153,13 @@ export class OrderDetailsPage extends SalesPortalPage {
     await this.waitForSpinner();
   }
 
-  @logStep('Click Cancel Button')
+  @logStep('Click on Cancel Button in Product Section')
   async clickCancelButton() {
     await this.cancelReceivingButton.click();
     await this.waitForSpinner();
   }
 
-  @logStep('Click Save Button')
+  @logStep('Click on Save Button in Product Section')
   async clickSaveButton() {
     await this.saveReceivingButton.click();
     await this.waitForSpinner();

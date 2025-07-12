@@ -9,6 +9,9 @@ export const ALERTS = {
   DELIVERY_SAVED: 'Delivery was successfully saved',
   COMMENT_CREATED: 'Comment was successfully posted',
   COMMENT_DELETED: 'Comment was successfully deleted',
+  ORDER_REOPEN: 'Order was successfully reopened',
+  ORDER_CANCELED: 'Order was successfully canceled',
+  ORDER_PROCESS: 'Order processing was successfully started',
 };
 
 export const EMPTY_TABLE_ROW_TEXT = 'No records created yet';

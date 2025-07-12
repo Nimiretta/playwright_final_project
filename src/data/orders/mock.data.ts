@@ -1,8 +1,9 @@
-import { COUNTRIES } from 'data/customers';
+import { COUNTRIES, generateCustomerData } from 'data/customers';
 import { generateID } from 'utils';
-import { MANUFACTURERS } from 'data/products';
+import { generateProductData, MANUFACTURERS } from 'data/products';
 import { ROLES } from 'data/roles.data';
-import { ICustomerFromResponse, IProductFromResponse, IUser } from 'types';
+import { ICustomerFromResponse, IOrderResponse, IProductFromResponse, IUser } from 'types';
+import { ORDER_STATUSES } from 'data/orders';
 
 export const mockCustomer: ICustomerFromResponse = {
   _id: generateID(),
@@ -45,3 +46,23 @@ export const secondMockManager: IUser = {
   roles: [ROLES.USER],
   createdOn: '2025/04/22 14:19:13',
 };
+
+export function generateMockOrder(params?: Partial<IOrderResponse['Order']>): IOrderResponse {
+  return {
+    Order: {
+      customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
+      products: [{ ...generateProductData(), _id: generateID(), received: false }],
+      createdOn: new Date().toISOString(),
+      total_price: 100,
+      comments: [],
+      history: [],
+      assignedManager: null,
+      status: ORDER_STATUSES.DRAFT,
+      delivery: null,
+      _id: generateID(),
+      ...params,
+    },
+    IsSuccess: true,
+    ErrorMessage: null,
+  };
+}
