@@ -11,6 +11,9 @@ export const ALERTS = {
   COMMENT_DELETED: 'Comment was successfully deleted',
   UPDATE_CUSTOMRE_IS_UNABLE: 'Unable to update customer. Please try again later.',
   UPDATE_CUSTOMER_FAILED: 'Failed to update customer. Please try again later.',
+  ORDER_REOPEN: 'Order was successfully reopened',
+  ORDER_CANCELED: 'Order was successfully canceled',
+  ORDER_PROCESS: 'Order processing was successfully started',
 };
 
 export const EMPTY_TABLE_ROW_TEXT = 'No records created yet';

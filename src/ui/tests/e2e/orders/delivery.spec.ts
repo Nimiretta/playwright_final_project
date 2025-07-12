@@ -1,4 +1,4 @@
-import { NOTIFICATIONS, TAGS } from 'data';
+import { ALERTS, TAGS } from 'data';
 import { COUNTRIES } from 'data/customers';
 import { DELIVERY_CONDITIONS, generateDeliveryData, SHOP_ADDRESS_BY_COUNTRY } from 'data/orders';
 import { expect, test } from 'fixtures';
@@ -45,7 +45,7 @@ test.describe('[E2E] [Orders] [Delivery]', () => {
       await deliveryPage.fillInputs({ ...delivery, location: 'Home' });
       await deliveryPage.clickSave();
 
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.DELIVERY_SAVED);
+      await orderDetailsPage.waitForNotification(ALERTS.DELIVERY_SAVED);
       await orderDetailsPage.deliveryTab.waitForOpened();
       const actualDelivery = await orderDetailsPage.deliveryTab.getDeliveryInfo();
 
@@ -74,7 +74,7 @@ test.describe('[E2E] [Orders] [Delivery]', () => {
       await deliveryPage.fillInputs({ ...expectedDelivery, location: 'Other' });
       await deliveryPage.clickSave();
 
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.DELIVERY_SAVED);
+      await orderDetailsPage.waitForNotification(ALERTS.DELIVERY_SAVED);
       await orderDetailsPage.deliveryTab.waitForOpened();
       const actualDelivery = await orderDetailsPage.deliveryTab.getDeliveryInfo();
 
@@ -108,7 +108,7 @@ test.describe('[E2E] [Orders] [Delivery]', () => {
       await deliveryPage.fillInputs({ ...delivery, location: 'Other' });
       await deliveryPage.clickSave();
 
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.DELIVERY_SAVED);
+      await orderDetailsPage.waitForNotification(ALERTS.DELIVERY_SAVED);
       await orderDetailsPage.deliveryTab.waitForOpened();
       const actualDelivery = await orderDetailsPage.deliveryTab.getDeliveryInfo();
 

@@ -3,31 +3,32 @@ import { modalTitle, mockManager, generateMockOrder } from 'data/orders';
 import { expect, test } from 'fixtures';
 import { IOrderResponse } from 'types';
 
-test.describe('[UI] [Orders] [Component] Assign New Manager Modal', async () => {
+test.describe('[UI] [Orders] [Component] Edit Assigned Manager Modal', async () => {
   let mockOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = generateMockOrder();
+    mockOrder = generateMockOrder({ assignedManager: mockManager });
 
     await mock.users({
       Users: [mockManager],
       IsSuccess: true,
       ErrorMessage: null,
     });
+
     await mock.orderDetails(mockOrder.Order._id, mockOrder);
     await orderDetailsPage.open(mockOrder.Order._id);
   });
-
   test(
     'Should display all buttons & title modal',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE, TAGS.COMPONENT] },
     async ({ orderDetailsPage, assignManagerModal }) => {
-      await orderDetailsPage.clickAddAssignManager();
-      await assignManagerModal.select(mockManager._id);
+      await orderDetailsPage.clickEditAssignManager();
 
-      await expect.soft(assignManagerModal.title).toContainText(modalTitle.assignManager);
+      await expect.soft(assignManagerModal.title).toContainText(modalTitle.editAssignManager);
       await expect.soft(assignManagerModal.confirmButton).toBeVisible();
-      await expect.soft(assignManagerModal.confirmButton).toBeEnabled();
+      await expect
+        .soft(assignManagerModal.confirmButton, 'Verify Save is disabled if new  Manager not selected')
+        .toBeDisabled();
       await expect.soft(assignManagerModal.cancelButton).toBeVisible();
       await expect.soft(assignManagerModal.cancelButton).toBeEnabled();
       await expect.soft(assignManagerModal.closeButton).toBeVisible();
@@ -35,17 +36,24 @@ test.describe('[UI] [Orders] [Component] Assign New Manager Modal', async () => 
     },
   );
 
-  test('Should disable Save button when no manager selected', async ({ assignManagerModal, orderDetailsPage }) => {
-    await orderDetailsPage.clickAddAssignManager();
-    await assignManagerModal.getManagersList();
-    await expect(assignManagerModal.confirmButton).toBeDisabled();
-  });
+  test(
+    'Should display actual assigned manager',
+    { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.SMOKE, TAGS.COMPONENT] },
+    async ({ orderDetailsPage, assignManagerModal }) => {
+      await orderDetailsPage.clickEditAssignManager();
+
+      const mockinfo = `${mockManager.firstName} ${mockManager.lastName} (${mockManager.username})`;
+      const currentActiveManager = await assignManagerModal.getActiveManagerInfo();
+
+      expect(currentActiveManager, 'Verify current active manager').toBe(mockinfo);
+    },
+  );
 
   test(
     'Should display  Manager via Search',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.COMPONENT] },
     async ({ orderDetailsPage, assignManagerModal }) => {
-      await orderDetailsPage.clickAddAssignManager();
+      await orderDetailsPage.clickEditAssignManager();
 
       const mockinfo = `${mockManager.firstName} ${mockManager.lastName} (${mockManager.username})`;
 
@@ -64,10 +72,10 @@ test.describe('[UI] [Orders] [Component] Assign New Manager Modal', async () => 
   );
 
   test(
-    ' Should disable Save button if  no search manager  result',
+    'Should disable Save button if no search manager result',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.COMPONENT] },
     async ({ assignManagerModal, orderDetailsPage }) => {
-      await orderDetailsPage.clickAddAssignManager();
+      await orderDetailsPage.clickEditAssignManager();
       await assignManagerModal.fillSearch('abc');
       await expect(assignManagerModal.confirmButton).toBeDisabled();
     },

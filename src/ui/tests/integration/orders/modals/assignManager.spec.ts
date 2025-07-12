@@ -1,7 +1,7 @@
 import { ALERTS, TAGS } from 'data';
 import { generateCustomerData } from 'data/customers';
 import { generateDeliveryData, ORDER_STATUSES } from 'data/orders';
-import { mockManager, secondMockManager } from 'data/orders/mock.data';
+import { generateMockOrder, mockManager, secondMockManager } from 'data/orders/mock.data';
 import { generateProductData } from 'data/products';
 import { expect, test } from 'fixtures';
 import { IOrderResponse } from 'types';
@@ -12,22 +12,7 @@ test.describe('[UI] [Orders] [Integration] Assign New Manager Modal', async () =
   let updatedOrder: IOrderResponse;
 
   test.beforeEach(async ({ orderDetailsPage, mock }) => {
-    mockOrder = {
-      Order: {
-        customer: { ...generateCustomerData(), _id: generateID(), createdOn: new Date().toISOString() },
-        products: [{ ...generateProductData(), _id: generateID(), received: false }],
-        createdOn: new Date().toISOString(),
-        total_price: 100,
-        comments: [],
-        history: [],
-        assignedManager: null,
-        status: ORDER_STATUSES.DRAFT,
-        delivery: generateDeliveryData(),
-        _id: generateID(),
-      },
-      IsSuccess: true,
-      ErrorMessage: null,
-    };
+    mockOrder = generateMockOrder();
 
     updatedOrder = {
       ...mockOrder,
@@ -74,7 +59,7 @@ test.describe('[UI] [Orders] [Integration] Assign New Manager Modal', async () =
   );
 
   test(
-    'Should close modal without assignment',
+    'Should not assign manager when modal is closed',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, assignManagerModal }) => {
       await orderDetailsPage.clickAddAssignManager();
@@ -88,7 +73,7 @@ test.describe('[UI] [Orders] [Integration] Assign New Manager Modal', async () =
   );
 
   test(
-    'Should cancel modal without assignment',
+    'Should not assign manager when modal is canceled',
     { tag: [TAGS.UI, TAGS.REGRESSION, TAGS.INTEGRATION] },
     async ({ orderDetailsPage, assignManagerModal }) => {
       await orderDetailsPage.clickAddAssignManager();

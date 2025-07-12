@@ -29,7 +29,7 @@ test.describe('[UI] [Orders] [Component] Delivery tab', () => {
     'Title should be "Delivery Information"',
     { tag: ['@1_O_DLVR_CMPNT', TAGS.UI, TAGS.COMPONENT, TAGS.REGRESSION] },
     async ({ mock, orderDetailsPage }) => {
-      await mock.orderDetails(mockOrder);
+      await mock.orderDetails(mockOrder.Order._id, mockOrder);
 
       await orderDetailsPage.open(mockOrder.Order._id);
       await orderDetailsPage.clickDeliveryTab();
@@ -44,7 +44,7 @@ test.describe('[UI] [Orders] [Component] Delivery tab', () => {
     { tag: ['@2_O_DLVR_CMPNT', TAGS.UI, TAGS.COMPONENT, TAGS.REGRESSION] },
     async ({ mock, orderDetailsPage }) => {
       const expected = `#/orders/${mockOrder.Order._id}/edit-delivery`;
-      await mock.orderDetails(mockOrder);
+      await mock.orderDetails(mockOrder.Order._id, mockOrder);
 
       await orderDetailsPage.open(mockOrder.Order._id);
       await orderDetailsPage.clickDeliveryTab();
@@ -61,7 +61,7 @@ test.describe('[UI] [Orders] [Component] Delivery tab', () => {
     async ({ mock, orderDetailsPage }) => {
       const expected = `#/orders/${mockOrder.Order._id}/schedule-delivery`;
       const updMockOrder = _.merge(mockOrder, { Order: { delivery: null } });
-      await mock.orderDetails(updMockOrder);
+      await mock.orderDetails(mockOrder.Order._id, updMockOrder);
 
       await orderDetailsPage.open(mockOrder.Order._id);
       await orderDetailsPage.clickDeliveryTab();

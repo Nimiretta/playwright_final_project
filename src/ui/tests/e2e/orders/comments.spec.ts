@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
+import { ALERTS, STATUS_CODES, TAGS } from 'data';
 import { generateCommentData } from 'data/orders';
 import { expect, test } from 'fixtures';
 import { IOrderFromResponse, IOrderResponse } from 'types';
@@ -38,7 +38,7 @@ test.describe('[E2E] [Orders] [Comments]', () => {
 
       expect.soft(response.status).toBe(STATUS_CODES.OK);
       expect.soft(createdComment).toBeDefined();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.COMMENT_CREATED);
+      await orderDetailsPage.waitForNotification(ALERTS.COMMENT_CREATED);
 
       await orderDetailsPage.commentsTab.waitForOpened();
       const commentsUI = await orderDetailsPage.commentsTab.getAllComments();
@@ -63,7 +63,7 @@ test.describe('[E2E] [Orders] [Comments]', () => {
 
       await orderDetailsPage.commentsTab.clickDeleteButton(addedCommentId);
 
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.COMMENT_DELETED);
+      await orderDetailsPage.waitForNotification(ALERTS.COMMENT_DELETED);
       await orderDetailsPage.commentsTab.waitForOpened();
       const commentsUI = await orderDetailsPage.commentsTab.getAllComments();
       expect.soft(commentsUI.length).toBe(0);
