@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
+import { ALERTS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { IOrderFromResponse, IProductFromResponse } from 'types';
 import { convertProductToUIData } from 'data/orders';
@@ -36,7 +36,7 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
+      await orderDetailsPage.waitForNotification(ALERTS.ORDER_UPDATED);
       const productInOrder = await orderDetailsPage.getProducts();
       productInOrder.forEach((el) =>
         expect(el).toMatchObject(convertProductToUIData(products.find((product) => product.name === el.Name)!)),
@@ -65,7 +65,7 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
+      await orderDetailsPage.waitForNotification(ALERTS.ORDER_UPDATED);
       const productInOrder = await orderDetailsPage.getProducts();
       productInOrder.forEach((el) =>
         expect(el).toMatchObject(convertProductToUIData(products.find((product) => product.name === el.Name)!)),
@@ -89,7 +89,7 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
+      await orderDetailsPage.waitForNotification(ALERTS.ORDER_UPDATED);
       const productsInOrder = await orderDetailsPage.getProducts();
       expect(productsInOrder.length).toBe(order.products.length + 1);
     },
@@ -111,7 +111,7 @@ test.describe('[UI] [E2E] [Orders] [Update Product]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
+      await orderDetailsPage.waitForNotification(ALERTS.ORDER_UPDATED);
       const productsInOrder = await orderDetailsPage.getProducts();
       expect(productsInOrder.length).toBe(order.products.length - 1);
     },

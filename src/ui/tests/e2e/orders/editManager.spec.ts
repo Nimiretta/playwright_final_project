@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
+import { ALERTS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { IOrderFromResponse } from 'types';
 
@@ -33,7 +33,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      await orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_ASSIGNED);
+      await orderDetailsPage.waitForNotification(ALERTS.MANAGER_ASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Updated manager name should be displayed').toBe(secondUserId.name);
     },

@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
+import { ALERTS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { IOrderFromResponse } from 'types';
 
@@ -30,7 +30,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
+      orderDetailsPage.waitForNotification(ALERTS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -52,7 +52,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
+      orderDetailsPage.waitForNotification(ALERTS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -74,7 +74,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
+      orderDetailsPage.waitForNotification(ALERTS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -96,7 +96,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
+      orderDetailsPage.waitForNotification(ALERTS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },
@@ -118,7 +118,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification(NOTIFICATIONS.MANAGER_UNASSIGNED);
+      orderDetailsPage.waitForNotification(ALERTS.MANAGER_UNASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
       expect(orderValues.assignedManagerName, 'Manager name should not be displayed').toBe('Click to select manager');
     },

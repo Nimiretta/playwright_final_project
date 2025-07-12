@@ -1,5 +1,5 @@
 import { apiConfig } from 'config';
-import { NOTIFICATIONS, STATUS_CODES, TAGS } from 'data';
+import { ALERTS, STATUS_CODES, TAGS } from 'data';
 import { test, expect } from 'fixtures';
 import { ICustomerFromResponse, IOrderFromResponse } from 'types';
 import { convertCustomerToUIData } from 'data/orders';
@@ -31,7 +31,7 @@ test.describe('[E2E] [UI] [Orders] [Update Customer In Order]', () => {
       );
       expect(response.status).toBe(STATUS_CODES.OK);
       await orderDetailsPage.waitForOpened();
-      orderDetailsPage.waitForNotification(NOTIFICATIONS.ORDER_UPDATED);
+      orderDetailsPage.waitForNotification(ALERTS.ORDER_UPDATED);
       expect(await orderDetailsPage.getCustomer(), 'New products should match expected').toMatchObject(
         convertCustomerToUIData(customer),
       );
