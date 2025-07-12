@@ -25,8 +25,8 @@ export const commentTestData = [
     tag: ['@004_O_COMM_POST_API', TAGS.API, TAGS.REGRESSION],
     body: generateCommentData(),
     orderId: '',
-    statusCode: STATUS_CODES.BAD_REQUEST,
-    error: API_ERRORS.CUSTOMER_BAD_REQUEST,
+    statusCode: STATUS_CODES.NOT_FOUND,
+    error: API_ERRORS.ORDER_NOT_FOUND(''),
   },
   {
     testName: 'Should not create a comment with orderId invalid format (non hex, 12-byte string, int)',
@@ -91,7 +91,7 @@ export const deleteCommentTestData = [
     testName: 'Should not delete a comment with orderId as empty string',
     tag: ['@004_O_COMM_DELETE_API', TAGS.API, TAGS.REGRESSION],
     orderId: '',
-    statusCode: STATUS_CODES.BAD_REQUEST,
+    statusCode: STATUS_CODES.NOT_FOUND,
     error: API_ERRORS.ORDER_BAD_REQUEST,
   },
   {

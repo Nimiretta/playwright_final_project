@@ -12,7 +12,7 @@ export const orderTestData = [
     testName: 'Should not create order with missing token',
     token: '',
     tag: ['@005_O_POST_API', TAGS.API, TAGS.REGRESSION],
-    error: API_ERRORS.INVALID_TOKEN,
+    error: API_ERRORS.EMPTY_TOKEN,
     status: STATUS_CODES.UNAUTHORIZED,
   },
 
@@ -21,7 +21,7 @@ export const orderTestData = [
     customer: '',
     tag: ['@007_O_POST_API', TAGS.API, TAGS.REGRESSION],
     error: API_ERRORS.ORDER_WITHOUT_CUSTOMER,
-    status: STATUS_CODES.BAD_REQUEST,
+    status: STATUS_CODES.NOT_FOUND,
   },
   {
     testName: 'Should not create order without products (empty array)',

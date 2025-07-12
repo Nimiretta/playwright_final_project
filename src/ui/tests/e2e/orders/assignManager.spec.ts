@@ -121,7 +121,7 @@ test.describe('[E2E] [UI] [Orders] [Assign Manager]', () => {
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.waitForNotification(ALERTS.MANAGER_ASSIGNED);
       const orderValues = await orderDetailsPage.getOrderValues();
-      expect(orderValues.assignedManagerName).toBe(firstMangerData.id);
+      expect(orderValues.assignedManagerName).toBe(firstMangerData.name);
     },
   );
 });

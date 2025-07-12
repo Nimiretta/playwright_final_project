@@ -128,4 +128,14 @@ export class Mock {
       });
     });
   }
+
+  async allProducts(body: IProductsResponse | IResponseFields, statusCode: STATUS_CODES = STATUS_CODES.OK) {
+    this.page.route(apiConfig.BASE_URL + apiConfig.ENDPOINTS.PRODUCTS_ALL, async (route) => {
+      await route.fulfill({
+        status: statusCode,
+        contentType: 'application/json',
+        body: JSON.stringify(body),
+      });
+    });
+  }
 }

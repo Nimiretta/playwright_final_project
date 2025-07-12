@@ -1,12 +1,17 @@
-import { IProductFromResponse, ICustomerFromResponse } from 'types';
+import { IProductFromResponse, ICustomerFromResponse, IProductInOrder } from 'types';
 import { convertToDateAndTime } from 'utils';
 
-export function convertProductToUIData(data: IProductFromResponse): Record<string, string> {
+export function convertAPIProductStatusTOUI(data: IProductInOrder) {
+  if (data.received) return 'Received';
+  else return 'Not Received';
+}
+
+export function convertProductToUIData(data: IProductFromResponse | IProductInOrder): Record<string, string> {
   return {
     Name: data.name,
     Manufacturer: data.manufacturer,
     Price: '$' + data.price.toString(),
-    Notes: data.notes ?? '',
+    Notes: data.notes || '-',
   };
 }
 

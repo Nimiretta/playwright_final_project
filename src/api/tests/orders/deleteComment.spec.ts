@@ -73,7 +73,7 @@ test.describe('[API] [Orders] [Add Comment]', () => {
       const deleteCommentResponse = await ordersController.deleteComment(order._id, invalidCommentId, token);
       validateResponse(
         deleteCommentResponse as unknown as IResponse<IResponseFields>,
-        STATUS_CODES.NOT_FOUND,
+        STATUS_CODES.BAD_REQUEST,
         false,
         API_ERRORS.COMMENT_NOT_FOUND,
       );

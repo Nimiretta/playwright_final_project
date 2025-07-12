@@ -15,7 +15,7 @@ export const apiConfig = {
     UNASSIGN_MANAGER: (orderId: string) => `/api/orders/${orderId}/unassign-manager`,
     ORDER_COMMENTS_ADD: (id: string) => `/api/orders/${id}/comments`,
     ORDER_COMMENTS_DELETE: (id: string, commentId: string) => `/api/orders/${id}/comments/${commentId}`,
-    ORDER_RECEIVE: (id: string) => `/api/orders/${id}/receive`,
+    ORDER_RECEIVE: (id: string) => `/api/orders/${id}/receive/`,
     ORDER_DELIVERY: (id: string) => `/api/orders/${id}/delivery`,
     ORDER_STATUS: (id: string) => `/api/orders/${id}/status`,
     NOTIFICATIONS: '/api/notifications',

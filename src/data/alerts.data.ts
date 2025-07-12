@@ -9,6 +9,8 @@ export const ALERTS = {
   DELIVERY_SAVED: 'Delivery was successfully saved',
   COMMENT_CREATED: 'Comment was successfully posted',
   COMMENT_DELETED: 'Comment was successfully deleted',
+  UPDATE_PRODUCT_FAILED: 'Failed to update products. Please try again later.', // Displayed if UpdateOrder request returns error
+  UPDATE_PRODCUT_UNABLED: 'Unable to update products. Please try again later.', // Displayed if GetAllProducts request returns error
   UPDATE_CUSTOMRE_IS_UNABLE: 'Unable to update customer. Please try again later.',
   UPDATE_CUSTOMER_FAILED: 'Failed to update customer. Please try again later.',
   ORDER_REOPEN: 'Order was successfully reopened',
