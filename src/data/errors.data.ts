@@ -18,3 +18,19 @@ export const API_ERRORS = {
   PRODUCT_IS_NOT_REQUESTED: (id: string) => `Product with Id '${id}' is not requested`,
   ORDER_STATUS_INVALID: 'Invalid order status',
 } as const;
+
+export const VALIDATION_ERROR_MESSAGES = {
+  ['Customer Name']: `Customer's name should contain only 1-40 alphabetical characters and one space between`,
+  ['City']: `City's name should contain only 1-20 alphabetical characters and one space between`,
+  ['Address']: `Address should contain only 1-20 alphanumerical characters and one space between`,
+  ['Street']: `Street should contain only 1-40 alphanumerical characters and one space between`,
+  ['House']: 'House number should be in range 1-999',
+  ['Flat']: 'Flat number should be in range 1-9999',
+  ['Email']: 'Invalid Email Address',
+  ['Phone']: 'Mobile Number should be at least 10 characters (max 20) and start with a +',
+  ['Notes']: 'Notes should be in range 0-250 and without < or > symbols',
+  ['Comments']: 'Comment should be in range 1-250 and without < or > symbols',
+  ['Product Name']: "Products's name should contain only 3-40 alphanumerical characters and one space between",
+  ['Amount']: 'Amount should be in range 0-999',
+  ['Price']: 'Price should be in range 1-99999',
+} as const;
