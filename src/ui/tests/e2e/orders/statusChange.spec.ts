@@ -29,7 +29,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.CANCELED);
-      expect(orderDetailsPage.reopenOrderButton).toBeVisible();
+      await expect(orderDetailsPage.reopenOrderButton).toBeVisible();
     },
   );
 
