@@ -28,8 +28,8 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.CANCELED);
-      expect(orderDetailsPage.reopenOrderButton).toBeVisible();
+      expect(status, 'Verify order status is Cancelled').toBe(ORDER_STATUSES.CANCELED);
+      await expect(orderDetailsPage.reopenOrderButton, 'Verify Reopen button is shown').toBeVisible();
     },
   );
 
@@ -44,8 +44,8 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.reopenModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_REOPEN);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.DRAFT);
-      expect(orderDetailsPage.cancelOrderButton).toBeVisible();
+      expect(status, 'Verify order status is Draft').toBe(ORDER_STATUSES.DRAFT);
+      await expect(orderDetailsPage.cancelOrderButton, 'Verify Cancel button is shown').toBeVisible();
     },
   );
 
@@ -61,8 +61,8 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.CANCELED);
-      expect(orderDetailsPage.reopenOrderButton).toBeVisible();
+      expect(status, 'Verify order status is Cancelled').toBe(ORDER_STATUSES.CANCELED);
+      await expect(orderDetailsPage.reopenOrderButton, 'Verify Reopen button is visible').toBeVisible();
     },
   );
 
@@ -71,7 +71,6 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
     { tag: ['@004_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createInProcess(token);
-      await orderDetailsPage;
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
@@ -79,8 +78,8 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.CANCELED);
-      expect(orderDetailsPage.reopenOrderButton).toBeVisible();
+      expect(status, 'Verify order status is Cancelled').toBe(ORDER_STATUSES.CANCELED);
+      await expect(orderDetailsPage.reopenOrderButton, 'Verify Reopen button is visible').toBeVisible();
     },
   );
 
@@ -96,8 +95,8 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.CANCELED);
-      expect(orderDetailsPage.reopenOrderButton).toBeVisible();
+      expect(status, 'Verify order status is Cancelled').toBe(ORDER_STATUSES.CANCELED);
+      await expect(orderDetailsPage.reopenOrderButton, 'Verify Reopen is visible').toBeVisible();
     },
   );
 
@@ -119,7 +118,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await deliveryPage.clickSave();
       await orderDetailsPage.waitForNotification(ALERTS.DELIVERY_SAVED);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.DRAFT);
+      expect(status, 'Verify order status is Draft').toBe(ORDER_STATUSES.DRAFT);
     },
   );
 
@@ -135,7 +134,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.processModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_PROCESS);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.IN_PROCESS);
+      expect(status, 'Verify order status is In Process').toBe(ORDER_STATUSES.IN_PROCESS);
     },
   );
 
@@ -152,7 +151,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.clickSaveButton();
       await orderDetailsPage.waitForNotification(ALERTS.PRODUCTS_RECEIVED);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.RECEIVED);
+      expect(status, 'Verify order status is Received').toBe(ORDER_STATUSES.RECEIVED);
     },
   );
 
@@ -169,7 +168,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.clickSaveButton();
       await orderDetailsPage.waitForNotification(ALERTS.PRODUCTS_RECEIVED);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
+      expect(status, 'Verify order status is Partially received').toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
     },
   );
 
@@ -185,7 +184,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_REOPEN);
       const status = (await orderDetailsPage.getOrderValues()).status;
-      expect(status).toBe(ORDER_STATUSES.DRAFT);
+      expect(status, 'Verify order status is Draft').toBe(ORDER_STATUSES.DRAFT);
     },
   );
 });
