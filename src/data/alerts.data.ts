@@ -16,6 +16,7 @@ export const ALERTS = {
   ORDER_REOPEN: 'Order was successfully reopened',
   ORDER_CANCELED: 'Order was successfully canceled',
   ORDER_PROCESS: 'Order processing was successfully started',
+  PRODUCTS_RECEIVED: 'Products were successfully received',
 };
 
 export const EMPTY_TABLE_ROW_TEXT = 'No records created yet';
