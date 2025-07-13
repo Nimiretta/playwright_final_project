@@ -32,7 +32,7 @@ test.describe('[UI] [Orders] [Component] Comments tab', () => {
   };
 
   test.beforeEach(async ({ mock, orderDetailsPage }) => {
-    await mock.orderDetails(mockOrder);
+    await mock.orderDetails(mockOrder.Order._id, mockOrder);
 
     await orderDetailsPage.open(mockOrder.Order._id);
     await orderDetailsPage.clickCommentsTab();
