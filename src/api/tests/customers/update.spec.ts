@@ -12,10 +12,9 @@ test.describe('[API] [Customers] [Update]', () => {
   let token = '';
   let customerId = '';
   let createdCustomer: ICustomerFromResponse;
-  test.beforeEach(async ({ signInApiService }) => {
+
+  test.beforeEach(async ({ customersApiService, signInApiService }) => {
     token = await signInApiService.getAuthToken();
-  });
-  test.beforeEach(async ({ customersApiService }) => {
     createdCustomer = await customersApiService.create(token, generateCustomerData());
     customerId = createdCustomer._id;
   });

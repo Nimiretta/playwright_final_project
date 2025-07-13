@@ -21,7 +21,7 @@ test.describe('[API] [Customers] [GET by ID]', () => {
 
   test.afterEach(async ({ customersController }) => {
     if (!customer._id) return;
-    await customersController.delete(customer._id, token);
+    else await customersController.delete(customer._id, token);
   });
 
   test(
