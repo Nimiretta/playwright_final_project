@@ -19,9 +19,10 @@ Create a `.env` file in the project root with the following variables:
 ```
 USER_LOGIN=your_login
 USER_PASSWORD=your_password
+USER_ID=your_manager_id
 ```
 
-Replace `your_login` and `your_password` with valid credentials.
+Replace `your_login`, `your_password` and `your_manager_id` with valid credentials.
 
 ### 3. Running Tests
 
