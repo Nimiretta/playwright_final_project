@@ -28,6 +28,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
+
       expect(status, 'Verify order status is Cancelled').toBe(ORDER_STATUSES.CANCELED);
       await expect(orderDetailsPage.reopenOrderButton, 'Verify Reopen button is shown').toBeVisible();
     },
