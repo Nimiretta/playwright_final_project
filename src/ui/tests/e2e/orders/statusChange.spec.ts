@@ -25,6 +25,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickCancel();
+      await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.CANCELED);
@@ -40,6 +41,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickReopen();
+      await orderDetailsPage.reopenModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_REOPEN);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.DRAFT);
@@ -49,13 +51,14 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
 
   test(
     'Should cancel an order on Draft with delivery',
-    { tag: ['@001_O_SC_E2E', TAGS.E2E] },
+    { tag: ['@003_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraftWithDelivery(token);
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickCancel();
+      await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.CANCELED);
@@ -65,13 +68,15 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
 
   test(
     'Should cancel an order In progress',
-    { tag: ['@001_O_SC_E2E', TAGS.E2E] },
+    { tag: ['@004_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createInProcess(token);
+      await orderDetailsPage;
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickCancel();
+      await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.CANCELED);
@@ -81,13 +86,14 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
 
   test(
     'Should cancel an order In process',
-    { tag: ['@001_O_SC_E2E', TAGS.E2E] },
+    { tag: ['@005_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createInProcess(token);
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickCancel();
+      await orderDetailsPage.cancelModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_CANCELED);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.CANCELED);
@@ -97,13 +103,14 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
 
   test(
     'Should move the order from Draft to Draft with delivery',
-    { tag: ['@001_O_SC_E2E', TAGS.E2E] },
+    { tag: ['@006_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage, deliveryPage }) => {
       order = await ordersApiService.createDraft(token);
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickDeliveryTab();
+      await orderDetailsPage.deliveryTab.clickDeliveryButton();
       const delivery = {
         condition: DELIVERY_CONDITIONS.DELIVERY,
         finalDate: generateValidDeliveryDate(),
@@ -117,14 +124,15 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
   );
 
   test(
-    'Should cancel an order In process',
-    { tag: ['@001_O_SC_E2E', TAGS.E2E] },
+    'Should move an order from draft to In process',
+    { tag: ['@007_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createDraftWithDelivery(token);
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickProcess();
+      await orderDetailsPage.processModal.submit();
       await orderDetailsPage.waitForNotification(ALERTS.ORDER_PROCESS);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.IN_PROCESS);
@@ -133,7 +141,7 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
 
   test(
     'Should Receive order from In process with all products',
-    { tag: ['@001_O_SC_E2E', TAGS.E2E] },
+    { tag: ['@008_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
       order = await ordersApiService.createInProcess(token);
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
@@ -150,18 +158,34 @@ test.describe('[E2E] [UI] [Orders] [Status Change]', () => {
 
   test(
     'Should Partially Receive order from In process with part of the products',
-    { tag: ['@001_O_SC_E2E', TAGS.E2E] },
+    { tag: ['@009_O_SC_E2E', TAGS.E2E] },
     async ({ ordersApiService, orderDetailsPage }) => {
-      order = await ordersApiService.createInProcess(token);
+      order = await ordersApiService.createInProcess(token, { productCount: 2 });
       order = await ordersApiService.assignManager(order._id, managerData.id, token);
       await orderDetailsPage.openPage('ORDER_DETAILS', order._id);
       await orderDetailsPage.waitForOpened();
       await orderDetailsPage.clickReceiveButton();
-      await orderDetailsPage.markSingleProduct('Product 1752358249844 ISdaWVJBAr', 'check');
+      await orderDetailsPage.markSingleProduct(order.products[1].name, 'check');
       await orderDetailsPage.clickSaveButton();
       await orderDetailsPage.waitForNotification(ALERTS.PRODUCTS_RECEIVED);
       const status = (await orderDetailsPage.getOrderValues()).status;
       expect(status).toBe(ORDER_STATUSES.PARTIALLY_RECEIVED);
+    },
+  );
+
+  test(
+    'Should Reopen from Orders list',
+    { tag: ['@010_O_SC_E2E', TAGS.E2E] },
+    async ({ ordersApiService, ordersPage, orderDetailsPage }) => {
+      order = await ordersApiService.createCanceled(token);
+      await ordersPage.openPage('ORDERS');
+      await ordersPage.clickReopenOrder(order._id);
+      await ordersPage.waitForOpened();
+      await ordersPage.reopenModal.submit();
+      await orderDetailsPage.waitForOpened();
+      await orderDetailsPage.waitForNotification(ALERTS.ORDER_REOPEN);
+      const status = (await orderDetailsPage.getOrderValues()).status;
+      expect(status).toBe(ORDER_STATUSES.DRAFT);
     },
   );
 });
