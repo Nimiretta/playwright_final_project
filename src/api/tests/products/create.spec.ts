@@ -13,9 +13,8 @@ test.describe('[API] [Product] [Create]', () => {
     token = await signInApiService.getAuthToken();
   });
 
-  test.afterEach(async ({ productsApiService, productsController }) => {
-    const isProductExists = (await productsController.getById(createdProductId, token)).status === STATUS_CODES.OK;
-    if (isProductExists) {
+  test.afterEach(async ({ productsApiService }) => {
+    if (createdProductId) {
       await productsApiService.delete(createdProductId, token);
     }
   });
