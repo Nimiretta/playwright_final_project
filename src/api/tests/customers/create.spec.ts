@@ -15,7 +15,7 @@ test.describe('[API] [CUstomer] [Create]', () => {
 
   test.afterEach(async ({ customersApiService }) => {
     if (!customerId) return;
-    await customersApiService.delete(customerId, token);
+    else await customersApiService.delete(customerId, token);
   });
 
   customerPositiveTestData.forEach((data) => {
